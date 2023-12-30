@@ -1,0 +1,197 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "TWEP",
+    "description": "TWEP API",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3000",
+      "description": "local server"
+    }
+  ],
+  "paths": {
+    "/stations": {
+      "get": {
+        "summary": "Get all stations",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "example": [
+                  {
+                    "id": 1,
+                    "coordinates": "40.7128, -74.0060",
+                    "bikeSpaces": 10,
+                    "operational": true
+                  }
+                ]
+              }
+            }
+          },
+          "404": {
+            "description": "No stations found",
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "No stations found"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Create a new station",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "example": {
+                "coordinates": "37.7749, -122.4194",
+                "bikeSpaces": 12,
+                "operational": true
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Station created successfully",
+            "content": {
+              "application/json": {
+                "example": {
+                  "id": 3,
+                  "coordinates": "37.7749, -122.4194",
+                  "bikeSpaces": 12,
+                  "operational": true
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "Invalid input data"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/stations/{id}": {
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "integer"
+          },
+          "description": "The ID of the station"
+        }
+      ],
+      "get": {
+        "summary": "Get a specific station",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "example": {
+                  "id": 1,
+                  "coordinates": "40.7128, -74.0060",
+                  "bikeSpaces": 10,
+                  "operational": true
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Station not found",
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "Station not found"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "summary": "Update a station",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "example": {
+                "coordinates": "40.7128, -74.0060",
+                "bikeSpaces": 15,
+                "operational": false
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Station updated successfully",
+            "content": {
+              "application/json": {
+                "example": {
+                  "id": 1,
+                  "coordinates": "40.7128, -74.0060",
+                  "bikeSpaces": 15,
+                  "operational": false
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "Invalid input data"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Station not found",
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "Station not found"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete a station",
+        "responses": {
+          "204": {
+            "description": "Station deleted successfully"
+          },
+          "404": {
+            "description": "Station not found",
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "Station not found"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
