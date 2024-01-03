@@ -1,13 +1,14 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule, FormControl, Validators } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, FormGroup, FormControl, Validators, AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatButtonModule } from '@angular/material/button';
-import {MatIconModule} from '@angular/material/icon';
+import { MatIconModule } from '@angular/material/icon';
 
+import { LoadingOverlayComponent } from '../common/loading-overlay/loading-overlay.component';
 import { LoginUser } from '../model/loginUser';
 import { LoginService } from '../service/login.service';
 
@@ -22,31 +23,50 @@ import { LoginService } from '../service/login.service';
     FormsModule,
     RouterModule,
     MatIconModule,
+    ReactiveFormsModule,
+    LoadingOverlayComponent
   ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss'
 })
 export class LoginComponent {
-  loginUser: LoginUser;
-  errorMessage?: string;
+  runningAction: boolean = false;
   showPassword: boolean = false;
-  inputFormControl: FormControl = new FormControl('', [Validators.required])
+  loginForm: FormGroup;
 
   constructor(private loginService: LoginService) {
-    this.loginUser = new LoginUser()
+    //Create form group for input validation
+    this.loginForm = new FormGroup({
+      username: new FormControl('', Validators.required),
+      password: new FormControl('', Validators.required),
+    })
   }
 
   login(): void{
-    console.log("Username", this.loginUser.username);
-    console.log("Password", this.loginUser.password);
-    //TODO: Error handling
-    this.loginService.login(this.loginUser).subscribe({
+    const username: string = this.username?.value;
+    const password: string = this.password?.value;
+    const loginUser: LoginUser = new LoginUser(username, password);
+    this.runningAction = true;
+    this.loginService.login(loginUser).subscribe({
       next: (): void => {
-        return;
+        //TODO: Redirect to next page
+        this.runningAction = false;
       },
       error: (error: any): void => {
-        alert(error);
-      }
+        console.error(error);
+        //Set the username in error state and tell the user 
+        //that login was not possible
+        this.username?.setErrors({ invalidCredentials: true })
+        this.runningAction = false;
+      },
     });
+  }
+
+  get username(): AbstractControl<any, any> | null {
+    return this.loginForm.get('username');
+  }
+
+  get password(): AbstractControl<any, any> | null {
+    return this.loginForm.get('password');
   }
 }
