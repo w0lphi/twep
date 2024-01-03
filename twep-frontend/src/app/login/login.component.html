@@ -1,0 +1,54 @@
+<div class="twep-login-container">
+    <img class="twep-logo" src="../../assets/logo.svg" width="260" height="240">
+    <form
+        class="twep-login-form"
+        #loginUserForm="ngForm"
+    >
+        <mat-form-field>
+            <mat-label>Username</mat-label>
+            <input 
+                matInput 
+                required="true"
+                type="text" 
+                name="username" 
+                [(ngModel)]="loginUser.username"
+            >
+        </mat-form-field>
+        <mat-form-field>
+            <mat-label>Password</mat-label>
+            <input 
+                matInput 
+                required="true"
+                name="password" 
+                [type]="showPassword ? 'text' : 'password'" 
+                [(ngModel)]="loginUser.password"
+            >
+            <button 
+                matSuffix 
+                mat-icon-button 
+                aria-label="Toggle password visibility" 
+                (click)="showPassword = !showPassword"
+            >
+                <mat-icon *ngIf="!showPassword">visibility</mat-icon>
+                <mat-icon *ngIf="showPassword">visibility_off</mat-icon>
+            </button>
+        </mat-form-field>
+
+        <button 
+            mat-raised-button 
+            color="primary"
+            (click)="login()"
+            [disabled]="loginUserForm.invalid"
+        >
+            LOGIN
+        </button>
+    </form>
+
+    <!-- TODO: Redirect user to register page on click-->
+    <div class="twep-register-link">
+        <div>Do not have an account?</div> 
+        <div>
+            <a routerLink="/register">Register now!</a>
+        </div>
+    </div>
+</div>
