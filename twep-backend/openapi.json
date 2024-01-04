@@ -1,0 +1,665 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "TWEP",
+    "description": "TWEP API",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3000",
+      "description": "local server"
+    }
+  ],
+  "components": {
+    "schemas": {
+      "User": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "email": {
+            "type": "string",
+            "format": "email"
+          },
+          "password": {
+            "type": "string",
+            "format": "password"
+          },
+          "wallet": {
+            "type": "number",
+            "format": "float"
+          },
+          "tickets": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Ticket"
+            }
+          }
+        },
+        "required": [
+          "email",
+          "password"
+        ],
+        "example": {
+          "id": 1,
+          "email": "user@example.com",
+          "password": "Password123",
+          "wallet": 100
+        }
+      },
+      "UserLogin": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "format": "email"
+          },
+          "password": {
+            "type": "string",
+            "format": "password"
+          }
+        },
+        "required": [
+          "email",
+          "password"
+        ]
+      },
+      "BikeType": {
+        "type": "string",
+        "enum": [
+          "Mountain Bike",
+          "City Bike",
+          "Electric Bike",
+          "Children Bike"
+        ]
+      },
+      "Ticket": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "bikeType": {
+            "$ref": "#/components/schemas/BikeType"
+          },
+          "station": {
+            "type": "string"
+          },
+          "purchaseDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "immediateRenting": {
+            "type": "boolean"
+          },
+          "reservedStation": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "bikeType",
+          "station",
+          "purchaseDate",
+          "immediateRenting"
+        ],
+        "example": {
+          "id": 1,
+          "bikeType": "Mountain Bike",
+          "station": "Station A",
+          "purchaseDate": "2024-01-10T08:00:00Z",
+          "immediateRenting": true,
+          "reservedStation": "Station B"
+        }
+      },
+      "Station": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "location": {
+            "type": "object",
+            "properties": {
+              "latitude": {
+                "type": "number",
+                "format": "float"
+              },
+              "longitude": {
+                "type": "number",
+                "format": "float"
+              }
+            },
+            "required": [
+              "latitude",
+              "longitude"
+            ]
+          },
+          "bikeSpaces": {
+            "type": "integer"
+          },
+          "operational": {
+            "type": "boolean"
+          }
+        },
+        "example": {
+          "id": 1,
+          "location": {
+            "latitude": 40.7128,
+            "longitude": -74.006
+          },
+          "bikeSpaces": 10,
+          "operational": true
+        }
+      },
+      "ErrorResponse": {
+        "type": "object",
+        "properties": {
+          "error": {
+            "type": "string"
+          }
+        },
+        "example": {
+          "error": "Some error message"
+        }
+      }
+    }
+  },
+  "paths": {
+    "/register": {
+      "post": {
+        "summary": "Register a new user",
+        "tags": [
+          "user"
+        ],
+        "requestBody": {
+          "description": "User registration details",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/User"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "User registered successfully",
+            "content": {
+              "application/json": {
+                "example": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "example": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/login": {
+      "post": {
+        "summary": "User login",
+        "tags": [
+          "user"
+        ],
+        "requestBody": {
+          "description": "User login details",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserLogin"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Login successful",
+            "content": {
+              "application/json": {
+                "example": {
+                  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "Invalid credentials"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/{userId}/tickets": {
+      "get": {
+        "summary": "Get user's ticket history",
+        "tags": [
+          "user"
+        ],
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "description": "The ID of the user"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "example": {
+                  "tickets": [
+                    {
+                      "id": 1,
+                      "bikeType": "Mountain Bike",
+                      "station": "Station A",
+                      "purchaseDate": "2024-01-10T08:00:00Z"
+                    },
+                    {
+                      "id": 2,
+                      "bikeType": "City Bike",
+                      "station": "Station B",
+                      "purchaseDate": "2024-01-15T10:30:00Z"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "User not found",
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "User not found"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Purchase a new ticket",
+        "tags": [
+          "user"
+        ],
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "description": "The ID of the user"
+          }
+        ],
+        "requestBody": {
+          "description": "Ticket details",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Ticket"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Ticket purchased successfully",
+            "content": {
+              "application/json": {
+                "example": {
+                  "$ref": "#/components/schemas/Ticket"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "Invalid input data"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/stations": {
+      "get": {
+        "summary": "Get all stations",
+        "tags": [
+          "station"
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "example": {
+                  "$ref": "#/components/schemas/Station"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No stations found",
+            "content": {
+              "application/json": {
+                "example": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Create a new station",
+        "tags": [
+          "station"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "example": {
+                "$ref": "#/components/schemas/Station"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Station created successfully",
+            "content": {
+              "application/json": {
+                "example": {
+                  "$ref": "#/components/schemas/Station"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "example": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/stations/{stationId}/bikes": {
+      "parameters": [
+        {
+          "name": "stationId",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "integer"
+          },
+          "description": "The ID of the bike station"
+        }
+      ],
+      "get": {
+        "summary": "Get all bikes at a specific station",
+        "tags": [
+          "station"
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "example": {
+                  "bikes": [
+                    {
+                      "id": 1,
+                      "bikeType": "Mountain Bike",
+                      "status": "Available"
+                    },
+                    {
+                      "id": 2,
+                      "bikeType": "City Bike",
+                      "status": "Rented"
+                    },
+                    {
+                      "id": 3,
+                      "bikeType": "Electric Bike",
+                      "status": "Available"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Station not found",
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "Station not found"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/stations/{id}": {
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "integer"
+          },
+          "description": "The ID of the station"
+        }
+      ],
+      "get": {
+        "summary": "Get a specific station",
+        "tags": [
+          "station"
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "example": {
+                  "$ref": "#/components/schemas/Station"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Station not found",
+            "content": {
+              "application/json": {
+                "example": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "summary": "Update a station",
+        "tags": [
+          "station"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "example": {
+                "$ref": "#/components/schemas/Station"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Station updated successfully",
+            "content": {
+              "application/json": {
+                "example": {
+                  "$ref": "#/components/schemas/Station"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "example": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Station not found",
+            "content": {
+              "application/json": {
+                "example": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete a station",
+        "tags": [
+          "station"
+        ],
+        "responses": {
+          "204": {
+            "description": "Station deleted successfully"
+          },
+          "404": {
+            "description": "Station not found",
+            "content": {
+              "application/json": {
+                "example": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/bikes/categories": {
+      "get": {
+        "summary": "Get all bike categories and specific bikes",
+        "tags": [
+          "bike"
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "example": {
+                  "categories": [
+                    {
+                      "name": "Mountain Bike",
+                      "bikes": [
+                        {
+                          "id": 1,
+                          "status": "Available"
+                        },
+                        {
+                          "id": 2,
+                          "status": "Rented"
+                        }
+                      ]
+                    },
+                    {
+                      "name": "City Bike",
+                      "bikes": [
+                        {
+                          "id": 3,
+                          "status": "Available"
+                        },
+                        {
+                          "id": 4,
+                          "status": "Available"
+                        }
+                      ]
+                    },
+                    {
+                      "name": "Electric Bike",
+                      "bikes": [
+                        {
+                          "id": 5,
+                          "status": "Rented"
+                        },
+                        {
+                          "id": 6,
+                          "status": "Available"
+                        }
+                      ]
+                    },
+                    {
+                      "name": "Children Bike",
+                      "bikes": [
+                        {
+                          "id": 7,
+                          "status": "Available"
+                        },
+                        {
+                          "id": 8,
+                          "status": "Rented"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

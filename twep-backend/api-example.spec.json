@@ -19,7 +19,9 @@
     "paths": {
         "/users": {
             "get": {
-                "tags": ["User API"],
+                "tags": [
+                    "User API"
+                ],
                 "description": "Get users",
                 "operationId": "getUsers",
                 "parameters": [
@@ -49,7 +51,9 @@
                 }
             },
             "post": {
-                "tags": ["User API"],
+                "tags": [
+                    "User API"
+                ],
                 "description": "Add new user",
                 "operationId": "createUser",
                 "requestBody": {
@@ -83,21 +87,23 @@
         },
         "/user/{id}": {
             "get": {
-                "tags": ["User API"],
+                "tags": [
+                    "User API"
+                ],
                 "description": "Get user",
                 "operationId": "getUser",
                 "parameters": [
                     {
-                       "name": "id",
+                        "name": "id",
                         "in": "path",
                         "required": "true",
                         "schema": {
                             "type": "string"
-                        } 
+                        }
                     }
                 ],
                 "responses": {
-                     "200": {
+                    "200": {
                         "description": "User found",
                         "content": {
                             "application/json": {
@@ -117,7 +123,6 @@
             }
         }
     },
-
     "components": {
         "schemas": {
             "User": {
@@ -133,16 +138,13 @@
                     }
                 }
             },
-
             "Users": {
                 "type": "array",
                 "items": {
                     "$ref": "#/components/schemas/User"
                 }
             }
-            
         },
-
         "responses": {
             "NotFound": {
                 "description": "Not found"
@@ -155,5 +157,4 @@
             }
         }
     }
-
 }
