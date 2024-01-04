@@ -1,0 +1,92 @@
+@use '@angular/material' as mat;
+
+@include mat.core();
+
+/* 
+    Sources: 
+        - https: //stackoverflow.com/a/41446746
+        - https: //blog.thoughtram.io/angular/2017/05/23/custom-themes-with-angular-material.html
+        - https: //github.com/angular/components/blob/main/guides/theming.md
+*/
+
+/* Generated with http://mcg.mbitson.com/#!?twepbrand=%23e9891c&themename=twep */
+$md-twep: (
+    50 : #fcf1e4,
+    100 : #f8dcbb,
+    200 : #f4c48e,
+    300 : #f0ac60,
+    400 : #ec9b3e,
+    500 : #e9891c,
+    600 : #e68119,
+    700 : #e37614,
+    800 : #df6c11,
+    900 : #d95909,
+    A100 : #ffffff,
+    A200 : #ffe0d0,
+    A400 : #ffbe9d,
+    A700 : #ffad84,
+    contrast: (50 : #000000,
+        100 : #000000,
+        200 : #000000,
+        300 : #000000,
+        400 : #ffffff,
+        500 : #ffffff,
+        600 : #ffffff,
+        700 : #ffffff,
+        800 : #ffffff,
+        900 : #ffffff,
+        A100 : #000000,
+        A200 : #000000,
+        A400 : #000000,
+        A700 : #000000,
+    )
+);
+
+$md-twep-accent: (
+    50 : #fce4e4,
+    100 : #f8bdbb,
+    200 : #f4918e,
+    300 : #f06460,
+    400 : #ec433e,
+    500 : #e9221c,
+    600 : #e61e19,
+    700 : #e31914,
+    800 : #df1411,
+    900 : #d90c09,
+    A100 : #ffffff,
+    A200 : #ffd0d0,
+    A400 : #ff9e9d,
+    A700 : #ff8484,
+    contrast: (50 : #000000,
+        100 : #000000,
+        200 : #000000,
+        300 : #000000,
+        400 : #ffffff,
+        500 : #ffffff,
+        600 : #ffffff,
+        700 : #ffffff,
+        800 : #ffffff,
+        900 : #ffffff,
+        A100 : #000000,
+        A200 : #000000,
+        A400 : #000000,
+        A700 : #000000,
+    )
+);
+
+// mandatory stuff for theming
+$twep-palette-primary: mat.define-palette($md-twep);
+$twep-palette-accent: mat.define-palette($md-twep-accent);
+
+// include the custom theme components into a theme object
+$twep-theme:  mat.define-light-theme((
+    color: (
+        primary: $twep-palette-primary,
+        accent: $twep-palette-accent,
+    ),
+    typography: mat.define-typography-config(),
+    density: 0,
+     ));
+
+// include the custom theme object into the angular material theme
+@include mat.all-component-themes($twep-theme);

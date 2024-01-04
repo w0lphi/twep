@@ -1,0 +1,73 @@
+<div class="twep-login-container">
+    <div class="twep-login-header">
+        <img
+            class="twep-logo"
+            src="../../assets/logo.svg"
+            width="130"
+            height="120"
+        >
+    </div>
+    <form
+        class="twep-login-form"
+        [formGroup]="loginForm"
+    >
+        <mat-form-field>
+            <mat-label>Username</mat-label>
+            <input 
+                matInput 
+                required="true"
+                type="text" 
+                name="username" 
+                formControlName="username"
+                [disabled]="runningAction"
+            >
+            <mat-error *ngIf="username?.errors?.['required']">
+                Please enter username
+            </mat-error>
+            <mat-error *ngIf="username?.errors?.['invalidCredentials']">
+                Username or password incorrect
+            </mat-error>
+        </mat-form-field>
+        <mat-form-field>
+            <mat-label>Password</mat-label>
+            <input 
+                matInput 
+                required="true"
+                name="password" 
+                formControlName="password"
+                [type]="showPassword ? 'text' : 'password'" 
+                [disabled]="runningAction"
+            >
+            <button 
+                matSuffix 
+                mat-icon-button 
+                aria-label="Toggle password visibility" 
+                (click)="showPassword = !showPassword"
+            >
+                <mat-icon *ngIf="!showPassword">visibility</mat-icon>
+                <mat-icon *ngIf="showPassword">visibility_off</mat-icon>
+            </button>
+            <mat-error *ngIf="password?.errors?.['required']">
+                Please enter password
+            </mat-error>
+        </mat-form-field>
+        <button 
+            mat-raised-button 
+            color="primary"
+            (click)="login()"
+            [disabled]="loginForm.invalid || runningAction"
+        >
+            LOGIN
+        </button>
+    </form>
+
+    <!-- TODO: Redirect user to register page on click-->
+    <div class="twep-register-link">
+        <div>Do not have an account?</div> 
+        <div>
+            <a routerLink="/signup">Sign up</a>
+        </div>
+    </div>
+
+    <app-loading-overlay *ngIf="runningAction"></app-loading-overlay>
+</div>
