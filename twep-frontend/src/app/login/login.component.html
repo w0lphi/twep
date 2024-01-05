@@ -12,20 +12,20 @@
         [formGroup]="loginForm"
     >
         <mat-form-field>
-            <mat-label>Username</mat-label>
+            <mat-label>E-Mail</mat-label>
             <input 
                 matInput 
                 required="true"
                 type="text" 
-                name="username" 
-                formControlName="username"
+                name="email" 
+                formControlName="email"
                 [disabled]="runningAction"
             >
-            <mat-error *ngIf="username?.errors?.['required']">
-                Please enter username
+            <mat-error *ngIf="email?.errors?.['required']">
+                Please enter email
             </mat-error>
-            <mat-error *ngIf="username?.errors?.['invalidCredentials']">
-                Username or password incorrect
+            <mat-error *ngIf="email?.errors?.['invalidCredentials']">
+                E-Mail or password incorrect
             </mat-error>
         </mat-form-field>
         <mat-form-field>
@@ -55,7 +55,7 @@
             mat-raised-button 
             color="primary"
             (click)="login()"
-            [disabled]="loginForm.invalid || runningAction"
+            [disabled]="runningAction || loginForm.invalid"
         >
             LOGIN
         </button>

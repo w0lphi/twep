@@ -10,7 +10,7 @@ import { MatIconModule } from '@angular/material/icon';
 
 import { LoadingOverlayComponent } from '../common/loading-overlay/loading-overlay.component';
 import { LoginUser } from '../model/loginUser';
-import { LoginService } from '../service/login.service';
+import { AuthService } from '../service/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -34,36 +34,38 @@ export class LoginComponent {
   showPassword: boolean = false;
   loginForm: FormGroup;
 
-  constructor(private loginService: LoginService) {
+  constructor(private authService: AuthService) {
     //Create form group for input validation
     this.loginForm = new FormGroup({
-      username: new FormControl('', Validators.required),
+      email: new FormControl('', Validators.required),
       password: new FormControl('', Validators.required),
     })
   }
 
   login(): void{
-    const username: string = this.username?.value;
+    const email: string = this.email?.value;
     const password: string = this.password?.value;
-    const loginUser: LoginUser = new LoginUser(username, password);
+    const loginUser: LoginUser = new LoginUser(email, password);
     this.runningAction = true;
-    this.loginService.login(loginUser).subscribe({
-      next: (): void => {
-        //TODO: Redirect to next page
+    this.authService.login(loginUser).subscribe({
+      next: (res: any): void => {
+        const token: string | null = res?.token;
+        if(token) this.authService.setSession(res?.token);
         this.runningAction = false;
+        //TODO: Redirect to next page
       },
       error: (error: any): void => {
         console.error(error);
-        //Set the username in error state and tell the user 
+        //Set the email in error state and tell the user 
         //that login was not possible
-        this.username?.setErrors({ invalidCredentials: true })
+        this.email?.setErrors({ invalidCredentials: true })
         this.runningAction = false;
       },
     });
   }
 
-  get username(): AbstractControl<any, any> | null {
-    return this.loginForm.get('username');
+  get email(): AbstractControl<any, any> | null {
+    return this.loginForm.get('email');
   }
 
   get password(): AbstractControl<any, any> | null {
