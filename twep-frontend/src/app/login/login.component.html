@@ -1,11 +1,13 @@
 <div class="twep-login-container">
     <div class="twep-login-header">
-        <img
-            class="twep-logo"
-            src="../../assets/logo.svg"
-            width="130"
-            height="120"
-        >
+        <a routerLink="/">
+            <img
+                class="twep-logo"
+                src="../../assets/logo.svg"
+                width="130"
+                height="120"
+            >
+        </a>
     </div>
 
     <div *ngIf="displayInvalidCredentialsError" class="twep-login-error-container">
