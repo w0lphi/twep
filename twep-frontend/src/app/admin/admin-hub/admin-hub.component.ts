@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router, ActivatedRoute, RouterOutlet } from '@angular/router';
+import { Router, ActivatedRoute, RouterOutlet, RouterLink } from '@angular/router';
 
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatSidenavModule } from '@angular/material/sidenav';
@@ -15,7 +15,7 @@ import { AuthService } from '../../service/auth.service';
 @Component({
   selector: 'app-admin-hub',
   standalone: true,
-  imports: [MatToolbarModule, MatSidenavModule, MatListModule, MatIconModule, CommonModule, MatDividerModule, MatButtonModule, RouterOutlet],
+  imports: [MatToolbarModule, MatSidenavModule, MatListModule, MatIconModule, CommonModule, MatDividerModule, MatButtonModule, RouterOutlet, RouterLink],
   templateUrl: './admin-hub.component.html',
   styleUrl: './admin-hub.component.scss'
 })
@@ -30,12 +30,7 @@ export class AdminHubComponent {
   ngOnInit() {
     const url: string = this.router.url;
     const route: string = url.replace("/admin/", "");
-    this.activeLink = this.navigationLinks.find(navlink => navlink?.route === route) ?? null;
-
-    if (this.activeLink === null) {
-      const link: NavigationLink = new NavigationLink("Dashboard", "dashboard", "dashboard");
-      this.openLink(link);
-    }
+    this.activeLink = this.navigationLinks.find(navlink => navlink?.route && route.includes(navlink?.route)) ?? null;
   }
 
   openLink(link: NavigationLink) {
@@ -56,10 +51,6 @@ export class AdminHubComponent {
       new NavigationLink("Categories", "category", "categories"),
       new NavigationLink("Bikes", "pedal_bike", "bikes"),
     ]
-  }
-
-  get breadcrumb(): string {
-    return `Administration > ${this.activeLink?.title}`;
   }
 
 }

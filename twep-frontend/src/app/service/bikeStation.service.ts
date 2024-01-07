@@ -14,4 +14,8 @@ export class BikeStationService{
     public getBikeStations(): Observable<BikeStation[]>{
         return this.http.get<BikeStation[]>(`${this.apiUrl}/stations`);
     }
+
+    public getBikeStation(id: string): Observable<BikeStation>{
+        return this.http.get<BikeStation>(`${this.apiUrl}/stations/${id}`)
+    }
 }

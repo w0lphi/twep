@@ -36,18 +36,17 @@
                 >
                     <mat-icon>menu</mat-icon>
                 </button>
-                <img
-                    src="../../../assets/logo_small.svg"
-                    height="40"
-                    width="40"
-                >
+                <a routerLink="/admin">
+                    <img
+                        src="../../../assets/logo_small.svg"
+                        height="40"
+                        width="40"
+                    >
+                </a>
                 <span class="twep-toolbar-title">Administration</span>
                 <div class="twep-spacer"></div>
             </mat-toolbar>
             <div class="twep-admin-content">
-                <div *ngIf="activeLink?.route !== null" class="twep-breadcrumb">
-                    {{ breadcrumb }}
-                </div>
                 <router-outlet></router-outlet>
             </div>
         </mat-drawer-content>

@@ -1,0 +1,24 @@
+.twep-not-found-page{
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;   
+    padding: 0 16px;
+
+    .twep-not-found-page-logo{
+        padding: 16px 0;
+    }
+
+    .twep-not-found-page-title{
+        font-weight: bold;
+        text-align: center;
+        color: #e9891c;
+      
+    }
+
+    .twep-not-found-page-subtitle{
+        text-align: center;
+        color: rgba(0, 0, 0, 0.54);
+    }
+}
