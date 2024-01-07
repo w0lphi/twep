@@ -1,12 +1,12 @@
 .twep-admin-dashboard-container{
-    height: 100vh;
+    height: 100%;
 
-    .mat-toolbar{
+    >.mat-toolbar{
         gap: 16px;
     }
 
     .twep-drawer-container{
-        height: 100%;
+        height: calc(100% - 64px);
 
         >.mat-drawer{
             width: 300px;
@@ -24,9 +24,15 @@
         }
 
         .twep-admin-content{
-            height: calc(100% - 80px);
-            padding: 8px 16px;
-            overflow-y: scroll;
+            height: calc(100% - 64px);
+            padding: 16px;
         }
+    }
+}
+
+@media (min-width: 1280px){
+
+    .mat-drawer-content{
+        box-shadow: inset 0px 4px 8px 0px rgba(0, 0, 0, 0.5);
     }
 }

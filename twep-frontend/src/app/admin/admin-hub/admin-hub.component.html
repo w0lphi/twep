@@ -1,8 +1,28 @@
 <div class="twep-admin-dashboard-container">
+    <mat-toolbar>
+        <button
+            *ngIf="isSmallScreen"
+            mat-icon-button
+            aria-label="Open admin menu"
+            (click)="drawer.toggle()"
+        >
+            <mat-icon>menu</mat-icon>
+        </button>
+        <a routerLink="/admin">
+            <img
+                src="../../../assets/logo_small.svg"
+                height="40"
+                width="40"
+            >
+        </a>
+        <span class="twep-toolbar-title">Administration</span>
+        <div class="twep-spacer"></div>
+    </mat-toolbar>
     <mat-drawer-container class="twep-drawer-container">
         <mat-drawer
             #drawer
-            mode="over"
+            [opened]="!isSmallScreen"
+            [mode]="isSmallScreen ? 'over' : 'side'"
         >
             <!-- SIDEBAR -->
             <div class="twep-drawer-title">Menu</div>
@@ -12,7 +32,7 @@
                     <mat-list-item 
                         *ngIf="navlink !== null" 
                         [activated]="navlink.route === activeLink?.route"
-                        (click)="openLink(navlink); drawer.close()"
+                        (click)="openLink(navlink)"
                     >
                         <mat-icon matListItemIcon>{{ navlink.icon }}</mat-icon>
                         <span matListItemTitle>{{ navlink.title }}</span>
@@ -28,25 +48,8 @@
         </mat-drawer>
         <mat-drawer-content>
             <!-- MAIN CONTENT -->
-            <mat-toolbar>
-                <button
-                    mat-icon-button
-                    aria-label="Open admin menu"
-                    (click)="drawer.toggle()"
-                >
-                    <mat-icon>menu</mat-icon>
-                </button>
-                <a routerLink="/admin">
-                    <img
-                        src="../../../assets/logo_small.svg"
-                        height="40"
-                        width="40"
-                    >
-                </a>
-                <span class="twep-toolbar-title">Administration</span>
-                <div class="twep-spacer"></div>
-            </mat-toolbar>
             <div class="twep-admin-content">
+                <h1 *ngIf="activeLink === null">Welcome to the Twep administration</h1>
                 <router-outlet></router-outlet>
             </div>
         </mat-drawer-content>

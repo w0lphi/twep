@@ -7,10 +7,25 @@
             height="120"
         >
     </div>
+
+    <div *ngIf="displayInvalidCredentialsError" class="twep-login-error-container">
+        <mat-error>
+            E-Mail or password incorrect
+        </mat-error>
+        <button 
+            mat-icon-button 
+            aria-label="Close error" 
+            (click)="displayInvalidCredentialsError = false"
+        >
+            <mat-icon>close</mat-icon>
+        </button>
+    </div>
+
     <form
         class="twep-login-form"
         [formGroup]="loginForm"
     >
+
         <mat-form-field>
             <mat-label>E-Mail</mat-label>
             <input 
@@ -23,9 +38,6 @@
             >
             <mat-error *ngIf="email?.errors?.['required']">
                 Please enter email
-            </mat-error>
-            <mat-error *ngIf="email?.errors?.['invalidCredentials']">
-                E-Mail or password incorrect
             </mat-error>
         </mat-form-field>
         <mat-form-field>
@@ -55,7 +67,7 @@
             mat-raised-button 
             color="primary"
             (click)="login()"
-            [disabled]="runningAction || loginForm.invalid"
+            [disabled]="runningAction"
         >
             LOGIN
         </button>

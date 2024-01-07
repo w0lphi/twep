@@ -32,6 +32,7 @@ import { AuthService } from '../service/auth.service';
 export class LoginComponent {
   runningAction: boolean = false;
   showPassword: boolean = false;
+  displayInvalidCredentialsError: boolean = false;
   loginForm: FormGroup;
 
   constructor(private authService: AuthService) {
@@ -43,10 +44,12 @@ export class LoginComponent {
   }
 
   login(): void{
+    if(this.loginForm.invalid) return;
+    this.runningAction = true;
     const email: string = this.email?.value;
     const password: string = this.password?.value;
     const loginUser: LoginUser = new LoginUser(email, password);
-    this.runningAction = true;
+    this.displayInvalidCredentialsError = false;
     this.authService.login(loginUser).subscribe({
       next: (res: any): void => {
         const token: string | null = res?.token;
@@ -56,9 +59,7 @@ export class LoginComponent {
       },
       error: (error: any): void => {
         console.error(error);
-        //Set the email in error state and tell the user 
-        //that login was not possible
-        this.email?.setErrors({ invalidCredentials: true })
+        this.displayInvalidCredentialsError = true;
         this.runningAction = false;
       },
     });
