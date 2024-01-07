@@ -1,5 +1,5 @@
 import { ApplicationConfig } from '@angular/core';
-import { provideRouter } from '@angular/router';
+import { provideRouter, withComponentInputBinding } from '@angular/router';
 import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http'
 import { httpInterceptorProviders } from './http-interceptors/http-interceptor.provider';
 
@@ -10,7 +10,7 @@ import { MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material/form-field';
 
 export const appConfig: ApplicationConfig = {
   providers: [
-    provideRouter(routes),
+    provideRouter(routes, withComponentInputBinding()),
     provideAnimations(),
     provideAnimations(),
 

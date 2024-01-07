@@ -1,0 +1,55 @@
+<div class="twep-admin-dashboard-container">
+    <mat-drawer-container class="twep-drawer-container">
+        <mat-drawer
+            #drawer
+            mode="over"
+        >
+            <!-- SIDEBAR -->
+            <div class="twep-drawer-title">Menu</div>
+            <mat-nav-list>
+                @for (navlink of navigationLinks; track $index) {
+                    <mat-divider *ngIf="navlink === null" />
+                    <mat-list-item 
+                        *ngIf="navlink !== null" 
+                        [activated]="navlink.route === activeLink?.route"
+                        (click)="openLink(navlink); drawer.close()"
+                    >
+                        <mat-icon matListItemIcon>{{ navlink.icon }}</mat-icon>
+                        <span matListItemTitle>{{ navlink.title }}</span>
+                    </mat-list-item>
+                }
+                <mat-divider />
+                <mat-list-item (click)="adminLogout()">
+                    <mat-icon matListItemIcon>logout</mat-icon>
+                    <span matListItemTitle>Logout</span>
+                </mat-list-item>
+            </mat-nav-list>
+
+        </mat-drawer>
+        <mat-drawer-content>
+            <!-- MAIN CONTENT -->
+            <mat-toolbar>
+                <button
+                    mat-icon-button
+                    aria-label="Open admin menu"
+                    (click)="drawer.toggle()"
+                >
+                    <mat-icon>menu</mat-icon>
+                </button>
+                <img
+                    src="../../../assets/logo_small.svg"
+                    height="40"
+                    width="40"
+                >
+                <span class="twep-toolbar-title">Administration</span>
+                <div class="twep-spacer"></div>
+            </mat-toolbar>
+            <div class="twep-admin-content">
+                <div *ngIf="activeLink?.route !== null" class="twep-breadcrumb">
+                    {{ breadcrumb }}
+                </div>
+                <router-outlet></router-outlet>
+            </div>
+        </mat-drawer-content>
+    </mat-drawer-container>
+</div>
