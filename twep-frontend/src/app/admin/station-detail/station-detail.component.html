@@ -1,4 +1,58 @@
 <div class="twep-station-detail"> 
     <app-loading-overlay *ngIf="runningAction"></app-loading-overlay>
-    {{ bikeStation }}
+    <mat-toolbar>
+        <h1>{{ bikeStationName }}</h1>
+        <div class="twep-spacer"></div>
+        <button
+            mat-raised-button
+        >
+            SAVE
+        </button>
+        <button mat-raised-button>
+            DELETE
+        </button>
+    </mat-toolbar>
+    <form 
+        [formGroup]="bikeStationForm" 
+        class="twep-station-form"
+    >
+        <mat-form-field *ngIf="bikeStation?.id !== ''">
+            <mat-label>Id</mat-label>
+            <input
+                matInput
+                required="true"
+                type="text"
+                name="email"
+                formControlName="id"
+                [disabled]="true"
+            >
+        </mat-form-field>
+        <mat-form-field>
+            <mat-label>Name</mat-label>
+            <input
+                matInput
+                required="true"
+                type="text"
+                name="name"
+                formControlName="name"
+            >
+        </mat-form-field>
+        <mat-form-field>
+            <mat-label>Address</mat-label>
+            <input
+                matInput
+                required="true"
+                type="text"
+                name="address"
+                formControlName="address"
+            >
+        </mat-form-field>
+        <div
+            *ngIf="options"
+            class="twep-map"
+            leaflet
+            [leafletOptions]="options"
+        >
+        </div>
+    </form>
 </div>
