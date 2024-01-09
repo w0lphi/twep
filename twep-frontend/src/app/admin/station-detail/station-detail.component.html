@@ -47,11 +47,37 @@
                 formControlName="address"
             >
         </mat-form-field>
+        <div class="twep-station-location">
+            <mat-form-field>
+                <mat-label>Latitude</mat-label>
+                <input
+                    matInput
+                    required="true"
+                    type="text"
+                    name="latitude"
+                    formControlName="latitude"
+                    [readonly]="true"
+                >
+            </mat-form-field>
+            <mat-form-field>
+                <mat-label>Longitude</mat-label>
+                <input
+                    matInput
+                    required="true"
+                    type="text"
+                    name="longitude"
+                    formControlName="longitude"
+                    [readonly]="true"
+                >
+            </mat-form-field>
+        </div>
         <div
             *ngIf="options"
             class="twep-map"
             leaflet
             [leafletOptions]="options"
+            [leafletLayers]="layers"
+            (leafletClick)="setStationLocation($event)"
         >
         </div>
     </form>

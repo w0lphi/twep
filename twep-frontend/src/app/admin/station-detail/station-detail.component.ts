@@ -4,6 +4,7 @@ import { FormsModule, ReactiveFormsModule, FormGroup, FormControl, Validators, A
 import { LoadingOverlayComponent } from '../../common/loading-overlay/loading-overlay.component';
 import { BikeStation } from '../../model/bikeStation';
 import { BikeStationService } from '../../service/bikeStation.service';
+import { Location } from '../../model/location';
 
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -36,8 +37,9 @@ export class StationDetailComponent {
   stationId?: string;
   bikeStationForm: FormGroup;
   bikeStationName: string = "";
-  bikeStation?: BikeStation;
-  options?: Leaflet.MapOptions;
+  bikeStation: BikeStation = new BikeStation("", "");
+  options: Leaflet.MapOptions = {};
+  layers: Leaflet.Layer[] = [];
 
   @Input()
   set id(stationId: string) {
@@ -55,7 +57,6 @@ export class StationDetailComponent {
       longitude: new FormControl(this.bikeStation?.location?.longitude, Validators.required),
       address: new FormControl(this.bikeStation?.address),
       operational: new FormControl(this.bikeStation?.operational, Validators.required),
-      bikeSpaces: new FormControl(this.bikeStation?.bikeSpaces, Validators.required),
     })
   }
 
@@ -64,7 +65,7 @@ export class StationDetailComponent {
       layers: [
         Leaflet.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 18, attribution: '...' })
       ],
-      zoom: 13,
+      zoom: 12,
       center: Leaflet.latLng(46.624268, 14.3051051)
     };
   }
@@ -83,6 +84,10 @@ export class StationDetailComponent {
         next: (bikeStation: BikeStation) => {
           this.bikeStation = bikeStation;
           this.bikeStationName = this.bikeStation.name;
+          this.updateForm(bikeStation);
+          if (this.bikeStation?.location !== undefined) {
+            this.setMarker(this.bikeStation.location)
+          }
           this.runningAction = false;
         },
         error: (error: any) => {
@@ -92,6 +97,37 @@ export class StationDetailComponent {
         } 
       })
     }
+  }
+
+  updateForm(bikeStation: BikeStation) {
+    this.bikeStationForm.patchValue({
+      id: bikeStation.id,
+      name: bikeStation.name,
+      address: bikeStation.address,
+      longitude: bikeStation.location?.longitude,
+      latitude: bikeStation.location?.longitude,
+      operational: bikeStation.operational,
+    })
+  }
+
+  setStationLocation(event: Leaflet.LeafletMouseEvent): void {
+    const latitude: number = event.latlng.lat;
+    const longitude: number = event.latlng.lng;
+    this.bikeStationForm.patchValue({ longitude, latitude })
+    this.setMarker(new Location(latitude, longitude));
+  }
+
+  setMarker(location: Location): void{
+    const marker: Leaflet.Marker<any> = Leaflet.marker([location.latitude, location.longitude]);
+    this.layers = [marker];
+  }
+
+  get longitude(): AbstractControl<any, any> | null {
+    return this.bikeStationForm.get('longitude');
+  }
+
+  get latitude(): AbstractControl<any, any> | null {
+    return this.bikeStationForm.get('latitude');
   }
 
 
