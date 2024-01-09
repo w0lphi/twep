@@ -16,6 +16,7 @@
         [formGroup]="bikeStationForm" 
         class="twep-station-form"
     >
+    <h3>General Information</h3>
         <mat-form-field *ngIf="bikeStation?.id !== ''">
             <mat-label>Id</mat-label>
             <input
@@ -47,6 +48,16 @@
                 formControlName="address"
             >
         </mat-form-field>
+        <h3>Location</h3>
+        <div
+            *ngIf="options"
+            class="twep-map"
+            leaflet
+            [leafletOptions]="options"
+            [leafletLayers]="layers"
+            (leafletClick)="setStationLocation($event)"
+        >
+        </div>
         <div class="twep-station-location">
             <mat-form-field>
                 <mat-label>Latitude</mat-label>
@@ -70,15 +81,6 @@
                     [readonly]="true"
                 >
             </mat-form-field>
-        </div>
-        <div
-            *ngIf="options"
-            class="twep-map"
-            leaflet
-            [leafletOptions]="options"
-            [leafletLayers]="layers"
-            (leafletClick)="setStationLocation($event)"
-        >
         </div>
     </form>
 </div>

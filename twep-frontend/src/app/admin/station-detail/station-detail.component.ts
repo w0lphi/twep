@@ -12,6 +12,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { LeafletModule } from '@asymmetrik/ngx-leaflet';
+import { LeafletUtil } from '../../util/leaflet-util'
 import * as Leaflet from 'leaflet';
 
 @Component({
@@ -61,13 +62,7 @@ export class StationDetailComponent {
   }
 
   ngOnInit() {
-    this.options = {
-      layers: [
-        Leaflet.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 18, attribution: '...' })
-      ],
-      zoom: 12,
-      center: Leaflet.latLng(46.624268, 14.3051051)
-    };
+    this.options = LeafletUtil.mapOptions;
   }
 
   loadStation(): void{
@@ -118,7 +113,7 @@ export class StationDetailComponent {
   }
 
   setMarker(location: Location): void{
-    const marker: Leaflet.Marker<any> = Leaflet.marker([location.latitude, location.longitude]);
+    const marker: Leaflet.Marker<any> = LeafletUtil.getStationMarker(location.latitude, location.longitude)
     this.layers = [marker];
   }
 
