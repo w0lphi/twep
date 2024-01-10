@@ -1,6 +1,6 @@
 CREATE DATABASE twep;
  
-\c bikestations;
+\c twep;
  
 CREATE TABLE stations (
     id SERIAL PRIMARY KEY,
@@ -8,6 +8,13 @@ CREATE TABLE stations (
     number_of_bike_spaces INTEGER NOT NULL,
     operational BOOLEAN NOT NULL
 );
+
+CREATE TABLE users (
+    id SERIAL PRIMARY KEY,
+    email VARCHAR(255) NOT NULL,
+    password VARCHAR(255) NOT NULL
+);
+
  
  
 INSERT INTO stations (coordinates, number_of_bike_spaces, operational) VALUES
