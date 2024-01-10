@@ -1,16 +1,24 @@
 // index.js
 const express = require('express');
+const session = require('express-session');
+const cookieParser = require('cookie-parser');
+const jwt = require('jsonwebtoken');
+const swaggerUi = require('swagger-ui-express');
+const swaggerDocument = require('./openapi.json');
+const verifyToken = require('./src/middleware/verifyToken');
+
+
 const app = express();
 const pool = require('./src/db');
 
-// Swagger
-const swaggerUi = require("swagger-ui-express");
-const swaggerDocument = require("./openapi.json");
-
-app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
-
-
 // Middleware
+app.use(cookieParser());
+app.use(session({
+    secret: 'secret',
+    resave: false,
+    saveUninitialized: true,
+    cookie: { secure: process.env.NODE_ENV === 'production' } // Set to true in production with HTTPS
+}));
 app.use(express.json());
 
 // Routes
@@ -18,10 +26,20 @@ app.get('/', (req, res) => {
     res.send('Hello, this is your backend!');
 });
 
-const stationsRoutes = require('./src/routes/stations');
+// Protected Route using JWT
+app.get('/protected-route', verifyToken, (req, res) => {
+    res.json({ message: 'This route is protected with JWT' });
+});
+
+// External Routes
+const stationsRoutes = require('./src/routes/stationsRouter');
+const usersRouter = require('./src/routes/usersRouter');
 
 app.use('/stations', stationsRoutes);
+app.use('/users', usersRouter);
 
+// Swagger Documentation
+app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 // Database Connection
 pool.connect()

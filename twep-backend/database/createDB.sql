@@ -1,4 +1,4 @@
-CREATE DATABASE bikestations;
+CREATE DATABASE twep;
  
 \c bikestations;
  
