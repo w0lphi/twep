@@ -1,6 +1,6 @@
 CREATE DATABASE twep;
  
-\c bikestations;
+\c twep;
  
 CREATE TABLE stations (
     id SERIAL PRIMARY KEY,
@@ -21,3 +21,9 @@ INSERT INTO stations (coordinates, number_of_bike_spaces, operational) VALUES
     ('52.5200,13.4050', 22, true),
     ('25.7617,-80.1918', 17, true),
     ('33.8688,151.2093', 19, false);
+
+    CREATE TABLE users (
+    id SERIAL PRIMARY KEY,
+    email VARCHAR(255) NOT NULL,
+    password VARCHAR(255) NOT NULL
+);
