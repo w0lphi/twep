@@ -1,5 +1,6 @@
 import { Routes } from '@angular/router';
 import { LoginComponent } from './login/login.component';
+import { RegisterComponent } from './register/register.component';  
 
 import { AdminHubComponent } from './admin/admin-hub/admin-hub.component';
 import { DashboardComponent } from './admin/dashboard/dashboard.component';
@@ -16,6 +17,10 @@ export const routes: Routes = [
     {
         path: 'login',
         component: LoginComponent
+    },
+    {
+        path: 'register',
+        component: RegisterComponent
     },
 
     //Admin Routes
@@ -44,6 +49,7 @@ export const routes: Routes = [
         path: '**',
         component: PageNotFoundComponent
     }
+
     
     
 ];
