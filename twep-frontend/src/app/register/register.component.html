@@ -40,37 +40,80 @@
                 E-Mail or password incorrect
             </mat-error>
         </mat-form-field>
-        <mat-form-field>
-            <mat-label>Password</mat-label>
-            <input 
-                matInput 
-                required="true"
-                name="password" 
-                formControlName="password"
-                [type]="showPassword ? 'text' : 'password'" 
-                [disabled]="runningAction"
-            >
-            <button 
-                matSuffix 
-                mat-icon-button 
-                aria-label="Toggle password visibility" 
-                (click)="showPassword = !showPassword"
-            >
-                <mat-icon *ngIf="!showPassword">visibility</mat-icon>
-                <mat-icon *ngIf="showPassword">visibility_off</mat-icon>
-            </button>
-            <mat-error *ngIf="password?.errors?.['required']">
-                Please enter password
-            </mat-error>
-        </mat-form-field>
-        <button 
-            mat-raised-button 
-            color="primary"
-            (click)="register()"    
-            [disabled]="runningAction || registerForm.invalid"
-        >
-            LOGIN
-        </button>
+ <!-- ... new... -->
+
+<!-- ... existing code ... -->
+
+<mat-form-field>
+    <mat-label>Password</mat-label>
+    <input 
+        matInput 
+        required="true"
+        name="password" 
+        formControlName="password"
+        [type]="showPassword ? 'text' : 'password'" 
+        [disabled]="runningAction"
+    >
+    <button 
+        matSuffix 
+        mat-icon-button 
+        aria-label="Toggle password visibility" 
+        (click)="showPassword = !showPassword"
+    >
+        <mat-icon *ngIf="!showPassword">visibility</mat-icon>
+        <mat-icon *ngIf="showPassword">visibility_off</mat-icon>
+    </button>
+    <mat-error *ngIf="password?.errors?.['required']">
+        Please enter a password
+    </mat-error>
+    <mat-error *ngIf="password?.hasError('minlength')">
+        Password must be at least 9 characters long
+    </mat-error>
+    <mat-error *ngIf="password?.hasError('pattern')">
+        Password must contain at least one capital letter
+    </mat-error>
+</mat-form-field>
+
+<mat-form-field>
+    <mat-label>Confirm Password</mat-label>
+    <input 
+        matInput 
+        required="true"
+        name="confirmPassword" 
+        formControlName="confirmPassword"
+        [type]="showConfirmPassword ? 'text' : 'password'" 
+        [disabled]="runningAction"
+    >
+    <button 
+        matSuffix 
+        mat-icon-button 
+        aria-label="Toggle password visibility" 
+        (click)="showConfirmPassword = !showConfirmPassword"
+    >
+        <mat-icon *ngIf="!showConfirmPassword">visibility</mat-icon>
+        <mat-icon *ngIf="showConfirmPassword">visibility_off</mat-icon>
+    </button>
+    <mat-error *ngIf="confirmPassword?.errors?.['required']">
+        Please confirm your password
+    </mat-error>
+    <mat-error *ngIf="confirmPassword?.hasError('passwordMismatch') && confirmPassword?.dirty">
+        Passwords do not match
+    </mat-error>
+</mat-form-field>
+
+<button 
+    mat-raised-button 
+    color="primary"
+    (click)="register()"    
+    [disabled]="runningAction || registerForm.invalid || confirmPassword?.errors?.['passwordMismatch']"
+>
+    REGISTER
+</button>
+
+
+
+
+
     </form>
 
     <!-- TODO: Redirect user to register page on click-->

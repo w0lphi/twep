@@ -19,6 +19,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { LoadingOverlayComponent } from '../common/loading-overlay/loading-overlay.component';
 import { LoginUser } from '../model/loginUser';
 import { AuthService } from '../service/auth.service';
+import { ValidatorFn } from '@angular/forms';
+
 
 
 
@@ -44,17 +46,38 @@ export class AppModule { }
 export class RegisterComponent {
   runningAction: boolean = false;
   showPassword: boolean = false;
+  showConfirmPassword: boolean = false;
   registerForm: FormGroup;
 
   constructor(private registerService: RegisterService) {
     this.registerForm = new FormGroup({
       username: new FormControl('', Validators.required),
-      password: new FormControl('', Validators.required),
       email: new FormControl('', Validators.required),
       fullName: new FormControl('', Validators.required),
-      // Add more fields as needed for registration
-    });
+      password: new FormControl('', [Validators.required, Validators.minLength(9), Validators.pattern(/[A-Z]/)]),
+      confirmPassword: new FormControl('', Validators.required),
+    }, { validators: this.passwordMatchValidator as ValidatorFn }); 
+    // Add more fields as needed 
   }
+
+  private passwordMatchValidator(form: FormGroup): { passwordMismatch: boolean } | null {
+    const password = form.get('password')?.value;
+    const confirmPassword = form.get('confirmPassword')?.value;
+
+    const passwordMismatch = password !== confirmPassword;
+
+    
+    if (passwordMismatch) {
+      form.get('confirmPassword')?.setErrors({ passwordMismatch: true });
+    } else {
+      form.get('confirmPassword')?.setErrors(null);
+    }
+
+    return passwordMismatch ? { passwordMismatch: true } : null;
+  }
+
+
+
 
   register(): void {
     const username: string = this.username?.value;
@@ -88,5 +111,8 @@ export class RegisterComponent {
   }
   get fullName() {
     return this.registerForm.get('fullName');
+  }
+  get confirmPassword() {
+    return this.registerForm.get('confirmPassword');
   }
 }
