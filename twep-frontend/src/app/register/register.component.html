@@ -1,0 +1,85 @@
+<div class="twep-login-container">
+    <div class="twep-login-header">
+        <img
+            class="twep-logo"
+            src="../../assets/logo.svg"
+            width="130"
+            height="120"
+        >
+    </div>
+    <form
+        class="twep-login-form"
+        [formGroup]="registerForm"
+        
+    ><mat-form-field>
+        <mat-label>Username</mat-label>
+        <input matInput required="true" type="text" name="username" formControlName="username" [disabled]="runningAction">
+        <mat-error *ngIf="username?.errors?.['required']">Please enter username</mat-error>
+    </mat-form-field>
+
+    <mat-form-field>
+        <mat-label>Full Name</mat-label>
+        <input matInput required="true" type="text" name="fullName" formControlName="fullName" [disabled]="runningAction">
+        <mat-error *ngIf="fullName?.errors?.['required']">Please enter your full name</mat-error>
+    </mat-form-field>
+
+        <mat-form-field>
+            <mat-label>E-Mail</mat-label>
+            <input 
+                matInput 
+                required="true"
+                type="text" 
+                name="email" 
+                formControlName="email"
+                [disabled]="runningAction"
+            >
+            <mat-error *ngIf="email?.errors?.['required']">
+                Please enter email
+            </mat-error>
+            <mat-error *ngIf="email?.errors?.['invalidCredentials']">
+                E-Mail or password incorrect
+            </mat-error>
+        </mat-form-field>
+        <mat-form-field>
+            <mat-label>Password</mat-label>
+            <input 
+                matInput 
+                required="true"
+                name="password" 
+                formControlName="password"
+                [type]="showPassword ? 'text' : 'password'" 
+                [disabled]="runningAction"
+            >
+            <button 
+                matSuffix 
+                mat-icon-button 
+                aria-label="Toggle password visibility" 
+                (click)="showPassword = !showPassword"
+            >
+                <mat-icon *ngIf="!showPassword">visibility</mat-icon>
+                <mat-icon *ngIf="showPassword">visibility_off</mat-icon>
+            </button>
+            <mat-error *ngIf="password?.errors?.['required']">
+                Please enter password
+            </mat-error>
+        </mat-form-field>
+        <button 
+            mat-raised-button 
+            color="primary"
+            (click)="register()"    
+            [disabled]="runningAction || registerForm.invalid"
+        >
+            LOGIN
+        </button>
+    </form>
+
+    <!-- TODO: Redirect user to register page on click-->
+    <div class="twep-login-link">
+        <div>Do you already have an account?</div> 
+        <div>
+            <a routerLink="/login">Log in</a>
+        </div>
+    </div>
+
+    <app-loading-overlay *ngIf="runningAction"></app-loading-overlay>
+</div>
