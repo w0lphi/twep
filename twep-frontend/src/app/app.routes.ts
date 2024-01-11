@@ -44,7 +44,7 @@ export const routes: Routes = [
     },
 
 
-    //Not found route
+    //Not found route, needs to be at the bottom
     {
         path: '**',
         component: PageNotFoundComponent
