@@ -27,6 +27,15 @@
 
 }
 
+
+#Login {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%; 
+  }
+  
+
 @media (max-width: 600px){
     .twep-login-container{
         justify-content: flex-start;
