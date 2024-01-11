@@ -149,24 +149,48 @@
           "operational": {
             "type": "boolean"
           }
-        },
-        "example": {
-          "id": "uuid",
-          "name": "Bike Station 1",
-          "location": {
-            "latitude": 40.7128,
-            "longitude": -74.006
+        }
+      },
+      "Review": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
           },
-          "parkingPlaces": [
-            {
-              "id": "uuid",
-              "bikeCategories": [
-                "city_bike",
-                "mountain_bike"
-              ]
-            }
-          ],
-          "operational": true
+          "userId": {
+            "type": "integer",
+            "description": "The ID of the user submitting the review"
+          },
+          "stationId": {
+            "type": "string",
+            "format": "uuid",
+            "description": "The ID of the station to which the review is bound"
+          },
+          "rating": {
+            "type": "integer",
+            "description": "The rating given by the user ( 1 to 5)"
+          },
+          "comment": {
+            "type": "string",
+            "description": "Optional comment provided by the user"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Timestamp when the review was submitted"
+          }
+        },
+        "required": [
+          "userId",
+          "stationId",
+          "rating"
+        ],
+        "example": {
+          "userId": 1,
+          "stationId": "uuid",
+          "rating": 4,
+          "comment": "Great experience!",
+          "createdAt": "2024-01-20T12:30:00Z"
         }
       },
       "ParkingPlace": {
@@ -182,6 +206,17 @@
               "$ref": "#/components/schemas/BikeCategory"
             }
           }
+        },
+        "required": [
+          "id",
+          "bikeCategories"
+        ],
+        "example": {
+          "id": "abc123",
+          "bikeCategories": [
+            "city_bike",
+            "mountain_bike"
+          ]
         }
       },
       "BikeCategory": {
@@ -203,11 +238,93 @@
         "example": {
           "error": "Some error message"
         }
+      },
+      "IndividualBike": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "bikeType": {
+            "type": "string",
+            "enum": [
+              "mountain_bike",
+              "city_bike",
+              "electric_bike",
+              "children_bike"
+            ]
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "available",
+              "rented",
+              "unavailable"
+            ]
+          },
+          "bikeModel": {
+            "$ref": "#/components/schemas/BikeModel"
+          }
+        },
+        "required": [
+          "bikeType",
+          "status",
+          "bikeModel"
+        ],
+        "example": {
+          "id": "uuid",
+          "bikeType": "mountain_bike",
+          "status": "available",
+          "bikeModel": {
+            "name": "Mountain Bike XL",
+            "description": "A robust mountain bike for off-road adventures",
+            "wheelSize": 29.5,
+            "extraFeatures": [
+              "Shimano XT gears",
+              "Front suspension with 120mm travel"
+            ]
+          }
+        }
+      },
+      "BikeModel": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "wheelSize": {
+            "type": "number",
+            "format": "float"
+          },
+          "extraFeatures": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "name",
+          "wheelSize"
+        ],
+        "example": {
+          "name": "Mountain Bike XL",
+          "description": "A robust mountain bike for off-road adventures",
+          "wheelSize": 29.5,
+          "extraFeatures": [
+            "Shimano XT gears",
+            "Front suspension with 120mm travel"
+          ]
+        }
       }
     }
   },
   "paths": {
-    "/register": {
+    "/users/register": {
       "post": {
         "summary": "Register a new user",
         "tags": [
@@ -248,7 +365,7 @@
         }
       }
     },
-    "/login": {
+    "/users/login": {
       "post": {
         "summary": "User login",
         "tags": [
@@ -282,6 +399,128 @@
               "application/json": {
                 "example": {
                   "error": "Invalid credentials"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/{userId}/account": {
+      "get": {
+        "summary": "Get user account details",
+        "tags": [
+          "user"
+        ],
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "description": "The ID of the user"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "example": {
+                  "id": 1,
+                  "email": "user@example.com",
+                  "wallet": 100,
+                  "tickets": [
+                    {
+                      "id": 1,
+                      "bikeType": "Mountain Bike",
+                      "station": "Station A",
+                      "purchaseDate": "2024-01-10T08:00:00Z"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "User not found",
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "User not found"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Add money to user's wallet",
+        "tags": [
+          "user"
+        ],
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "description": "The ID of the user"
+          }
+        ],
+        "requestBody": {
+          "description": "Amount to add to the wallet",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "amount": {
+                    "type": "number",
+                    "format": "float"
+                  }
+                },
+                "required": [
+                  "amount"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Wallet updated successfully",
+            "content": {
+              "application/json": {
+                "example": {
+                  "id": 1,
+                  "email": "user@example.com",
+                  "wallet": 150
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "Invalid input data"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "User not found",
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "User not found"
                 }
               }
             }
@@ -391,6 +630,1020 @@
               "application/json": {
                 "example": {
                   "error": "Invalid input data"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/stations": {
+      "get": {
+        "summary": "Get list of bike stations",
+        "tags": [
+          "station"
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "example": {
+                  "stations": [
+                    {
+                      "id": "uuid",
+                      "name": "Bike Station 1",
+                      "location": {
+                        "latitude": 40.7128,
+                        "longitude": -74.006
+                      },
+                      "parkingPlaces": [
+                        {
+                          "id": "uuid",
+                          "bikeCategories": [
+                            "city_bike",
+                            "mountain_bike"
+                          ]
+                        }
+                      ],
+                      "operational": true
+                    },
+                    {
+                      "id": "uuid",
+                      "name": "Bike Station 2",
+                      "location": {
+                        "latitude": 40.73,
+                        "longitude": -73.995
+                      },
+                      "parkingPlaces": [
+                        {
+                          "id": "uuid",
+                          "bikeCategories": [
+                            "electric_bike",
+                            "children_bike"
+                          ]
+                        }
+                      ],
+                      "operational": true
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Stations not found",
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "Stations not found"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/stations/{stationId}/bikes": {
+      "get": {
+        "summary": "Get list of bikes available at a specific station",
+        "tags": [
+          "bike"
+        ],
+        "parameters": [
+          {
+            "name": "stationId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "The ID of the station"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "example": {
+                  "bikes": [
+                    {
+                      "id": "uuid",
+                      "bikeType": "mountain_bike",
+                      "status": "available"
+                    },
+                    {
+                      "id": "uuid",
+                      "bikeType": "city_bike",
+                      "status": "available"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Station not found",
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "Station not found"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/stations/{id}": {
+      "get": {
+        "summary": "Get details of a specific bike station",
+        "tags": [
+          "station"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "The ID of the station"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "example": {
+                  "id": "uuid",
+                  "name": "Bike Station 1",
+                  "location": {
+                    "latitude": 40.7128,
+                    "longitude": -74.006
+                  },
+                  "parkingPlaces": [
+                    {
+                      "id": "uuid",
+                      "bikeCategories": [
+                        "city_bike",
+                        "mountain_bike"
+                      ]
+                    }
+                  ],
+                  "operational": true
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Station not found",
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "Station not found"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/management/stations": {
+      "get": {
+        "summary": "Get a list of all bike stations",
+        "tags": [
+          "management-stations"
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "example": {
+                  "stations": [
+                    {
+                      "id": "uuid1",
+                      "name": "Bike Station 1",
+                      "location": {
+                        "latitude": 40.7128,
+                        "longitude": -74.006
+                      },
+                      "parkingPlaces": [
+                        {
+                          "id": "uuid",
+                          "bikeCategories": [
+                            "city_bike",
+                            "mountain_bike"
+                          ]
+                        }
+                      ],
+                      "operational": true
+                    },
+                    {
+                      "id": "uuid2",
+                      "name": "Bike Station 2",
+                      "location": {
+                        "latitude": 40.73,
+                        "longitude": -73.995
+                      },
+                      "parkingPlaces": [
+                        {
+                          "id": "uuid",
+                          "bikeCategories": [
+                            "electric_bike",
+                            "children_bike"
+                          ]
+                        }
+                      ],
+                      "operational": true
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Stations not found",
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "Stations not found"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Create a new bike station",
+        "tags": [
+          "management-stations"
+        ],
+        "requestBody": {
+          "description": "Station details for creation",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Station"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Station created successfully",
+            "content": {
+              "application/json": {
+                "example": {
+                  "id": "uuid",
+                  "name": "New Bike Station",
+                  "location": {
+                    "latitude": 40.75,
+                    "longitude": -73.995
+                  },
+                  "parkingPlaces": [
+                    {
+                      "id": "uuid",
+                      "bikeCategories": [
+                        "city_bike",
+                        "mountain_bike"
+                      ]
+                    }
+                  ],
+                  "operational": true
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "Invalid input data"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/management/stations/{id}": {
+      "put": {
+        "summary": "Update details of a specific bike station",
+        "tags": [
+          "management-stations"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "The ID of the station to update"
+          }
+        ],
+        "requestBody": {
+          "description": "Updated station details",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Station"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Station updated successfully",
+            "content": {
+              "application/json": {
+                "example": {
+                  "id": "uuid",
+                  "name": "Updated Bike Station",
+                  "location": {
+                    "latitude": 40.75,
+                    "longitude": -73.995
+                  },
+                  "parkingPlaces": [
+                    {
+                      "id": "uuid",
+                      "bikeCategories": [
+                        "city_bike",
+                        "mountain_bike"
+                      ]
+                    }
+                  ],
+                  "operational": true
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "Invalid input data"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Station not found",
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "Station not found"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete a specific bike station",
+        "tags": [
+          "management-stations"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "The ID of the station to delete"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Station deleted successfully"
+          },
+          "404": {
+            "description": "Station not found",
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "Station not found"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/management/bike-categories": {
+      "get": {
+        "summary": "Get a list of all bike categories",
+        "tags": [
+          "management-bike models and categories"
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "example": {
+                  "bikeCategories": [
+                    "mountain_bike",
+                    "city_bike",
+                    "electric_bike",
+                    "children_bike"
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Bike categories not found",
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "Bike categories not found"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Create a new bike category",
+        "tags": [
+          "management-bike models and categories"
+        ],
+        "requestBody": {
+          "description": "Bike category details",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BikeCategory"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Bike category created successfully",
+            "content": {
+              "application/json": {
+                "example": {
+                  "bikeCategory": "mountain_bike"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "Invalid input data"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/management/bike-categories/{name}": {
+      "put": {
+        "summary": "Update a bike category",
+        "tags": [
+          "management-bike models and categories"
+        ],
+        "parameters": [
+          {
+            "name": "name",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "The name of the bike category to update"
+          }
+        ],
+        "requestBody": {
+          "description": "Updated bike category details",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BikeCategory"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Bike category updated successfully",
+            "content": {
+              "application/json": {
+                "example": {
+                  "bikeCategory": "mountain_bike"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "Invalid input data"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Bike category not found",
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "Bike category not found"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete a bike category",
+        "tags": [
+          "management-bike models and categories"
+        ],
+        "parameters": [
+          {
+            "name": "name",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "The name of the bike category to delete"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Bike category deleted successfully"
+          },
+          "404": {
+            "description": "Bike category not found",
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "Bike category not found"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/management/bike-models": {
+      "get": {
+        "summary": "Get a list of all bike models",
+        "tags": [
+          "management-bike models and categories"
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "example": {
+                  "bikeModels": [
+                    {
+                      "name": "Mountain Bike XL",
+                      "description": "A robust mountain bike for off-road adventures",
+                      "wheelSize": 29.5,
+                      "extraFeatures": [
+                        "Shimano XT gears",
+                        "Front suspension with 120mm travel"
+                      ]
+                    },
+                    {
+                      "name": "City Cruiser",
+                      "description": "A comfortable city bike for daily commuting",
+                      "wheelSize": 28,
+                      "extraFeatures": [
+                        "Built-in rear rack",
+                        "Internal hub gears"
+                      ]
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Bike models not found",
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "Bike models not found"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Create a new bike model",
+        "tags": [
+          "management-bike models and categories"
+        ],
+        "requestBody": {
+          "description": "Bike model details",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BikeModel"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Bike model created successfully",
+            "content": {
+              "application/json": {
+                "example": {
+                  "bikeModel": {
+                    "name": "Mountain Bike XL",
+                    "description": "A mountain bike for off-road adventures",
+                    "wheelSize": 29.5,
+                    "extraFeatures": [
+                      "Shimano XT gears",
+                      "Front suspension with 120mm travel"
+                    ]
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "Invalid input data"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/management/bike-models/{name}": {
+      "put": {
+        "summary": "Update a bike model",
+        "tags": [
+          "management-bike models and categories"
+        ],
+        "parameters": [
+          {
+            "name": "name",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "The name of the bike model to update"
+          }
+        ],
+        "requestBody": {
+          "description": "Updated bike model details",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BikeModel"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Bike model updated successfully",
+            "content": {
+              "application/json": {
+                "example": {
+                  "bikeModel": {
+                    "name": "Mountain Bike XL",
+                    "description": "An updated description",
+                    "wheelSize": 29.5,
+                    "extraFeatures": [
+                      "Shimano XT gears",
+                      "Front suspension with 120mm travel"
+                    ]
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "Invalid input data"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Bike model not found",
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "Bike model not found"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete a bike model",
+        "tags": [
+          "management-bike models and categories"
+        ],
+        "parameters": [
+          {
+            "name": "name",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "The name of the bike model to delete"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Bike model deleted successfully"
+          },
+          "404": {
+            "description": "Bike model not found",
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "Bike model not found"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/management/bikes": {
+      "post": {
+        "summary": "Create a new individual bike",
+        "tags": [
+          "management-individual bikes"
+        ],
+        "requestBody": {
+          "description": "Bike details",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/IndividualBike"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Individual bike created successfully",
+            "content": {
+              "application/json": {
+                "example": {
+                  "individualBike": {
+                    "id": "uuid",
+                    "bikeType": "mountain_bike",
+                    "status": "available",
+                    "bikeModel": {
+                      "name": "Mountain Bike XL",
+                      "description": "A robust mountain bike for off-road adventures",
+                      "wheelSize": 29.5,
+                      "extraFeatures": [
+                        "Shimano XT gears",
+                        "Front suspension with 120mm travel"
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "Invalid input data"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/management/bikes/{id}": {
+      "put": {
+        "summary": "Update an individual bike",
+        "tags": [
+          "management-individual bikes"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "The ID of the individual bike to update"
+          }
+        ],
+        "requestBody": {
+          "description": "Updated bike details",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/IndividualBike"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Individual bike updated successfully",
+            "content": {
+              "application/json": {
+                "example": {
+                  "individualBike": {
+                    "id": "uuid",
+                    "bikeType": "mountain_bike",
+                    "status": "unavailable",
+                    "bikeModel": {
+                      "name": "Mountain Bike XL",
+                      "description": "A robust mountain bike for off-road adventures",
+                      "wheelSize": 29.5,
+                      "extraFeatures": [
+                        "Shimano XT gears",
+                        "Front suspension with 120mm travel"
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "Invalid input data"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Individual bike not found",
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "Individual bike not found"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete an individual bike",
+        "tags": [
+          "management-individual bikes"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "The ID of the individual bike to delete"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Individual bike deleted successfully"
+          },
+          "404": {
+            "description": "Individual bike not found",
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "Individual bike not found"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/management/reassign-bikes": {
+      "post": {
+        "summary": "Reassign individual bikes to stations and parking places",
+        "tags": [
+          "management-individual bikes"
+        ],
+        "requestBody": {
+          "description": "Reassignment details",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "stationId": {
+                    "type": "string",
+                    "format": "uuid",
+                    "description": "The ID of the destination station"
+                  },
+                  "parkingPlaceId": {
+                    "type": "string",
+                    "format": "uuid",
+                    "description": "The ID of the destination parking place"
+                  },
+                  "bikeIds": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "format": "uuid"
+                    },
+                    "description": "List of individual bike IDs to reassign"
+                  }
+                },
+                "required": [
+                  "stationId",
+                  "parkingPlaceId",
+                  "bikeIds"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Individual bikes reassigned successfully",
+            "content": {
+              "application/json": {
+                "example": {
+                  "message": "Individual bikes reassigned to Station A, Parking Place 1"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "Invalid input data"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "Station, parking place, or individual bike not found"
                 }
               }
             }
