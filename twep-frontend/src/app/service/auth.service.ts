@@ -12,7 +12,7 @@ export class AuthService{
     constructor(private http: HttpClient) { }
 
     public login(loginUser: LoginUser): Observable<Object>{
-        return this.http.post(`${this.apiUrl}/login`, loginUser)
+        return this.http.post(`${this.apiUrl}/users/login`, loginUser)
     }
 
     public setSession(token: string): void {
