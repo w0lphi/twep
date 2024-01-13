@@ -35,7 +35,7 @@ app.get('/protected-route', verifyToken, (req, res) => {
 const stationsRoutes = require('./src/routes/stationsRouter');
 const usersRouter = require('./src/routes/usersRouter');
 
-app.use('/stations', stationsRoutes);
+app.use('/management', stationsRoutes);
 app.use('/users', usersRouter);
 
 // Swagger Documentation

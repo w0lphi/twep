@@ -2,12 +2,11 @@ CREATE DATABASE twep;
  
 \c twep;
  
-CREATE TABLE stations (
-    id SERIAL PRIMARY KEY,
-    coordinates VARCHAR(255) NOT NULL,
-    number_of_bike_spaces INTEGER NOT NULL,
-    operational BOOLEAN NOT NULL
-);
+ -- \dt to display all tables in psql
+
+ -- Enable uuid-ossp extension (if not enabled)
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+
 
 CREATE TABLE users (
     id SERIAL PRIMARY KEY,
@@ -16,15 +15,49 @@ CREATE TABLE users (
 );
 
  
- 
-INSERT INTO stations (coordinates, number_of_bike_spaces, operational) VALUES
-    ('37.7749,-122.4194', 15, true),
-    ('34.0522,-118.2437', 12, true),
-    ('40.7128,-74.0060', 20, false),
-    ('41.8781,-87.6298', 18, true),
-    ('51.5074,-0.1278', 25, false),
-    ('48.8566,2.3522', 14, true),
-    ('35.6895,139.6917', 10, false),
-    ('52.5200,13.4050', 22, true),
-    ('25.7617,-80.1918', 17, true),
-    ('33.8688,151.2093', 19, false);
+CREATE TABLE stations (
+    id UUID PRIMARY KEY,
+    name VARCHAR(255),
+    location JSONB,
+    parking_places JSONB[],
+    operational BOOLEAN
+);
+
+-- Insert statement with generated UUID and 10 parking places for the station
+INSERT INTO stations (id, name, location, parking_places, operational)
+VALUES
+    (
+        uuid_generate_v4(),
+        'Bike Station with 10 Parking Places',
+        '{"latitude": 46.6272, "longitude": 14.3089}',
+        (
+            SELECT array_agg(
+                ('{"id": "' || uuid_generate_v4() || '", "bikeCategories": [{"id": "' || uuid_generate_v4() || '", "name": "City Bike"}], "occupied": false}')::jsonb
+            )
+            FROM generate_series(1, 10)
+        ),
+        true
+    );
+
+
+
+
+CREATE TABLE parking_places (
+    id UUID PRIMARY KEY,
+    station_id UUID REFERENCES stations(id),
+    occupied BOOLEAN NOT NULL
+);
+
+CREATE TABLE bike_categories (
+    id UUID PRIMARY KEY,
+    name VARCHAR(255) NOT NULL
+);
+
+CREATE TABLE parking_place_bike_categories (
+    parking_place_id UUID REFERENCES parking_places(id),
+    bike_category_id UUID REFERENCES bike_categories(id),
+    PRIMARY KEY (parking_place_id, bike_category_id)
+);
+
+
+
