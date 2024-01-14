@@ -1,4 +1,5 @@
 /* You can add global styles to this file, and also import other style files */
+@import url("./variables.scss");
 
 html, body { height: 100%; }
 body { 
@@ -43,4 +44,13 @@ body {
         margin-right: 8px;
     }
 
+    button.twep-save-btn{
+        --mdc-protected-button-container-color: var(--green);
+        --mdc-protected-button-label-text-color: white;
+    }
+
+    button.twep-delete-btn{
+        --mdc-protected-button-container-color: var(--red);
+        --mdc-protected-button-label-text-color: white;
+    }
 }

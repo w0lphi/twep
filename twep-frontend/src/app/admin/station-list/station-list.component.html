@@ -7,22 +7,6 @@
         </button>
     </mat-toolbar>
     <table mat-table [dataSource]="bikeStations">
-        <ng-container matColumnDef="id">
-            <th
-                mat-header-cell
-                *matHeaderCellDef
-                mat-sort-header
-                sortActionDescription="Sort by Id"
-            >
-                ID
-            </th>
-            <td
-                mat-cell
-                *matCellDef="let element"
-            > 
-                {{element.id}} 
-            </td>
-        </ng-container>
         <ng-container matColumnDef="name">
             <th
                 mat-header-cell
@@ -35,6 +19,7 @@
             <td
                 mat-cell
                 *matCellDef="let element"
+                class="bike-station-name"
             >
                 {{element.name}}
             </td>
@@ -52,7 +37,27 @@
                 mat-cell
                 *matCellDef="let element"
             >
-                {{ element.locationString }}
+                {{ getLocationAsString(element) }}
+            </td>
+        </ng-container>
+
+        <ng-container matColumnDef="operational">
+            <th
+                mat-header-cell
+                *matHeaderCellDef
+                mat-sort-header
+                sortActionDescription="Sort by name"
+            >
+               Operational
+            </th>
+            <td
+                mat-cell
+                *matCellDef="let element"
+            >
+                <mat-checkbox
+                    [checked]="element.operational"
+                    [disabled]="true"
+                />
             </td>
         </ng-container>
 
@@ -63,6 +68,7 @@
         <tr
             mat-row
             *matRowDef="let row; columns: columns;"
+            (click)="openStationDetail(row)"
         ></tr>
     </table>
 </div>

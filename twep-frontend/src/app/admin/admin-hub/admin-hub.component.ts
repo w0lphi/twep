@@ -55,8 +55,6 @@ export class AdminHubComponent {
 
   get navigationLinks(): (NavigationLink | null)[]{
     return [
-      new NavigationLink("Dashboard", "dashboard", "dashboard"),
-      null,
       new NavigationLink("Stations", "place", "stations"),
       new NavigationLink("Categories", "category", "categories"),
       new NavigationLink("Bikes", "pedal_bike", "bikes"),
