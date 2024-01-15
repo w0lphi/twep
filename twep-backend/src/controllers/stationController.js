@@ -13,6 +13,26 @@ const stationController = {
             res.status(500).send('Internal Server Error');
         }
     },
+
+    async getStationById(req, res) {
+        const { id } = req.params;
+
+        try {
+            const station = await StationModel.getStationById(id);
+
+            if (!station) {
+                // Return 404 if the station with the specified ID is not found
+                return res.status(404).json({ error: 'Station not found' });
+            }
+
+            res.json(station);
+        } catch (error) {
+            console.error(error);
+            res.status(500).send('Internal Server Error');
+        }
+    },
+
+
 };
 
 module.exports = stationController;

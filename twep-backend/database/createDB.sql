@@ -9,7 +9,7 @@ CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
 
 CREATE TABLE users (
-    id SERIAL PRIMARY KEY,
+    id UUID PRIMARY KEY,
     email VARCHAR(255) NOT NULL,
     password VARCHAR(255) NOT NULL
 );
@@ -38,26 +38,6 @@ VALUES
         ),
         true
     );
-
-
-
-
-CREATE TABLE parking_places (
-    id UUID PRIMARY KEY,
-    station_id UUID REFERENCES stations(id),
-    occupied BOOLEAN NOT NULL
-);
-
-CREATE TABLE bike_categories (
-    id UUID PRIMARY KEY,
-    name VARCHAR(255) NOT NULL
-);
-
-CREATE TABLE parking_place_bike_categories (
-    parking_place_id UUID REFERENCES parking_places(id),
-    bike_category_id UUID REFERENCES bike_categories(id),
-    PRIMARY KEY (parking_place_id, bike_category_id)
-);
 
 
 

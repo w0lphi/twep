@@ -1004,6 +1004,61 @@
       }
     },
     "/management/stations/{id}": {
+      "get": {
+        "summary": "Get details of a specific bike station",
+        "tags": [
+          "management-stations"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "The ID of the station to retrieve"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "example": {
+                  "id": "uuid",
+                  "name": "Bike Station 1",
+                  "location": {
+                    "latitude": 40.7128,
+                    "longitude": -74.006
+                  },
+                  "parkingPlaces": [
+                    {
+                      "id": "uuid",
+                      "bikeCategories": [
+                        "city_bike",
+                        "mountain_bike"
+                      ]
+                    }
+                  ],
+                  "operational": true
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Station not found",
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "Station not found"
+                }
+              }
+            }
+          }
+        }
+      },
       "put": {
         "summary": "Update details of a specific bike station",
         "tags": [
