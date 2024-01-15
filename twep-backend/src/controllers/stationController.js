@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const { v4: uuidv4 } = require('uuid');
 const StationModel = require('../models/stationModel');
 
 
@@ -32,6 +33,24 @@ const stationController = {
         }
     },
 
+    async createStation(req, res) {
+        const { name, location, operational, parkingPlaces } = req.body;
+
+        try {
+            // Convert bike categories array to an array of objects with 'name' property
+            const parkingPlacesData = parkingPlaces.map(place => ({
+                bike_categories: place.bike_categories.map(category => ({ name: category })),
+                occupied: place.occupied,
+            }));
+
+            const newStationId = await StationModel.createStation({ name, location, operational }, parkingPlacesData);
+
+            res.json({ id: newStationId });
+        } catch (error) {
+            console.error(error);
+            res.status(500).send('Internal Server Error');
+        }
+    },
 
 };
 

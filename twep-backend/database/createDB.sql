@@ -14,30 +14,29 @@ CREATE TABLE users (
     password VARCHAR(255) NOT NULL
 );
 
- 
-CREATE TABLE stations (
-    id UUID PRIMARY KEY,
+ CREATE TABLE stations (
+    id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
     name VARCHAR(255),
     location JSONB,
     parking_places JSONB[],
     operational BOOLEAN
 );
 
--- Insert statement with generated UUID and 10 parking places for the station
-INSERT INTO stations (id, name, location, parking_places, operational)
-VALUES
-    (
-        uuid_generate_v4(),
-        'Bike Station with 10 Parking Places',
-        '{"latitude": 46.6272, "longitude": 14.3089}',
-        (
-            SELECT array_agg(
-                ('{"id": "' || uuid_generate_v4() || '", "bikeCategories": [{"id": "' || uuid_generate_v4() || '", "name": "City Bike"}], "occupied": false}')::jsonb
-            )
-            FROM generate_series(1, 10)
-        ),
-        true
-    );
+CREATE TABLE parking_places (
+    id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
+    station_id UUID REFERENCES stations(id) ON DELETE CASCADE,
+    bike_categories JSONB[],
+    occupied BOOLEAN
+);
 
+CREATE TABLE bike_categories (
+    id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
+    name VARCHAR(255)
+);
 
+CREATE TABLE parking_place_bike_categories (
+    parking_place_id UUID REFERENCES parking_places(id) ON DELETE CASCADE,
+    bike_category_id UUID REFERENCES bike_categories(id) ON DELETE CASCADE,
+    PRIMARY KEY (parking_place_id, bike_category_id)
+);
 
