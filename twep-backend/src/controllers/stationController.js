@@ -52,6 +52,27 @@ const stationController = {
         }
     },
 
+    async deleteStationById(req, res) {
+        const { id } = req.params;
+
+        try {
+            const station = await StationModel.getStationById(id);
+
+            if (!station) {
+                // Return 404 if station not found
+                return res.status(404).json({ error: 'Station not found' });
+            }
+
+            // Call the deleteStationById in model
+            await StationModel.deleteStationById(id);
+
+            res.json({ message: 'Station deleted successfully' });
+        } catch (error) {
+            console.error(error);
+            res.status(500).send('Internal Server Error');
+        }
+    },
+
 };
 
 module.exports = stationController;

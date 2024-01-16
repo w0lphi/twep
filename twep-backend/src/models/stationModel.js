@@ -79,6 +79,20 @@ class StationModel {
             throw error;
         }
     }
+
+    static async deleteStationById(stationId) {
+        try {
+            await pool.query('BEGIN');
+
+            // Delete the station
+            await pool.query(stationQueries.deleteStationById, [stationId]);
+
+            await pool.query('COMMIT');
+        } catch (error) {
+            await pool.query('ROLLBACK');
+            throw error;
+        }
+    }
 }
 
 module.exports = StationModel;

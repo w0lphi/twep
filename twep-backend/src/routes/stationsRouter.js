@@ -7,5 +7,6 @@ const router = Router();
 router.get('/stations', stationController.getStations);
 router.get('/stations/:id', stationController.getStationById);
 router.post('/stations', stationController.createStation);
+router.delete('/stations/:id', stationController.deleteStationById);
 
 module.exports = router;
