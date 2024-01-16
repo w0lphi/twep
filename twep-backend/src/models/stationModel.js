@@ -93,6 +93,74 @@ class StationModel {
             throw error;
         }
     }
+
+    static async getAllBikeCategories() {
+        try {
+            const { rows } = await pool.query(stationQueries.getAllBikeCategories);
+            return rows;
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    static async createBikeCategory(bikeCategoryData) {
+        try {
+            // Check if the bike category already exists
+            const existingCategory = await pool.query(stationQueries.getBikeCategoryByName, [bikeCategoryData.name]);
+
+            if (existingCategory.rows.length > 0) {
+                // If it exists, return the existing category
+                return existingCategory.rows[0];
+            } else {
+                // If it doesn't exist, create a new bike category
+                const newCategory = await pool.query(stationQueries.createBikeCategory, [
+                    uuidv4(),
+                    bikeCategoryData.name,
+                ]);
+
+                return newCategory.rows[0];
+            }
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    static async getBikeCategoryByName(categoryName) {
+        try {
+            const { rows } = await pool.query(stationQueries.getBikeCategoryByName, [categoryName]);
+
+            if (rows.length === 0) {
+                return null; // Bike category not found
+            }
+
+            return rows[0];
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    static async getBikeCategoryById(categoryId) {
+        try {
+            const result = await pool.query(stationQueries.getBikeCategoryById, [categoryId]);
+
+            if (result.rows.length === 0) {
+                return null; // Bike category not found
+            }
+
+            return result.rows[0];
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    static async deleteBikeCategoryById(categoryId) {
+        try {
+            await pool.query(stationQueries.deleteBikeCategoryById, [categoryId]);
+        } catch (error) {
+            throw error;
+        }
+    }
+
 }
 
 module.exports = StationModel;

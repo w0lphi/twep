@@ -9,4 +9,8 @@ router.get('/stations/:id', stationController.getStationById);
 router.post('/stations', stationController.createStation);
 router.delete('/stations/:id', stationController.deleteStationById);
 
+router.get('/bike-categories', stationController.getAllBikeCategories);
+router.post('/bike-categories', stationController.createBikeCategory);
+router.delete('/bike-categories/:id', stationController.deleteBikeCategoryById);
+
 module.exports = router;
