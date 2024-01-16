@@ -40,6 +40,7 @@ class StationModel {
                 stationData.name,
                 stationData.location,
                 stationData.operational,
+                parkingPlacesData,
             ]);
 
             // Insert parking places for the station
