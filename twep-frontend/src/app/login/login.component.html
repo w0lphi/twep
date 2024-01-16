@@ -36,7 +36,7 @@
                 type="text" 
                 name="email" 
                 formControlName="email"
-                [disabled]="runningAction"
+                [readonly]="runningAction"
             >
             <mat-error *ngIf="email?.errors?.['required']">
                 Please enter email
@@ -50,7 +50,7 @@
                 name="password" 
                 formControlName="password"
                 [type]="showPassword ? 'text' : 'password'" 
-                [disabled]="runningAction"
+                [readonly]="runningAction"
             >
             <button 
                 matSuffix 

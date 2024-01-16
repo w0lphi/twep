@@ -1,10 +1,11 @@
-import { Component, Input, ViewChild } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule, FormGroup, FormControl, Validators, AbstractControl } from '@angular/forms';
 import { Router } from '@angular/router';
 import { LoadingOverlayComponent } from '../../common/loading-overlay/loading-overlay.component';
 import { BikeStation } from '../../model/bikeStation';
 import { BikeStationService } from '../../service/bikeStation.service';
+import { DialogService } from '../../service/dialog.service';
 import { Location } from '../../model/location';
 
 import { MatInputModule } from '@angular/material/input';
@@ -53,7 +54,7 @@ export class StationDetailComponent {
   parkingPlaces: ParkingPlace[] = [];
   options: Leaflet.MapOptions = {};
   layers: Leaflet.Layer[] = [];
-
+  map?: Leaflet.Map;
 
   @Input()
   set id(stationId: string) {
@@ -63,15 +64,16 @@ export class StationDetailComponent {
 
   constructor(
     private bikeStationService: BikeStationService,
-    private router: Router
+    private dialogService: DialogService,
+    private router: Router,
   ) {
 
     this.bikeStationForm = new FormGroup({
-      id: new FormControl(null),
+      id: new FormControl({value: null, disabled: true}),
       name: new FormControl(null, Validators.required),
       latitude: new FormControl(null, Validators.required),
       longitude: new FormControl(null, Validators.required),
-      operational: new FormControl(false, Validators.required),
+      operational: new FormControl(null),
     });
 
     this.bikeCategories = [
@@ -85,23 +87,33 @@ export class StationDetailComponent {
     this.options = LeafletUtil.mapOptions;
   }
 
+  onMapReady(map: Leaflet.Map) {
+    this.map = map;
+    if (!this.isNew && this.bikeStation?.location !== undefined) {
+      //Go to the bike station location
+      const location: Location = this.bikeStation.location;
+      this.map?.setView(new Leaflet.LatLng(location.latitude, location.longitude), 17);
+    }
+  }
+
   loadStation(): void{
     this.runningAction = true;
     if (this.stationId === null || this.stationId === undefined) {
       return; 
     }
-    if(this.stationId === "new"){
+    if(this.isNew){
       this.bikeStation = new BikeStation("", "", new Location(0, 0));
       this.bikeStationName = "New station"
       this.runningAction = false;
     }else{
       this.bikeStationService.getBikeStation(this.stationId).subscribe({
         next: (bikeStation: BikeStation) => {
+          //Bike station successfully loaded
           this.bikeStation = bikeStation;
           this.bikeStationName = this.bikeStation.name;
           this.updateForm(bikeStation);
           if (this.bikeStation?.location !== undefined) {
-            this.setMarker(this.bikeStation.location)
+            this.setMarker(this.bikeStation.location);
           }
           this.runningAction = false;
         },
@@ -125,11 +137,15 @@ export class StationDetailComponent {
     bikeStation.parkingPlaces = this.parkingPlaces;
     console.log("Updated station", bikeStation);
 
-    if (this.stationId === "new") {
+    if (this.isNew) {
       this.bikeStationService.createBikeStation(bikeStation).subscribe({
-        next: () => {
-          this.runningAction = false;
-          return;
+        next: (response: any) => {
+          const id: string = response?.id;
+          if(id !== undefined && id !== null && id !== ""){
+            this.router.navigateByUrl(`/admin/stations/${id}`);
+          }else{
+            this.router.navigateByUrl("/admin/stations");
+          }
         },
         error: () => {
           this.runningAction = false;
@@ -148,12 +164,21 @@ export class StationDetailComponent {
     }
   }
 
-  deleteStation() {
+  async deleteStation() {
     if (this.bikeStation?.id === undefined) return;
+
+    const confirmed: boolean = await this.dialogService.openConfirmDialog(
+      "Delete station?",
+      "Do you really want to delete the station? This cannot be undone!"
+    )
+
+    if(!confirmed) return;
+
     this.runningAction = true;
     this.bikeStationService.deleteBikeStation(this.bikeStation?.id).subscribe({
       next: () => {
         this.runningAction = false;
+        this.router.navigateByUrl("/admin/stations");
         return;
       },
       error: () => {
@@ -174,8 +199,8 @@ export class StationDetailComponent {
   }
 
   setStationLocation(event: Leaflet.LeafletMouseEvent): void {
-    const latitude: number = event.latlng.lat;
-    const longitude: number = event.latlng.lng;
+    const latitude: number = Number(event.latlng.lat.toPrecision(7));
+    const longitude: number = Number(event.latlng.lng.toPrecision(7));
     this.bikeStationForm.patchValue({ longitude, latitude })
     this.setMarker(new Location(latitude, longitude));
   }
@@ -198,7 +223,11 @@ export class StationDetailComponent {
   }
 
   updateCategories(parkingPlace: ParkingPlace, event: MatSelectChange): void {
-    parkingPlace.bikeCategories = event.value
+    parkingPlace.bike_categories = event.value
+  }
+
+  get isNew(): boolean{
+    return this.stationId === "new";
   }
 
   get name(): AbstractControl<any, any> | null {

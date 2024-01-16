@@ -23,14 +23,6 @@ body {
         color: rgba(0, 0, 0, 0.54);
     }
 
-    .mat-mdc-raised-button.mat-primary {
-        --mdc-protected-button-label-text-color: #fff
-    }
-
-    .mdc-button .mdc-button__label {
-        text-transform: uppercase;
-    }
-
     .mat-toolbar,
     .mat-toolbar h1,
     .mat-toolbar h2,
@@ -44,13 +36,27 @@ body {
         margin-right: 8px;
     }
 
+    //BUTTONS
+    .mdc-button.mat-primary {
+        --mdc-protected-button-label-text-color: #fff;
+        --mdc-filled-button-label-text-color: #fff;
+    }
+
+    .mdc-button .mdc-button__label {
+        text-transform: uppercase;
+    }
+
     button.twep-save-btn{
+        --mdc-filled-button-container-color: var(--green);
         --mdc-protected-button-container-color: var(--green);
         --mdc-protected-button-label-text-color: white;
+        --mdc-filled-button-label-text-color: #fff;
     }
 
     button.twep-delete-btn{
+        --mdc-filled-button-container-color: var(--green);
         --mdc-protected-button-container-color: var(--red);
         --mdc-protected-button-label-text-color: white;
+        --mdc-filled-button-label-text-color: #fff;
     }
 }
