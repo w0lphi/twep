@@ -1,0 +1,40 @@
+<div class="twep-prompt-dialog">
+    <form [formGroup]="promptForm">
+        <h1 mat-dialog-title>{{ data.title }}</h1>
+        <div mat-dialog-content>
+            <div class="twep-prompt-dialog-text">{{data.text}}</div>
+            <mat-form-field>
+                <mat-label>{{data.label}}</mat-label>
+                <input
+                    matInput
+                    type="text"
+                    name="text"
+                    formControlName="value"
+                >
+                <mat-error *ngIf="valueInput?.errors?.['required']">
+                    Please enter value
+                </mat-error>
+            </mat-form-field>
+        </div>
+        <div
+            mat-dialog-actions
+            [align]="'end'"
+        >
+            <button
+                mat-button
+                color
+                (click)="closeDialog(true)"
+            >
+                CANCEL
+            </button>
+            <button
+                mat-button
+                type="submit"
+                color="primary"
+                (click)="closeDialog(false)"
+            >
+                OK
+            </button>
+        </div>
+    </form>
+</div>

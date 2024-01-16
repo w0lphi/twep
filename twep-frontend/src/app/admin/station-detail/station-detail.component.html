@@ -38,10 +38,8 @@
                         DELETE
                     </button>
             </mat-toolbar>
-            <div class="twep-station-information">
-                <mat-toolbar>
-                    <h4>General Information</h4>
-                </mat-toolbar>
+            <div class="twep-station-information-container">
+                <h3>General Information</h3>
                 
                 <mat-form-field *ngIf="bikeStation?.id !== ''">
                     <mat-label>Id</mat-label>
@@ -70,10 +68,7 @@
                 <mat-checkbox formControlName="operational">
                     Is operational
                 </mat-checkbox>
-                <mat-divider />
-                <mat-toolbar>
-                    <h4>Location</h4>
-                </mat-toolbar>
+                <h3>Location</h3>
                 <div
                     *ngIf="options"
                     class="twep-map"
@@ -114,9 +109,10 @@
                         </mat-error>
                     </mat-form-field>
                 </div>
-                <mat-divider />
-                <mat-toolbar>
-                    <h4>Parking places</h4>
+            </div>
+            <div class="twep-station-parking-place-container">
+                <div class="twep-station-parking-place-toolbar">
+                    <h3>Parking places</h3>
                     <div class="twep-spacer"></div>
                     <button
                         mat-raised-button
@@ -125,8 +121,11 @@
                     >
                         Add Place
                     </button>
-                </mat-toolbar>
-                <div *ngFor="let parkingPlace of parkingPlaces; let i = index" class="twep-parking-place">
+                </div>
+                <div
+                    *ngFor="let parkingPlace of parkingPlaces; let i = index"
+                    class="twep-parking-place"
+                >
                     <div>{{i + 1}}</div>
                     <div>
                         <mat-form-field>
@@ -138,7 +137,7 @@
                                 (selectionChange)="updateCategories(parkingPlace, $event)"
                             >
                                 @for (category of bikeCategories; track id) {
-                                    <mat-option [value]="category">{{category.name}}</mat-option>
+                                <mat-option [value]="category">{{category.name}}</mat-option>
                                 }
                             </mat-select>
                         </mat-form-field>
@@ -146,12 +145,13 @@
                     <div class="twep-parking-place-actions">
                         <button
                             mat-icon-button
+                            class="twep-delete-btn"
                             (click)="removeParkingPlace(i)"
                         >
                             <mat-icon>delete</mat-icon>
                         </button>
                     </div>
-                </div>  
+                </div>
             </div>
         </form>
     }

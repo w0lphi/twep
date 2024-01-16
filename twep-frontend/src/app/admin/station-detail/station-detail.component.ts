@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { LoadingOverlayComponent } from '../../common/loading-overlay/loading-overlay.component';
 import { BikeStation } from '../../model/bikeStation';
 import { BikeStationService } from '../../service/bikeStation.service';
+import { BikeCategoryService } from '../../service/bikeCategory.service';
 import { DialogService } from '../../service/dialog.service';
 import { Location } from '../../model/location';
 
@@ -64,6 +65,7 @@ export class StationDetailComponent {
 
   constructor(
     private bikeStationService: BikeStationService,
+    private bikeCategoryService: BikeCategoryService,
     private dialogService: DialogService,
     private router: Router,
   ) {
@@ -75,16 +77,11 @@ export class StationDetailComponent {
       longitude: new FormControl(null, Validators.required),
       operational: new FormControl(null),
     });
-
-    this.bikeCategories = [
-      new BikeCategory("1", "City Bike"),
-      new BikeCategory("2", "Mountain Bike"),
-      new BikeCategory("3", "Electric Bike"),
-    ]
   }
 
   ngOnInit(): void {
     this.options = LeafletUtil.mapOptions;
+    this.loadCategories();
   }
 
   onMapReady(map: Leaflet.Map) {
@@ -94,6 +91,14 @@ export class StationDetailComponent {
       const location: Location = this.bikeStation.location;
       this.map?.setView(new Leaflet.LatLng(location.latitude, location.longitude), 17);
     }
+  }
+
+  loadCategories(): void{
+    this.bikeCategoryService.getBikeCategories().subscribe({
+      next: (bikeCategories: BikeCategory[]): void => {
+        this.bikeCategories = bikeCategories;
+      }
+    })
   }
 
   loadStation(): void{
@@ -107,7 +112,7 @@ export class StationDetailComponent {
       this.runningAction = false;
     }else{
       this.bikeStationService.getBikeStation(this.stationId).subscribe({
-        next: (bikeStation: BikeStation) => {
+        next: (bikeStation: BikeStation): void => {
           //Bike station successfully loaded
           this.bikeStation = bikeStation;
           this.bikeStationName = this.bikeStation.name;
@@ -117,8 +122,7 @@ export class StationDetailComponent {
           }
           this.runningAction = false;
         },
-        error: (error: any) => {
-          console.error(error);
+        error: (error: any): void => {
           this.runningAction = false;
           //TODO: Handle error
         } 

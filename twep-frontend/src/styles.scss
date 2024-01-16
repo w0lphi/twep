@@ -54,9 +54,14 @@ body {
     }
 
     button.twep-delete-btn{
-        --mdc-filled-button-container-color: var(--green);
+        --mdc-filled-button-container-color: var(--red);
         --mdc-protected-button-container-color: var(--red);
         --mdc-protected-button-label-text-color: white;
         --mdc-filled-button-label-text-color: #fff;
+
+        .mat-icon{
+            --mat-icon-color: var(--red);
+        }
+
     }
 }

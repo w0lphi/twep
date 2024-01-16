@@ -5,6 +5,7 @@ import { RegisterComponent } from './register/register.component';
 import { AdminHubComponent } from './admin/admin-hub/admin-hub.component';
 import { StationListComponent } from './admin/station-list/station-list.component';
 import { StationDetailComponent } from './admin/station-detail/station-detail.component';
+import { CategoryListComponent } from './admin/category-list/category-list.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 
 export const routes: Routes = [
@@ -34,6 +35,10 @@ export const routes: Routes = [
             {
                 path: 'stations/:id',
                 component: StationDetailComponent
+            },
+            {
+                path: 'categories',
+                component: CategoryListComponent
             }
         ]
     },
