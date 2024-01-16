@@ -73,6 +73,56 @@ const stationController = {
         }
     },
 
+    async getAllBikeCategories(req, res) {
+        try {
+            const bikeCategories = await StationModel.getAllBikeCategories();
+            res.json(bikeCategories);
+        } catch (error) {
+            console.error(error);
+            res.status(500).send('Internal Server Error');
+        }
+    },
+
+    async createBikeCategory(req, res) {
+        try {
+            const { name } = req.body;
+
+            // Check if the bike category already exists
+            const existingCategory = await StationModel.getBikeCategoryByName(name);
+
+            if (existingCategory) {
+                return res.status(400).json({ error: 'Bike category already exists in the database.' });
+            }
+
+            const newCategoryId = await StationModel.createBikeCategory({ name });
+
+            res.json({ id: newCategoryId, message: 'Bike category created successfully.' });
+        } catch (error) {
+            console.error(error);
+            res.status(500).send('Internal Server Error');
+        }
+    },
+
+    async deleteBikeCategoryById(req, res) {
+        const { id } = req.params;
+
+        try {
+            // Check if the bike category exists
+            const bikeCategory = await StationModel.getBikeCategoryById(id);
+
+            if (!bikeCategory) {
+                return res.status(404).json({ error: 'Bike category not found' });
+            }
+
+            await StationModel.deleteBikeCategoryById(id);
+
+            res.json({ message: 'Bike category deleted successfully' });
+        } catch (error) {
+            console.error(error);
+            res.status(500).send('Internal Server Error');
+        }
+    },
+
 };
 
 module.exports = stationController;

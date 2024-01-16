@@ -6,6 +6,11 @@ const createBikeCategory = 'INSERT INTO bike_categories(id, name) VALUES($1, $2)
 const createParkingPlaceBikeCategory = 'INSERT INTO parking_place_bike_categories(parking_place_id, bike_category_id) VALUES($1, $2)';
 const deleteStationById = 'DELETE FROM stations WHERE id = $1';
 
+const getAllBikeCategories = 'SELECT * FROM bike_categories';
+const getBikeCategoryByName = 'SELECT * FROM bike_categories WHERE name = $1';
+const deleteBikeCategoryById = 'DELETE FROM bike_categories WHERE id = $1';
+const getBikeCategoryById = 'SELECT * FROM bike_categories WHERE id = $1';
+
 
 module.exports = {
     getStations,
@@ -15,4 +20,8 @@ module.exports = {
     createBikeCategory,
     createParkingPlaceBikeCategory,
     deleteStationById,
+    getAllBikeCategories,
+    getBikeCategoryByName,
+    deleteBikeCategoryById,
+    getBikeCategoryById,
 };
