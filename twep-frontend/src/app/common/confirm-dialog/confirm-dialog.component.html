@@ -1,0 +1,23 @@
+<div class="twep-confirm-dialog">
+    <h1 mat-dialog-title>{{ data.title }}</h1>
+    <div mat-dialog-content>
+        {{data.text}}
+    </div>
+    <div mat-dialog-actions [align]="'end'">
+        <button
+            mat-button
+            color
+            [mat-dialog-close]="false"
+        >
+            CANCEL
+        </button>
+        <button
+            mat-button
+            color="primary"
+            [mat-dialog-close]="true"
+        >
+            OK
+        </button>
+    </div>
+
+</div>

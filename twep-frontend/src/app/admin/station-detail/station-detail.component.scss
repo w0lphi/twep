@@ -3,41 +3,112 @@
     flex-direction: column;
     gap: 8px;
     position: relative;
-    height: 100%;
-    max-width: 800px;
-
-    >.mat-toolbar {
-        background-color: white;
-
-        >.mdc-button + .mdc-button{
-            margin-left: 8px;
-        }
-
-    }
+    min-height: 100px;
+    background-color: white;
 
     >.twep-station-form{
-        display: flex;
-        flex-direction: column;
-        gap: 8px;
+        display: grid;
+        row-gap: 8px;
+        column-gap: 8px;
+        grid-template-areas: 
+            "toolbar toolbar"
+            "info parking";
 
-        >.twep-map{
-            width: 100%;
-            height: 600px;
+        >.mat-toolbar {
+            background-color: white;
+            grid-area: toolbar;
+            border-bottom: 1px solid var(--mat-divider-color);
+            margin-bottom: 8px;
+            
+            >.mdc-button+.mdc-button,
+            >button+h1 {
+                margin-left: 8px;
+            }
         }
 
-        >.twep-station-location{
-            display: grid;
-            grid-template-columns: 1fr 1fr;
+        >.twep-station-information-container{
+            display: flex;
+            flex-direction: column;
             gap: 8px;
-            flex-grow: 1;
+            padding: 0px 16px;
+            grid-area: info;
+
+            .mat-toolbar {
+                background-color: white;
+                padding: 0;
+            }
+
+            >.twep-map {
+                width: 100%;
+                height: 600px;
+                margin-bottom: 8px;
+            }
+        
+            >.twep-station-location {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 8px;
+            }
+        }
+
+        >.twep-station-parking-place-container{
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            grid-area: parking;
+            padding: 0px 16px;
+            border-left: 1px solid var(--mat-divider-color);
+
+            .twep-station-parking-place-toolbar {
+                display: flex;
+                flex-direction: row;
+                flex: 1 1 100%;
+                align-items: center;
+                max-height: 48px;
+            }
+        
+            .twep-parking-place {
+                display: grid;
+                grid-template-columns: 20px 1fr auto;
+                column-gap: 8px;
+                padding-top: 24px;
+                align-items: baseline;
+        
+                .mat-mdc-form-field {
+                    width: 100%;
+                }
+        
+            }
         }
     }
+}
+
+@media (max-width: 1599px) {
+    .twep-station-detail{
+        .twep-station-form{
+            grid-template-areas: 
+                "toolbar"
+                "info"
+                "parking";
+
+            >.twep-station-parking-place-container{
+                border-left: none;
+            }
+        }
+
+
+    }
+
 }
 
 @media (max-width: 599px) {
     .twep-station-detail{
         max-width: unset;
         width: 100%;
+
+        .back-button{
+            display: none;
+        }
 
         >.twep-station-form {
             display: flex;

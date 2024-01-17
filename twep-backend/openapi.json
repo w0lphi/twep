@@ -149,6 +149,78 @@
           "operational": {
             "type": "boolean"
           }
+        },
+        "example": {
+          "id": "uuid",
+          "name": "Bike Station 1",
+          "location": {
+            "latitude": 40.7128,
+            "longitude": -74.006
+          },
+          "parkingPlaces": [
+            {
+              "id": "uuid",
+              "bikeCategories": [
+                {
+                  "id": "uuid",
+                  "name": "Mountain Bike"
+                },
+                {
+                  "id": "uuid",
+                  "name": "Electric Bike"
+                }
+              ],
+              "occupied": true
+            }
+          ],
+          "operational": true
+        }
+      },
+      "UpsertStation": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "location": {
+            "type": "object",
+            "properties": {
+              "latitude": {
+                "type": "number",
+                "format": "float"
+              },
+              "longitude": {
+                "type": "number",
+                "format": "float"
+              }
+            },
+            "required": [
+              "latitude",
+              "longitude"
+            ]
+          },
+          "parkingPlaces": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "bikeCategories": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "description": "An array of existing category ids"
+                },
+                "occupied": {
+                  "type": "boolean",
+                  "description": "If the parking place is occupied or not"
+                }
+              }
+            }
+          },
+          "operational": {
+            "type": "boolean"
+          }
         }
       },
       "Review": {
@@ -205,28 +277,24 @@
             "items": {
               "$ref": "#/components/schemas/BikeCategory"
             }
+          },
+          "occupied": {
+            "type": "boolean",
+            "description": "If the parking place is occupied or not"
           }
-        },
-        "required": [
-          "id",
-          "bikeCategories"
-        ],
-        "example": {
-          "id": "abc123",
-          "bikeCategories": [
-            "city_bike",
-            "mountain_bike"
-          ]
         }
       },
       "BikeCategory": {
-        "type": "string",
-        "enum": [
-          "mountain_bike",
-          "city_bike",
-          "electric_bike",
-          "children_bike"
-        ]
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string"
+          }
+        }
       },
       "ErrorResponse": {
         "type": "object",
@@ -936,6 +1004,61 @@
       }
     },
     "/management/stations/{id}": {
+      "get": {
+        "summary": "Get details of a specific bike station",
+        "tags": [
+          "management-stations"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "The ID of the station to retrieve"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "example": {
+                  "id": "uuid",
+                  "name": "Bike Station 1",
+                  "location": {
+                    "latitude": 40.7128,
+                    "longitude": -74.006
+                  },
+                  "parkingPlaces": [
+                    {
+                      "id": "uuid",
+                      "bikeCategories": [
+                        "city_bike",
+                        "mountain_bike"
+                      ]
+                    }
+                  ],
+                  "operational": true
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Station not found",
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "Station not found"
+                }
+              }
+            }
+          }
+        }
+      },
       "put": {
         "summary": "Update details of a specific bike station",
         "tags": [

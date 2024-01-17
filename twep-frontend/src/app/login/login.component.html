@@ -36,7 +36,7 @@
                 type="text" 
                 name="email" 
                 formControlName="email"
-                [disabled]="runningAction"
+                [readonly]="runningAction"
             >
             <mat-error *ngIf="email?.errors?.['required']">
                 Please enter email
@@ -50,7 +50,7 @@
                 name="password" 
                 formControlName="password"
                 [type]="showPassword ? 'text' : 'password'" 
-                [disabled]="runningAction"
+                [readonly]="runningAction"
             >
             <button 
                 matSuffix 
@@ -79,7 +79,7 @@
     <div class="twep-register-link">
         <div>Do not have an account?</div> 
         <div>
-            <a routerLink="/signup">Sign up</a>
+            <a routerLink="/register">Sign up</a>
         </div>
     </div>
 

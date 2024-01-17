@@ -3,9 +3,9 @@ import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';  
 
 import { AdminHubComponent } from './admin/admin-hub/admin-hub.component';
-import { DashboardComponent } from './admin/dashboard/dashboard.component';
 import { StationListComponent } from './admin/station-list/station-list.component';
 import { StationDetailComponent } from './admin/station-detail/station-detail.component';
+import { CategoryListComponent } from './admin/category-list/category-list.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 
 export const routes: Routes = [
@@ -29,16 +29,16 @@ export const routes: Routes = [
         component: AdminHubComponent,
         children: [
             {
-                path: 'dashboard',
-                component: DashboardComponent,
-            },
-            {
                 path: 'stations',
                 component: StationListComponent,
             },
             {
                 path: 'stations/:id',
                 component: StationDetailComponent
+            },
+            {
+                path: 'categories',
+                component: CategoryListComponent
             }
         ]
     },

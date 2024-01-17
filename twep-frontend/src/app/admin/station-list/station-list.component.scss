@@ -4,4 +4,21 @@
     >.mat-toolbar {
         background-color: white;
     }
+
+    .mat-mdc-row{
+        cursor: pointer;
+
+        &:hover{
+            background-color: whitesmoke;
+        }
+
+        .bike-station-name {
+            max-width: 100px;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            overflow: hidden;
+        }
+
+    }
+
 }

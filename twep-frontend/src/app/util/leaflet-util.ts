@@ -13,6 +13,7 @@ const stadia_StamenTerrainLabels: Leaflet.TileLayer = Leaflet.tileLayer('https:/
 
 const stationIconUrl: string = '../../assets/station_marker.png'
 
+const coordinatesKlu = Leaflet.latLng(46.624268, 14.3051051);
 export class LeafletUtil {
 
     static get mapOptions(): Leaflet.MapOptions {
@@ -22,7 +23,7 @@ export class LeafletUtil {
                 stadia_StamenTerrainLabels
             ],
             zoom: 12,
-            center: Leaflet.latLng(46.624268, 14.3051051)
+            center: coordinatesKlu
         }
     }
 

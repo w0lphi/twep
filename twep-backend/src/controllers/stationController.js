@@ -1,89 +1,128 @@
+const express = require('express');
+const router = express.Router();
+const { v4: uuidv4 } = require('uuid');
 const StationModel = require('../models/stationModel');
 
-const getStations = async (req, res) => {
-    try {
-        const stations = await StationModel.getAllStations();
-        res.status(200).json(stations);
-    } catch (error) {
-        res.status(500).json({ error: 'Internal Server Error' });
-    }
-};
 
-const getStationById = async (req, res) => {
-    const id = parseInt(req.params.id);
-    try {
-        const station = await StationModel.getStationById(id);
-        if (!station) {
-            res.status(404).json({ error: 'Station not found' });
-            return;
+const stationController = {
+    async getStations(req, res) {
+        try {
+            const stations = await StationModel.getAllStations();
+            res.json(stations);
+        } catch (error) {
+            console.error(error);
+            res.status(500).send('Internal Server Error');
         }
-        res.status(200).json(station);
-    } catch (error) {
-        res.status(500).json({ error: 'Internal Server Error' });
-    }
-};
+    },
 
-const createStation = async (req, res) => {
-    const { coordinates, bikeSpaces, operational } = req.body;
+    async getStationById(req, res) {
+        const { id } = req.params;
 
-    try {
-        const newStation = await StationModel.createStation({
-            coordinates,
-            bikeSpaces,
-            operational,
-        });
+        try {
+            const station = await StationModel.getStationById(id);
 
-        res.status(201).json(newStation);
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ error: 'Internal Server Error' });
-    }
-};
+            if (!station) {
+                // Return 404 if the station with the specified ID is not found
+                return res.status(404).json({ error: 'Station not found' });
+            }
 
-const updateStation = async (req, res) => {
-    const id = parseInt(req.params.id);
-    const { coordinates, bikeSpaces, operational } = req.body;
-
-    try {
-        const existingStation = await StationModel.getStationById(id);
-        if (!existingStation) {
-            res.status(404).json({ error: 'Station not found' });
-            return;
+            res.json(station);
+        } catch (error) {
+            console.error(error);
+            res.status(500).send('Internal Server Error');
         }
+    },
 
-        const updatedStation = await StationModel.updateStation(id, {
-            coordinates,
-            bikeSpaces,
-            operational,
-        });
+    async createStation(req, res) {
+        const { name, location, operational, parkingPlaces } = req.body;
 
-        res.status(200).json(updatedStation);
-    } catch (error) {
-        res.status(500).json({ error: 'Internal Server Error' });
-    }
-};
+        try {
+            // Convert bike categories array to an array of objects with 'name' property
+            const parkingPlacesData = parkingPlaces.map(place => ({
+                bike_categories: place.bike_categories.map(category => ({ name: category })),
+                occupied: place.occupied,
+            }));
 
-const deleteStation = async (req, res) => {
-    const id = parseInt(req.params.id);
+            const newStationId = await StationModel.createStation({ name, location, operational }, parkingPlacesData);
 
-    try {
-        const existingStation = await StationModel.getStationById(id);
-        if (!existingStation) {
-            res.status(404).json({ error: 'Station not found' });
-            return;
+            res.json({ id: newStationId });
+        } catch (error) {
+            console.error(error);
+            res.status(500).send('Internal Server Error');
         }
+    },
 
-        const deletedStation = await StationModel.deleteStation(id);
-        res.status(200).json(deletedStation);
-    } catch (error) {
-        res.status(500).json({ error: 'Internal Server Error' });
-    }
+    async deleteStationById(req, res) {
+        const { id } = req.params;
+
+        try {
+            const station = await StationModel.getStationById(id);
+
+            if (!station) {
+                // Return 404 if station not found
+                return res.status(404).json({ error: 'Station not found' });
+            }
+
+            // Call the deleteStationById in model
+            await StationModel.deleteStationById(id);
+
+            res.json({ message: 'Station deleted successfully' });
+        } catch (error) {
+            console.error(error);
+            res.status(500).send('Internal Server Error');
+        }
+    },
+
+    async getAllBikeCategories(req, res) {
+        try {
+            const bikeCategories = await StationModel.getAllBikeCategories();
+            res.json(bikeCategories);
+        } catch (error) {
+            console.error(error);
+            res.status(500).send('Internal Server Error');
+        }
+    },
+
+    async createBikeCategory(req, res) {
+        try {
+            const { name } = req.body;
+
+            // Check if the bike category already exists
+            const existingCategory = await StationModel.getBikeCategoryByName(name);
+
+            if (existingCategory) {
+                return res.status(400).json({ error: 'Bike category already exists in the database.' });
+            }
+
+            const newCategoryId = await StationModel.createBikeCategory({ name });
+
+            res.json({ id: newCategoryId, message: 'Bike category created successfully.' });
+        } catch (error) {
+            console.error(error);
+            res.status(500).send('Internal Server Error');
+        }
+    },
+
+    async deleteBikeCategoryById(req, res) {
+        const { id } = req.params;
+
+        try {
+            // Check if the bike category exists
+            const bikeCategory = await StationModel.getBikeCategoryById(id);
+
+            if (!bikeCategory) {
+                return res.status(404).json({ error: 'Bike category not found' });
+            }
+
+            await StationModel.deleteBikeCategoryById(id);
+
+            res.json({ message: 'Bike category deleted successfully' });
+        } catch (error) {
+            console.error(error);
+            res.status(500).send('Internal Server Error');
+        }
+    },
+
 };
 
-module.exports = {
-    getStations,
-    getStationById,
-    createStation,
-    updateStation,
-    deleteStation,
-};
+module.exports = stationController;

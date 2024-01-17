@@ -1,23 +1,18 @@
 import { Location } from "./location";
+import { ParkingPlace } from "./parkingPlace";
 
 export class BikeStation{
     id: string;
     name: string;
-    location?: Location;
-    address?: string;
+    location: Location;
     operational: boolean;
-    bikeSpaces: number;
+    parkingPlaces: ParkingPlace[];
 
-    constructor(id: string = "", name: string = "", location?: Location, operational: boolean = false, bikeSpaces: number = 0, address?: string){
+    constructor(id: string = "", name: string = "", location: Location, operational: boolean = false, parkingPlaces: ParkingPlace[] = []){
         this.id = id;
         this.name = name;
         this.location = location;
-        this.address = address;
         this.operational = operational;
-        this.bikeSpaces = bikeSpaces;
-    }
-
-    get locationString(): string {
-        return `Long: ${this.location?.longitude}, Lat: ${this.location?.latitude}`;
+        this.parkingPlaces = parkingPlaces;
     }
 }

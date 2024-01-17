@@ -1,0 +1,23 @@
+.twep-category-list-container{
+    >.mat-toolbar {
+            background-color: white;
+        }
+    
+    .mat-mdc-row {
+        cursor: pointer;
+
+        .bike-category-name{
+            max-width: 100px;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            overflow: hidden;
+        }
+
+        .bike-category-actions{
+            display: flex;
+            flex-direction: row;
+            gap: 8px;
+            justify-content: flex-end;
+        }
+    }
+}

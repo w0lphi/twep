@@ -5,6 +5,7 @@ const cookieParser = require('cookie-parser');
 const jwt = require('jsonwebtoken');
 const swaggerUi = require('swagger-ui-express');
 const swaggerDocument = require('./openapi.json');
+const cors = require('cors');
 const verifyToken = require('./src/middleware/verifyToken');
 
 
@@ -20,6 +21,7 @@ app.use(session({
     cookie: { secure: process.env.NODE_ENV === 'production' } // Set to true in production with HTTPS
 }));
 app.use(express.json());
+app.use(cors());
 
 // Routes
 app.get('/', (req, res) => {
@@ -35,7 +37,7 @@ app.get('/protected-route', verifyToken, (req, res) => {
 const stationsRoutes = require('./src/routes/stationsRouter');
 const usersRouter = require('./src/routes/usersRouter');
 
-app.use('/stations', stationsRoutes);
+app.use('/management', stationsRoutes);
 app.use('/users', usersRouter);
 
 // Swagger Documentation

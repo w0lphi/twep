@@ -1,86 +1,158 @@
 <div class="twep-station-detail"> 
-    <app-loading-overlay *ngIf="runningAction"></app-loading-overlay>
-    <mat-toolbar>
-        <h1>{{ bikeStationName }}</h1>
-        <div class="twep-spacer"></div>
-        <button
-            mat-raised-button
-        >
-            SAVE
-        </button>
-        <button mat-raised-button>
-            DELETE
-        </button>
-    </mat-toolbar>
-    <form 
-        [formGroup]="bikeStationForm" 
-        class="twep-station-form"
-    >
-    <h3>General Information</h3>
-        <mat-form-field *ngIf="bikeStation?.id !== ''">
-            <mat-label>Id</mat-label>
-            <input
-                matInput
-                required="true"
-                type="text"
-                name="email"
-                formControlName="id"
-                [disabled]="true"
-            >
-        </mat-form-field>
-        <mat-form-field>
-            <mat-label>Name</mat-label>
-            <input
-                matInput
-                required="true"
-                type="text"
-                name="name"
-                formControlName="name"
-            >
-        </mat-form-field>
-        <mat-form-field>
-            <mat-label>Address</mat-label>
-            <input
-                matInput
-                required="true"
-                type="text"
-                name="address"
-                formControlName="address"
-            >
-        </mat-form-field>
-        <h3>Location</h3>
-        <div
-            *ngIf="options"
-            class="twep-map"
-            leaflet
-            [leafletOptions]="options"
-            [leafletLayers]="layers"
-            (leafletClick)="setStationLocation($event)"
-        >
+    @if(runningAction){
+        <app-loading-overlay />
+    }
+    @else if (bikeStation === undefined || bikeStation === null) {
+        <div class="twep-station-form">
+            <span>No bike station with id <i>{{stationId}}</i> found</span>
         </div>
-        <div class="twep-station-location">
-            <mat-form-field>
-                <mat-label>Latitude</mat-label>
-                <input
-                    matInput
-                    required="true"
-                    type="text"
-                    name="latitude"
-                    formControlName="latitude"
-                    [readonly]="true"
+    }
+    @else{
+        <form
+            [formGroup]="bikeStationForm"
+            class="twep-station-form"
+        >
+            <mat-toolbar>
+                <button
+                    mat-icon-button
+                    class="back-button"
+                    (click)="goBackToOverview()"
                 >
-            </mat-form-field>
-            <mat-form-field>
-                <mat-label>Longitude</mat-label>
-                <input
-                    matInput
-                    required="true"
-                    type="text"
-                    name="longitude"
-                    formControlName="longitude"
-                    [readonly]="true"
+                    <mat-icon>arrow_back</mat-icon>
+                </button>
+                    <h1>{{ bikeStationName }}</h1>
+                    <div class="twep-spacer"></div>
+                    <button
+                        mat-raised-button
+                        class="twep-save-btn"
+                        (click)="updateStation()"
+                    >
+                        SAVE
+                    </button>
+                    <button
+                        *ngIf="stationId !== 'new'"
+                        mat-raised-button
+                        class="twep-delete-btn"
+                        (click)="deleteStation()"
+                    >
+                        DELETE
+                    </button>
+            </mat-toolbar>
+            <div class="twep-station-information-container">
+                <h3>General Information</h3>
+                
+                <mat-form-field *ngIf="bikeStation?.id !== ''">
+                    <mat-label>Id</mat-label>
+                    <input
+                        matInput
+                        required="true"
+                        type="text"
+                        name="email"
+                        formControlName="id"
+                        [readonly]="true"
+                    >
+                </mat-form-field>
+                <mat-form-field>
+                    <mat-label>Name</mat-label>
+                    <input
+                        matInput
+                        required="true"
+                        type="text"
+                        name="name"
+                        formControlName="name"
+                    >
+                    <mat-error *ngIf="name?.errors?.['required']">
+                        Please enter bike station name
+                    </mat-error>
+                </mat-form-field>
+                <mat-checkbox formControlName="operational">
+                    Is operational
+                </mat-checkbox>
+                <h3>Location</h3>
+                <div
+                    *ngIf="options"
+                    class="twep-map"
+                    leaflet
+                    [leafletOptions]="options"
+                    [leafletLayers]="layers"
+                    (leafletMapReady)="onMapReady($event)"
+                    (leafletClick)="setStationLocation($event)"
                 >
-            </mat-form-field>
-        </div>
-    </form>
+                </div>
+                <div class="twep-station-location">
+                    <mat-form-field>
+                        <mat-label>Latitude</mat-label>
+                        <input
+                            matInput
+                            required="true"
+                            type="text"
+                            name="latitude"
+                            formControlName="latitude"
+                            [readonly]="true"
+                        >
+                        <mat-error *ngIf="latitude?.errors?.['required']">
+                            Please click on map to select location
+                        </mat-error>
+                    </mat-form-field>
+                    <mat-form-field>
+                        <mat-label>Longitude</mat-label>
+                        <input
+                            matInput
+                            required="true"
+                            type="text"
+                            name="longitude"
+                            formControlName="longitude"
+                            [readonly]="true"
+                        >
+                        <mat-error *ngIf="longitude?.errors?.['required']">
+                            Please click on map to select location
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="twep-station-parking-place-container">
+                <div class="twep-station-parking-place-toolbar">
+                    <h3>Parking places</h3>
+                    <div class="twep-spacer"></div>
+                    <button
+                        mat-raised-button
+                        color="primary"
+                        (click)="addParkingPlace()"
+                    >
+                        Add Place
+                    </button>
+                </div>
+                <div
+                    *ngFor="let parkingPlace of parkingPlaces; let i = index"
+                    class="twep-parking-place"
+                >
+                    <div>{{i + 1}}</div>
+                    <div>
+                        <mat-form-field>
+                            <mat-label>Categories</mat-label>
+                            <mat-select
+                                [value]="parkingPlace.bike_categories"
+                                [required]="true"
+                                multiple
+                                (selectionChange)="updateCategories(parkingPlace, $event)"
+                            >
+                                @for (category of bikeCategories; track id) {
+                                <mat-option [value]="category">{{category.name}}</mat-option>
+                                }
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                    <div class="twep-parking-place-actions">
+                        <button
+                            mat-icon-button
+                            class="twep-delete-btn"
+                            (click)="removeParkingPlace(i)"
+                        >
+                            <mat-icon>delete</mat-icon>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    }
 </div>
