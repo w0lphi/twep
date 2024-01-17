@@ -8,6 +8,8 @@ import { StationDetailComponent } from './admin/station-detail/station-detail.co
 import { CategoryListComponent } from './admin/category-list/category-list.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 
+import {UserhomeComponent} from './userhome/userhome.component';
+
 export const routes: Routes = [
     {
         path: '',
@@ -42,6 +44,16 @@ export const routes: Routes = [
             }
         ]
     },
+
+
+    // user view
+    {
+        path: 'userhome',
+        component: UserhomeComponent
+    },
+
+
+
 
 
     //Not found route, needs to be at the bottom
