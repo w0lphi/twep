@@ -46,8 +46,8 @@ export class UserhomeComponent {
         attribution: '© OpenStreetMap contributors'
       })
     ],
-    zoom: 13,
-    center: L.latLng(46.635700, 14.311817)
+    zoom: 14,
+    center: L.latLng(46.625800, 14.31181)
   };
 
   

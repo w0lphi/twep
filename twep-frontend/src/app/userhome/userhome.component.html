@@ -1,15 +1,17 @@
-
 <div class="userhome-container">
     
     <mat-toolbar color="secondary">
-      <img src="assets/favicon.ico" alt="Logo" class="logo">
-      <span class="twep-toolbar-title">twep Home</span>
+        <a routerLink="/userhome" id="logo">
+            <img
+                src="../../../assets/logo_small.svg"
+                height="40"
+                width="40"
+            >
+        </a>
+        <span class="twep-toolbar-title">TWEP Home</span>
     </mat-toolbar>
   
-    
     <form [formGroup]="userForm" class="user-form"></form>
   
-    
     <div leaflet [leafletOptions]="mapOptions" class="leaflet-map"></div>
-  </div>
-  
+</div>
