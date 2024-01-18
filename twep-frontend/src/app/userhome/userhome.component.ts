@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule, FormGroup, FormControl, Validators, AbstractControl } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -49,6 +49,10 @@ export class UserhomeComponent {
     zoom: 14,
     center: L.latLng(46.625800, 14.31181)
   };
+
+  
+
+
 
   
   userForm: FormGroup;

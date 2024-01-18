@@ -21,7 +21,7 @@ mat-toolbar {
 .logo {
     width: 40px; 
     height: 40px; 
-    margin-right: 9px; 
+    margin-right: 8px; 
 }
 
 .twep-toolbar-title {
@@ -30,13 +30,25 @@ mat-toolbar {
     font-weight: bold;
     display: flex;
     align-items: center;
+    margin-left: 1vw;
     
 }
 
 .user-form {
-    margin-bottom: 16px; 
+    margin-bottom: 0px; 
 }
 
 .leaflet-map {
     flex: 1;
+}
+
+
+#trenner {
+    height: 0.3em;
+    width: 100%;
+    background-color: orange;
+    margin-bottom: 0;
+    border-radius: 15px;
+
+
 }
