@@ -64,4 +64,11 @@ body {
         }
 
     }
+
+    //SNACKBAR
+    .twep-error-snackbar{
+        --mdc-snackbar-container-color: var(--red);
+        --mdc-snackbar-supporting-text-color: rgba(255, 255, 255, 0.87);
+        --mat-snack-bar-button-color: white;
+    }
 }

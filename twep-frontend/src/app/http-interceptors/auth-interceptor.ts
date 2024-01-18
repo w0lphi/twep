@@ -15,14 +15,11 @@ import { environment } from "../environment/environment";
 export class AuthInterceptor implements HttpInterceptor{
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> { 
-    //TODO: Get JWT token form local storage or elsewhere
     const jwtToken: string | null = localStorage.getItem(environment.TOKEN_KEY);
-
     if (jwtToken) {
           const cloned: HttpRequest<any> = req.clone({
               headers: req.headers.set("Authorization", `Bearer ${jwtToken}`)
           });
-
           return next.handle(cloned);
       }
       else {

@@ -16,6 +16,7 @@ export class AuthService{
     }
 
     public setSession(token: string): void {
+        this.logout();
         localStorage.setItem(this.storageKey, token);
     }
 

@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule, FormGroup, FormControl, Validators, AbstractControl } from '@angular/forms';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -32,10 +32,12 @@ import { AuthService } from '../service/auth.service';
 export class LoginComponent {
   runningAction: boolean = false;
   showPassword: boolean = false;
-  displayInvalidCredentialsError: boolean = false;
   loginForm: FormGroup;
 
-  constructor(private authService: AuthService) {
+  constructor(
+    private authService: AuthService,
+    private router: Router,
+  ) {
     //Create form group for input validation
     this.loginForm = new FormGroup({
       email: new FormControl('', Validators.required),
@@ -49,17 +51,16 @@ export class LoginComponent {
     const email: string = this.email?.value;
     const password: string = this.password?.value;
     const loginUser: LoginUser = new LoginUser(email, password);
-    this.displayInvalidCredentialsError = false;
     this.authService.login(loginUser).subscribe({
       next: (res: any): void => {
         const token: string | null = res?.token;
         if(token) this.authService.setSession(res?.token);
         this.runningAction = false;
-        //TODO: Redirect to next page
+        //TODO: Route to admin or user home page according to user profile
+        this.router.navigateByUrl("/userhome");
       },
       error: (error: any): void => {
         console.error(error);
-        this.displayInvalidCredentialsError = true;
         this.runningAction = false;
       },
     });

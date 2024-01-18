@@ -9,20 +9,6 @@
             >
         </a>
     </div>
-
-    <div *ngIf="displayInvalidCredentialsError" class="twep-login-error-container">
-        <mat-error>
-            E-Mail or password incorrect
-        </mat-error>
-        <button 
-            mat-icon-button 
-            aria-label="Close error" 
-            (click)="displayInvalidCredentialsError = false"
-        >
-            <mat-icon>close</mat-icon>
-        </button>
-    </div>
-
     <form
         class="twep-login-form"
         [formGroup]="loginForm"

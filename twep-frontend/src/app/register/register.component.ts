@@ -9,7 +9,7 @@ import { AppComponent } from '../../app/app.component';
 
 import { CommonModule } from '@angular/common';
 
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -17,9 +17,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 
 import { LoadingOverlayComponent } from '../common/loading-overlay/loading-overlay.component';
-import { LoginUser } from '../model/loginUser';
-import { AuthService } from '../service/auth.service';
 import { ValidatorFn } from '@angular/forms';
+import { RegisterUser } from '../model/registerUser';
 
 
 
@@ -49,11 +48,12 @@ export class RegisterComponent {
   showConfirmPassword: boolean = false;
   registerForm: FormGroup;
 
-  constructor(private registerService: RegisterService) {
+  constructor(
+    private registerService: RegisterService,
+    private router: Router,
+  ) {
     this.registerForm = new FormGroup({
-      username: new FormControl('', Validators.required),
       email: new FormControl('', Validators.required),
-      fullName: new FormControl('', Validators.required),
       password: new FormControl('', [Validators.required, Validators.minLength(9), Validators.pattern(/[A-Z]/)]),
       confirmPassword: new FormControl('', Validators.required),
     }, { validators: this.passwordMatchValidator as ValidatorFn }); 
@@ -63,9 +63,7 @@ export class RegisterComponent {
   private passwordMatchValidator(form: FormGroup): { passwordMismatch: boolean } | null {
     const password = form.get('password')?.value;
     const confirmPassword = form.get('confirmPassword')?.value;
-
     const passwordMismatch = password !== confirmPassword;
-
     
     if (passwordMismatch) {
       form.get('confirmPassword')?.setErrors({ passwordMismatch: true });
@@ -76,20 +74,16 @@ export class RegisterComponent {
     return passwordMismatch ? { passwordMismatch: true } : null;
   }
 
-
-
-
   register(): void {
-    const username: string = this.username?.value;
     const password: string = this.password?.value;
     const email: string = this.email?.value;
-    const registrationData = { username, password };
-
+    const registerUser: RegisterUser = new RegisterUser(email, password);
     this.runningAction = true;
-    this.registerService.register(registrationData).subscribe({
-      next: (response: any): void => {
+    this.registerService.register(registerUser).subscribe({
+      next: (): void => {
         // Handle successful registration response
         this.runningAction = false;
+        this.router.navigateByUrl("/login");
       },
       error: (error: any): void => {
         console.error(error);
@@ -99,18 +93,11 @@ export class RegisterComponent {
     });
   }
 
-  get username() {
-    return this.registerForm.get('username');
-  }
-
   get password() {
     return this.registerForm.get('password');
   }
   get email() {
     return this.registerForm.get('email');
-  }
-  get fullName() {
-    return this.registerForm.get('fullName');
   }
   get confirmPassword() {
     return this.registerForm.get('confirmPassword');

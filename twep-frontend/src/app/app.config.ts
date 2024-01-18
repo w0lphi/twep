@@ -3,7 +3,6 @@ import { provideRouter, withComponentInputBinding } from '@angular/router';
 import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http'
 import { httpInterceptorProviders } from './http-interceptors/http-interceptor.provider';
 
-
 import { routes } from './app.routes';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material/form-field';
@@ -11,7 +10,6 @@ import { MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material/form-field';
 export const appConfig: ApplicationConfig = {
   providers: [
     provideRouter(routes, withComponentInputBinding()),
-    provideAnimations(),
     provideAnimations(),
 
     //set default appearance of form fields to outline
