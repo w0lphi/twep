@@ -5,7 +5,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatIconModule } from '@angular/material/icon';
-import { Router } from '@angular/router';
+
 
 import { LoadingOverlayComponent } from '../../common/loading-overlay/loading-overlay.component';
 import { BikeCategory } from '../../model/bikeCategory';
@@ -33,7 +33,6 @@ export class CategoryListComponent {
 
 
   constructor(
-    private router: Router,
     private bikeCategoryService: BikeCategoryService,
     private dialogService: DialogService,
   ) {

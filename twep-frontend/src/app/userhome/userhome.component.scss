@@ -9,7 +9,6 @@ mat-toolbar {
     align-items: center;
     background-color: white; 
     color: #333; 
-    height: 4.5vh;
 }
 
 #logo {
@@ -40,15 +39,4 @@ mat-toolbar {
 
 .leaflet-map {
     flex: 1;
-}
-
-
-#trenner {
-    height: 0.3em;
-    width: 100%;
-    background-color: orange;
-    margin-bottom: 0;
-    border-radius: 15px;
-
-
 }

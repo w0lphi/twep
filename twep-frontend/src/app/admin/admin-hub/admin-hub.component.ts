@@ -50,13 +50,14 @@ export class AdminHubComponent {
 
   adminLogout() {
     this.authService.logout();
-    this.router.navigate(["/"])
+    this.router.navigateByUrl("/")
   }
 
   get navigationLinks(): (NavigationLink | null)[]{
     return [
       new NavigationLink("Stations", "place", "stations"),
       new NavigationLink("Categories", "category", "categories"),
+      new NavigationLink("Models", "bike_scooter", "models"),
       new NavigationLink("Bikes", "pedal_bike", "bikes"),
     ]
   }

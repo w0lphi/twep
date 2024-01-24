@@ -6,6 +6,8 @@ import { AdminHubComponent } from './admin/admin-hub/admin-hub.component';
 import { StationListComponent } from './admin/station-list/station-list.component';
 import { StationDetailComponent } from './admin/station-detail/station-detail.component';
 import { CategoryListComponent } from './admin/category-list/category-list.component';
+import { ModelListComponent } from './admin/model-list/model-list.component';
+import { BikesListComponent } from './admin/bikes-list/bikes-list.component'; 
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 
 import {UserhomeComponent} from './userhome/userhome.component';
@@ -41,7 +43,15 @@ export const routes: Routes = [
             {
                 path: 'categories',
                 component: CategoryListComponent
-            }
+            },
+            {
+                path: 'models',
+                component: ModelListComponent
+            },
+            {
+                path: 'bikes',
+                component: BikesListComponent
+            },
         ]
     },
 

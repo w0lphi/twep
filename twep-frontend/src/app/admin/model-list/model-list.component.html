@@ -1,0 +1,64 @@
+<div class="twep-model-list-container">
+    @if (runningAction) {
+        <app-loading-overlay />
+    }
+    @else {
+        <mat-toolbar>
+            <div class="twep-spacer"></div>
+            <button
+                mat-raised-button
+                color="primary"
+                (click)="createModel()"
+            >
+                Add Model
+            </button>
+        </mat-toolbar>
+        <table
+            mat-table
+            [dataSource]="bikeModels"
+        >
+            <ng-container matColumnDef="name">
+                <th
+                    mat-header-cell
+                    *matHeaderCellDef
+                    mat-sort-header
+                >
+                    Name
+                </th>
+                <td
+                    mat-cell
+                    *matCellDef="let element"
+                    class="bike-model-name"
+                >
+                    {{element.name}}
+                </td>
+            </ng-container>
+            
+            <ng-container matColumnDef="description">
+                <th
+                    mat-header-cell
+                    *matHeaderCellDef
+                    mat-sort-header
+                >
+                    Description
+                </th>
+                <td
+                    mat-cell
+                    *matCellDef="let element"
+                    class="bike-model-description"
+                >
+                    {{element.description}}
+                </td>
+            </ng-container>
+
+            <tr
+                mat-header-row
+                *matHeaderRowDef="columns"
+            ></tr>
+            <tr
+                mat-row
+                *matRowDef="let row; columns: columns;"
+            ></tr>
+        </table>
+    }
+</div>
