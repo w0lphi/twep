@@ -1,0 +1,69 @@
+.twep-bike-model-detail{
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    background-color: white;
+
+    .twep-bike-model-form{
+        display: grid;
+        row-gap: 16px;
+        column-gap: 8px;
+        grid-template-areas:
+                "toolbar toolbar"
+                "info features";
+        
+
+        >.twep-bike-model-information-container{
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            padding: 0px 16px;
+            grid-area: info
+        }
+
+        >.twep-bike-model-feature-container{
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            grid-area: features;
+            padding: 0px 16px;
+            border-left: 1px solid var(--mat-divider-color);
+
+            .twep-bike-model-feature-toolbar {
+                display: flex;
+                flex-direction: row;
+                flex: 1 1 100%;
+                align-items: center;
+                max-height: 48px;
+            }
+
+            .twep-bike-model-extra-feature {
+                display: grid;
+                grid-template-columns: 20px auto 48px;
+                column-gap: 8px;
+                padding-top: 24px;
+                align-items: baseline;
+
+                .mat-mdc-form-field {
+                    width: 100%;
+                }
+
+            }
+        }
+    }
+}
+
+@media (max-width: 1599px) {
+    .twep-bike-model-detail {
+        .twep-bike-model-form {
+            grid-template-areas:
+                "toolbar"
+                "info"
+                "features";
+
+            >.twep-bike-model-feature-container {
+                border-left: none;
+            }
+        }
+    }
+}

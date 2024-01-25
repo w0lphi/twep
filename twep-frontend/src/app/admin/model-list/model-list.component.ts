@@ -9,6 +9,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { LoadingOverlayComponent } from '../../common/loading-overlay/loading-overlay.component';
 import { BikeModel } from '../../model/bikeModel';
 import { BikeModelService } from '../../service/bikeModel.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-model-list',
@@ -30,14 +31,15 @@ export class ModelListComponent {
   bikeModels: BikeModel[] = [];
 
   constructor(
-    private bikeModelService: BikeModelService
+    private bikeModelService: BikeModelService,
+    private router: Router,
   ){
     this.getModels();
   }
 
 
   createModel(): void{
-    //TODO: Implement
+    this.router.navigateByUrl("/admin/models/new")
   }
 
   getModels(): void{

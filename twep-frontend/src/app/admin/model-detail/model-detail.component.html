@@ -1,0 +1,147 @@
+<div class="twep-bike-model-detail">
+    @if(runningAction){
+        <app-loading-overlay />
+    }@else if (bikeModel === undefined || bikeModel === null) {
+    <div class="twep-station-form">
+        <span>No bike station with id <i>{{modelId}}</i> found</span>
+    </div>
+    } @else{
+        <form
+            [formGroup]="bikeModelForm"
+            class="twep-bike-model-form"
+        >
+            <mat-toolbar class="twep-admin-content-toolbar">
+                <button
+                    mat-icon-button
+                    class="back-button"
+                    (click)="goBackToOverview()"
+                >
+                    <mat-icon>arrow_back</mat-icon>
+                </button>
+                <h1>{{ bikeModelName }}</h1>
+                <div class="twep-spacer"></div>
+                <button
+                    mat-raised-button
+                    class="twep-save-btn"
+                    (click)="updateModel()"
+                >
+                    SAVE
+                </button>
+                <button
+                    *ngIf="modelId !== 'new'"
+                    mat-raised-button
+                    class="twep-delete-btn"
+                    (click)="deleteModel()"
+                >
+                    DELETE
+                </button>
+            </mat-toolbar>
+            <div class="twep-bike-model-information-container">
+                <h3>General Information</h3>
+                <mat-form-field  *ngIf="bikeModel?.id !== ''">
+                    <mat-label>Id</mat-label>
+                    <input
+                        matInput
+                        required="true"
+                        type="text"
+                        name="email"
+                        formControlName="id"
+                        [readonly]="true"
+                    >
+                </mat-form-field>
+                <mat-form-field>
+                    <mat-label>Name</mat-label>
+                    <input
+                        matInput
+                        required="true"
+                        type="text"
+                        name="name"
+                        formControlName="name"
+                    >
+                    <mat-error *ngIf="name?.errors?.['required']">
+                        Please enter bike model name
+                    </mat-error>
+                </mat-form-field>
+                <mat-form-field>
+                    <mat-label>Category</mat-label>
+                    <mat-select 
+                        [required]="true"
+                        name="category"
+                        formControlName="category"
+                    >
+                        @for (category of bikeCategories; track id) {
+                            <mat-option [value]="category">{{category.name}}</mat-option>
+                        }
+                    </mat-select>
+                    <mat-error *ngIf="category?.errors?.['required']">
+                        Please select the category of the bike model
+                    </mat-error>
+                </mat-form-field>
+                <mat-form-field>
+                    <mat-label>Wheel size</mat-label>
+                    <input
+                        matInput
+                        required="true"
+                        type="number"
+                        name="wheelSize"
+                        formControlName="wheelSize"
+                    >
+                    <span matTextSuffix>inches</span>
+                    <mat-error *ngIf="wheelSize?.errors?.['required']">
+                        Please enter wheel size of bike model
+                    </mat-error>
+                </mat-form-field>
+                <mat-form-field>
+                    <mat-label>Description</mat-label>
+                    <textarea
+                        matInput
+                        required="true"
+                        type="text"
+                        name="description"
+                        rows="5"
+                        formControlName="description"
+                    ></textarea>
+                    <mat-error *ngIf="description?.errors?.['required']">
+                        Please enter a description for the bike model
+                    </mat-error>
+                </mat-form-field>
+            </div>
+            <div class="twep-bike-model-feature-container">
+                <div class="twep-bike-model-feature-toolbar">
+                    <h3>Model features</h3>
+                    <div class="twep-spacer"></div>
+                    <button
+                        mat-raised-button
+                        color="primary"
+                        (click)="addFeature()"
+                    >
+                        Add feature
+                    </button>
+                </div>
+
+                <div
+                    *ngFor="let feature of extraFeatures; let i = index"
+                    class="twep-bike-model-extra-feature"
+                >
+                    <div>{{i + 1}}</div>
+                    <mat-form-field>
+                        <input
+                            [value]="feature.value"
+                            matInput
+                            type="text"
+                            placeholder="Enter feature..."
+                            (input)="updateFeature(feature, $event)"
+                        >
+                    </mat-form-field>
+                    <button
+                        mat-icon-button
+                        class="twep-delete-btn"
+                        (click)="removeFeature(i)"
+                    >
+                        <mat-icon>delete</mat-icon>
+                    </button>
+                </div>
+            </div>
+        </form>
+    }
+</div>

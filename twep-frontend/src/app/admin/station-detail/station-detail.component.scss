@@ -2,29 +2,15 @@
     display: flex;
     flex-direction: column;
     gap: 8px;
-    position: relative;
-    min-height: 100px;
     background-color: white;
 
     >.twep-station-form{
         display: grid;
-        row-gap: 8px;
+        row-gap: 16px;
         column-gap: 8px;
         grid-template-areas: 
             "toolbar toolbar"
             "info parking";
-
-        >.mat-toolbar {
-            background-color: white;
-            grid-area: toolbar;
-            border-bottom: 1px solid var(--mat-divider-color);
-            margin-bottom: 8px;
-            
-            >.mdc-button+.mdc-button,
-            >button+h1 {
-                margin-left: 8px;
-            }
-        }
 
         >.twep-station-information-container{
             display: flex;
@@ -69,7 +55,7 @@
         
             .twep-parking-place {
                 display: grid;
-                grid-template-columns: 20px 1fr auto;
+                grid-template-columns: 20px auto 48px;
                 column-gap: 8px;
                 padding-top: 24px;
                 align-items: baseline;
@@ -95,10 +81,7 @@
                 border-left: none;
             }
         }
-
-
     }
-
 }
 
 @media (max-width: 599px) {

@@ -8,6 +8,7 @@ import { StationDetailComponent } from './admin/station-detail/station-detail.co
 import { CategoryListComponent } from './admin/category-list/category-list.component';
 import { ModelListComponent } from './admin/model-list/model-list.component';
 import { BikesListComponent } from './admin/bikes-list/bikes-list.component'; 
+import { ModelDetailComponent } from './admin/model-detail/model-detail.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 
 import {UserhomeComponent} from './userhome/userhome.component';
@@ -47,6 +48,10 @@ export const routes: Routes = [
             {
                 path: 'models',
                 component: ModelListComponent
+            },
+            {
+                path: 'models/:id',
+                component: ModelDetailComponent
             },
             {
                 path: 'bikes',

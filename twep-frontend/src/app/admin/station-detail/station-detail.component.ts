@@ -84,7 +84,7 @@ export class StationDetailComponent {
     this.loadCategories();
   }
 
-  onMapReady(map: Leaflet.Map) {
+  onMapReady(map: Leaflet.Map): void {
     this.map = map;
     if (!this.isNew && this.bikeStation?.location !== undefined) {
       //Go to the bike station location
@@ -102,15 +102,14 @@ export class StationDetailComponent {
   }
 
   loadStation(): void{
-    this.runningAction = true;
     if (this.stationId === null || this.stationId === undefined) {
       return; 
     }
     if(this.isNew){
       this.bikeStation = new BikeStation("", "", new Location(0, 0));
       this.bikeStationName = "New station"
-      this.runningAction = false;
-    }else{
+    } else {
+      this.runningAction = true;
       this.bikeStationService.getBikeStation(this.stationId).subscribe({
         next: (bikeStation: BikeStation): void => {
           //Bike station successfully loaded
@@ -131,19 +130,17 @@ export class StationDetailComponent {
   }
 
   updateStation(): void {
-    if (this.bikeStationForm.invalid) return;
+    if (this.bikeStationForm.invalid || this.bikeStation === undefined) return;
     this.runningAction = true;
-    if (this.bikeStation === undefined) return;
     const bikeStation: BikeStation = this.bikeStation;
     bikeStation.location = new Location(this.latitude?.value, this.longitude?.value);
     bikeStation.name = this.name?.value;
     bikeStation.operational = this.operational?.value;
     bikeStation.parkingPlaces = this.parkingPlaces;
-    console.log("Updated station", bikeStation);
 
     if (this.isNew) {
       this.bikeStationService.createBikeStation(bikeStation).subscribe({
-        next: (response: any) => {
+        next: (response: any): void => {
           const id: string = response?.id;
           if(id !== undefined && id !== null && id !== ""){
             this.router.navigateByUrl(`/admin/stations/${id}`);
@@ -151,24 +148,23 @@ export class StationDetailComponent {
             this.router.navigateByUrl("/admin/stations");
           }
         },
-        error: () => {
+        error: (): void => {
           this.runningAction = false;
         }
       })
     } else {
       this.bikeStationService.updateBikeStation(bikeStation).subscribe({
-        next: () => {
+        next: (): void => {
           this.runningAction = false;
-          return;
         },
-        error: () => {
+        error: (): void => {
           this.runningAction = false;
         }
       })
     }
   }
 
-  async deleteStation() {
+  async deleteStation(): Promise<void> {
     if (this.bikeStation?.id === undefined) return;
 
     const confirmed: boolean = await this.dialogService.openConfirmDialog(
@@ -180,12 +176,12 @@ export class StationDetailComponent {
 
     this.runningAction = true;
     this.bikeStationService.deleteBikeStation(this.bikeStation?.id).subscribe({
-      next: () => {
+      next: (): void => {
         this.runningAction = false;
         this.router.navigateByUrl("/admin/stations");
         return;
       },
-      error: () => {
+      error: (): void => {
         this.runningAction = false;
       }
     });
@@ -249,12 +245,4 @@ export class StationDetailComponent {
   get latitude(): AbstractControl<any, any> | null {
     return this.bikeStationForm.get('latitude');
   }
-
-  get parkingPlaceColumns(): string[]{
-    return [
-      "id",
-      "categories"
-    ]
-  }
-
 }

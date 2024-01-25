@@ -18,11 +18,7 @@ body {
         flex-grow: 1;
     }
 
-    .twep-breadcrumb {
-        font-size: 12px;
-        color: rgba(0, 0, 0, 0.54);
-    }
-
+    /* TOOLBAR */
     .mat-toolbar,
     .mat-toolbar h1,
     .mat-toolbar h2,
@@ -38,6 +34,23 @@ body {
 
     .twep-main-toolbar{
         border-bottom: 6px solid orange;
+
+        >.twep-logo{
+            height: 40px;
+        }
+    }
+
+    .twep-admin-content-toolbar{
+        background-color: white;
+        grid-area: toolbar;
+        border-bottom: 1px solid var(--mat-divider-color);
+        margin-bottom: 8px;
+    
+        >.mdc-button+.mdc-button,
+        >button+h1 {
+            margin-left: 8px;
+        }
+
     }
 
     //BUTTONS
@@ -75,4 +88,5 @@ body {
         --mdc-snackbar-supporting-text-color: rgba(255, 255, 255, 0.87);
         --mat-snack-bar-button-color: white;
     }
+
 }
