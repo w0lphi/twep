@@ -55,6 +55,10 @@ export class ModelListComponent {
     });
   }
 
+  openModelDetail(bikeModel: BikeModel) {
+    this.router.navigateByUrl(`/admin/models/${bikeModel.id}`);
+  }
+
   get columns(): string[]{
     return [
       "name",
