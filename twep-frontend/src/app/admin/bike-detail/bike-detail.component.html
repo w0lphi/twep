@@ -1,0 +1,79 @@
+<div class="twep-bike-detail">
+    @if(runningAction){
+        <app-loading-overlay />
+    }
+    @else if(bike === undefined || bike === null){
+        <div class="twep-bike-form">
+            <span>No bike with id <i>{{bikeId}}</i> found</span>
+        </div>
+    }
+    @else {
+        <form
+            [formGroup]="bikeForm"
+            class="twep-bike-form"
+        >
+            <mat-toolbar class="twep-admin-content-toolbar">
+                <button
+                    mat-icon-button
+                    class="back-button"
+                    (click)="goBackToOverview()"
+                >
+                    <mat-icon>arrow_back</mat-icon>
+                </button>
+                <h1>{{ bikeName }}</h1>
+                <div class="twep-spacer"></div>
+                <button
+                    mat-raised-button
+                    class="twep-save-btn"
+                >
+                    SAVE
+                </button>
+                <button
+                    *ngIf="bikeId !== 'new'"
+                    mat-raised-button
+                    class="twep-delete-btn"
+                >
+                    DELETE
+                </button>
+            </mat-toolbar>
+            <h3>General information</h3>
+            <mat-form-field *ngIf="bike?.id !== ''">
+                <mat-label>Id</mat-label>
+                <input
+                    matInput
+                    required="true"
+                    type="text"
+                    name="email"
+                    formControlName="id"
+                    [readonly]="true"
+                >
+            </mat-form-field>
+            <mat-form-field>
+                <mat-label>Model</mat-label>
+                <mat-select
+                    [required]="true"
+                    name="model"
+                    formControlName="model"
+                >
+                    @for (model of bikeModels; track id) {
+                    <mat-option [value]="model">{{model.name}}</mat-option>
+                    }
+                </mat-select>
+                <mat-error *ngIf="model?.errors?.['required']">
+                    Please select the model of the bike
+                </mat-error>
+            </mat-form-field>
+            <h3>{{isNew ? 'Choose bike station' : 'Assigned bike station' }}</h3>
+            <div
+                *ngIf="options"
+                class="twep-map"
+                leaflet
+                [leafletOptions]="options"
+                [leafletLayers]="layers"
+                (leafletMapReady)="onMapReady($event)"
+            ></div>
+            
+            
+        </form>
+    }
+</div>

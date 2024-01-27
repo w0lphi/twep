@@ -14,6 +14,10 @@ export class BikeService{
         return this.http.get<Bike[]>(`${this.apiUrl}/management/bikes`);
     }
 
+    public getBike(id: string): Observable<Bike>{
+        return this.http.get<Bike>(`${this.apiUrl}/management/bikes/${id}`);
+    }
+
     public createBike(bike: Bike): Observable<any>{
         return this.http.post(`${this.apiUrl}/management/bikes`, bike);
     }
