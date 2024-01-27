@@ -19,21 +19,14 @@
         width: 400px;
     }
 
-    .twep-register-link{
+    .twep-login-link{
         display: flex;
         flex-direction: column;
         align-items: center;
+        gap: 4px;
     }
 
 }
-
-
-#Login {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100%; 
-  }
   
 
 @media (max-width: 600px){
