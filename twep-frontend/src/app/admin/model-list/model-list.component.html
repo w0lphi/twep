@@ -1,4 +1,7 @@
-<app-admin-table [loading]="runningAction">
+<app-admin-table 
+    [loading]="runningAction"
+    (reload)="getModels()"
+>
     <button
         toolbarAction
         mat-raised-button
@@ -9,6 +12,7 @@
     </button>
     <table
         table
+        class="twep-bike-model-table"
         mat-table
         [dataSource]="bikeModels"
     >

@@ -1,5 +1,17 @@
-.twep-bike-model-list-container{
-    >.mat-toolbar {
-        background-color: white;
+.twep-bike-model-table{
+    .mat-mdc-row {
+        cursor: pointer;
+
+        &:hover {
+            background-color: whitesmoke;
+        }
+
+        .bike-model-name {
+            max-width: 100px;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            overflow: hidden;
+        }
+
     }
 }

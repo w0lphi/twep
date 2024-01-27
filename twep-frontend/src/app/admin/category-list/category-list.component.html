@@ -1,4 +1,7 @@
-<app-admin-table [loading]="runningAction">
+<app-admin-table 
+    [loading]="runningAction"
+    (reload)="getCategories()"
+>
     <button
         toolbarAction
         mat-raised-button
@@ -9,7 +12,7 @@
     </button>
     <table
         table
-        class="twep-category-list-table"
+        class="twep-category-table"
         mat-table
         [dataSource]="bikeCategories"
     >

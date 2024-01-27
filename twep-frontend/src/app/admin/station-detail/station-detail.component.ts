@@ -121,9 +121,8 @@ export class StationDetailComponent {
           }
           this.runningAction = false;
         },
-        error: (error: any): void => {
+        error: (): void => {
           this.runningAction = false;
-          //TODO: Handle error
         } 
       })
     }

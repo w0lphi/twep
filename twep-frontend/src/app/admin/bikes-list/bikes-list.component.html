@@ -1,1 +1,79 @@
-<p>bikes-list works!</p>
+<app-admin-table 
+    [loading]="runningAction"
+    (reload)="getBikes()"
+>
+    <button
+        toolbarAction
+        mat-raised-button
+        color="primary"
+        (click)="createBike()"
+    >
+        Add Bike
+    </button>
+    <table
+        table
+        class="twep-bike-admin-table"
+        mat-table
+        [dataSource]="bikes"
+    >
+        <ng-container matColumnDef="id">
+            <th
+                mat-header-cell
+                *matHeaderCellDef
+                mat-sort-header
+            >
+                ID
+            </th>
+            <td
+                mat-cell
+                *matCellDef="let element"
+                class="bike-id"
+            >
+                {{element.id}}
+            </td>
+        </ng-container>
+    
+        <ng-container matColumnDef="model">
+            <th
+                mat-header-cell
+                *matHeaderCellDef
+                mat-sort-header
+            >
+                Model
+            </th>
+            <td
+                mat-cell
+                *matCellDef="let element"
+                class="bike-model-name"
+            >
+                <!-- TODO: Display model name -->            
+            </td>
+        </ng-container>
+        <ng-container matColumnDef="station">
+            <th
+                mat-header-cell
+                *matHeaderCellDef
+                mat-sort-header
+            >
+                Station
+            </th>
+            <td
+                mat-cell
+                *matCellDef="let element"
+                class="bike-station-name"
+            >
+                <!-- TODO: Display station name -->
+            </td>
+        </ng-container>
+    
+        <tr
+            mat-header-row
+            *matHeaderRowDef="columns"
+        ></tr>
+        <tr
+            mat-row
+            *matRowDef="let row; columns: columns;"
+            (click)="openBikeDetail(row)"
+        ></tr>
+    </table>
+</app-admin-table> 

@@ -1,4 +1,7 @@
-<app-admin-table [loading]="runningAction">
+<app-admin-table 
+    [loading]="runningAction"
+    (reload)="getBikeStations()"
+>
     <button 
         toolbarAction 
         mat-raised-button 
@@ -9,7 +12,7 @@
     </button>
     <table 
         table
-        class="twep-station-list-table" 
+        class="twep-station-table" 
         mat-table 
         [dataSource]="bikeStations"
     >

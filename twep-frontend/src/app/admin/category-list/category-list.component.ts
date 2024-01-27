@@ -67,7 +67,6 @@ export class CategoryListComponent {
       },
       error: (): void => {
         this.runningAction = false;
-        //TODO: How to handle 400 error? 
         this.createCategory();
       }
     })
@@ -90,7 +89,6 @@ export class CategoryListComponent {
       },
       error: (): void => {
         this.runningAction = false;
-        //TODO: How to handle 400 error? 
         this.createCategory();
       }
     })

@@ -51,7 +51,7 @@ export class ModelListComponent {
     });
   }
 
-  openModelDetail(bikeModel: BikeModel) {
+  openModelDetail(bikeModel: BikeModel): void {
     this.router.navigateByUrl(`/admin/models/${bikeModel.id}`);
   }
 

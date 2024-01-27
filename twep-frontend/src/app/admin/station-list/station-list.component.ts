@@ -43,9 +43,8 @@ export class StationListComponent {
         this.bikeStations = bikeStations;
         this.runningAction = false;
       },
-      error: (error: any) => {
+      error: () => {
         this.runningAction = false;
-        //TODO: Handle error
       }
     })
   }
