@@ -1,82 +1,77 @@
-<div class="twep-category-list-container">
-    @if (runningAction) {
-        <app-loading-overlay />
-    }
-    @else {
-        <mat-toolbar>
-            <div class="twep-spacer"></div>
-            <button
-                mat-raised-button
-                color="primary"
-                (click)="createCategory()"
+<app-admin-table [loading]="runningAction">
+    <button
+        toolbarAction
+        mat-raised-button
+        color="primary"
+        (click)="createCategory()"
+    >
+        Add Category
+    </button>
+    <table
+        table
+        class="twep-category-list-table"
+        mat-table
+        [dataSource]="bikeCategories"
+    >
+        <ng-container matColumnDef="name">
+            <th
+                mat-header-cell
+                *matHeaderCellDef
+                mat-sort-header
+                sortActionDescription="Sort by name"
             >
-                Add Category
-            </button>
-        </mat-toolbar>
-        <table
-            mat-table
-            [dataSource]="bikeCategories"
-        >
-            <ng-container matColumnDef="name">
-                <th
-                    mat-header-cell
-                    *matHeaderCellDef
-                    mat-sort-header
-                    sortActionDescription="Sort by name"
-                >
-                    Name
-                </th>
-                <td
-                    mat-cell
-                    *matCellDef="let element"
-                    class="bike-category-name"
-                >
-                    {{element.name}}
-                </td>
-            </ng-container>
-
-            <ng-container matColumnDef="actions">
-                <th
-                    mat-header-cell
-                    *matHeaderCellDef
-                >
-                </th>
-                <td
-                    mat-cell
-                    *matCellDef="let element"
-                >
-                    <div class="bike-category-actions">
-                        <!-- TODO: Activate once update of category is possible 
-                            <button
-                                mat-icon-button
-                                (click)="editCategory(element)"
-                            >
-                                <mat-icon>edit</mat-icon>
-                            </button>
-                        -->
-                        
-                        <button
-                            mat-icon-button
-                            class="twep-delete-btn"
-                            title="Delete category"
-                            (click)="deleteCategory(element)"
-                        >
-                            <mat-icon>delete</mat-icon>
-                        </button>
-                    </div>
-                </td>
-            </ng-container>
-            
-
-            <tr
-                mat-header-row
-                *matHeaderRowDef="columns"
-            ></tr>
-            <tr
-                mat-row
-                *matRowDef="let row; columns: columns;"
-            ></tr>
-        </table>
-    }
-</div>
+                Name
+            </th>
+            <td
+                mat-cell
+                *matCellDef="let element"
+                class="bike-category-name"
+            >
+                {{element.name}}
+            </td>
+        </ng-container>
+    
+        <ng-container matColumnDef="actions">
+            <th
+                mat-header-cell
+                *matHeaderCellDef
+            >
+            </th>
+            <td
+                mat-cell
+                *matCellDef="let element"
+            >
+                <div class="bike-category-actions">
+                    <!-- TODO: Activate once update of category is possible 
+                                <button
+                                    mat-icon-button
+                                    (click)="editCategory(element)"
+                                >
+                                    <mat-icon>edit</mat-icon>
+                                </button>
+                            -->
+    
+                    <button
+                        mat-icon-button
+                        class="twep-delete-btn"
+                        title="Delete category"
+                        (click)="deleteCategory(element)"
+                    >
+                        <mat-icon>delete</mat-icon>
+                    </button>
+                </div>
+            </td>
+        </ng-container>
+    
+    
+        <tr
+            mat-header-row
+            *matHeaderRowDef="columns"
+        ></tr>
+        <tr
+            mat-row
+            *matRowDef="let row; columns: columns;"
+        ></tr>
+    </table>
+</app-admin-table>
 

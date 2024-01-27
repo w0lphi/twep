@@ -1,18 +1,23 @@
-<div class="twep-station-list-container">
-    <app-loading-overlay *ngIf="runningAction" />
-    <mat-toolbar>
-        <div class="twep-spacer"></div>
-        <button mat-raised-button color="primary" (click)="createStation()">
-            Add Station
-        </button>
-    </mat-toolbar>
-    <table mat-table [dataSource]="bikeStations">
+<app-admin-table [loading]="runningAction">
+    <button 
+        toolbarAction 
+        mat-raised-button 
+        color="primary" 
+        (click)="createStation()"
+    >
+        Add Station
+    </button>
+    <table 
+        table
+        class="twep-station-list-table" 
+        mat-table 
+        [dataSource]="bikeStations"
+    >
         <ng-container matColumnDef="name">
             <th
                 mat-header-cell
                 *matHeaderCellDef
                 mat-sort-header
-                sortActionDescription="Sort by name"
             >
                 Name
             </th>
@@ -29,7 +34,6 @@
                 mat-header-cell
                 *matHeaderCellDef
                 mat-sort-header
-                sortActionDescription="Sort by name"
             >
                 Location
             </th>
@@ -46,9 +50,8 @@
                 mat-header-cell
                 *matHeaderCellDef
                 mat-sort-header
-                sortActionDescription="Sort by name"
             >
-               Operational
+                Operational
             </th>
             <td
                 mat-cell
@@ -71,4 +74,4 @@
             (click)="openStationDetail(row)"
         ></tr>
     </table>
-</div>
+</app-admin-table>

@@ -1,13 +1,12 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatTableModule } from '@angular/material/table';
-import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatIconModule } from '@angular/material/icon';
 import { Router } from '@angular/router';
 
-import { LoadingOverlayComponent } from '../../common/loading-overlay/loading-overlay.component';
+import { AdminTableComponent } from '../admin-table/admin-table.component';
 import { BikeStationService } from '../../service/bikeStation.service';
 import { BikeStation } from '../../model/bikeStation';
 import { Location } from '../../model/location';
@@ -18,11 +17,10 @@ import { Location } from '../../model/location';
   standalone: true,
   imports: [
     MatTableModule,
-    MatToolbarModule,
     MatButtonModule,
     MatCheckboxModule,
     MatIconModule,
-    LoadingOverlayComponent,
+    AdminTableComponent,
     CommonModule
   ],
   templateUrl: './station-list.component.html',

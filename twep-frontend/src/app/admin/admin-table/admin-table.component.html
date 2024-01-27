@@ -1,0 +1,14 @@
+<div class="twep-admin-table-container">
+    @if(runningAction){
+        <app-loading-overlay />
+    }
+    @else {
+        <mat-toolbar>
+            <div class="twep-spacer"></div>
+            <ng-content select="[toolbarAction]"></ng-content>
+        </mat-toolbar>
+        <div class="twep-admin-table">
+            <ng-content select="[table]"></ng-content>
+        </div>
+    }
+</div>

@@ -1,13 +1,11 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatTableModule } from '@angular/material/table';
-import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatIconModule } from '@angular/material/icon';
 
-
-import { LoadingOverlayComponent } from '../../common/loading-overlay/loading-overlay.component';
+import { AdminTableComponent } from '../admin-table/admin-table.component';
 import { BikeCategory } from '../../model/bikeCategory';
 import { BikeCategoryService } from '../../service/bikeCategory.service';
 import { DialogService } from '../../service/dialog.service';
@@ -18,11 +16,10 @@ import { DialogService } from '../../service/dialog.service';
   imports: [
     CommonModule,
     MatTableModule,
-    MatToolbarModule,
     MatButtonModule,
     MatCheckboxModule,
     MatIconModule,
-    LoadingOverlayComponent
+    AdminTableComponent
   ],
   templateUrl: './category-list.component.html',
   styleUrl: './category-list.component.scss'

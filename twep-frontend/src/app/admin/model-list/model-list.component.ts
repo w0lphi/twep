@@ -1,12 +1,10 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatTableModule } from '@angular/material/table';
-import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
-import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatIconModule } from '@angular/material/icon';
 
-import { LoadingOverlayComponent } from '../../common/loading-overlay/loading-overlay.component';
+import { AdminTableComponent } from '../admin-table/admin-table.component';
 import { BikeModel } from '../../model/bikeModel';
 import { BikeModelService } from '../../service/bikeModel.service';
 import { Router } from '@angular/router';
@@ -17,11 +15,9 @@ import { Router } from '@angular/router';
   imports: [
     CommonModule,
     MatTableModule,
-    MatToolbarModule,
     MatButtonModule,
-    MatCheckboxModule,
     MatIconModule,
-    LoadingOverlayComponent
+    AdminTableComponent
   ],
   templateUrl: './model-list.component.html',
   styleUrl: './model-list.component.scss'
