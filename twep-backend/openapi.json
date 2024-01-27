@@ -1594,6 +1594,63 @@
       }
     },
     "/management/bikes": {
+      "get": {
+        "summary": "Get all individual bikes",
+        "tags": [
+          "management-individual bikes"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "example": {
+                  "individualBikes": [
+                    {
+                      "id": "uuid",
+                      "bikeType": "mountain_bike",
+                      "status": "available",
+                      "bikeModel": {
+                        "name": "Mountain Bike XL",
+                        "description": "A robust mountain bike for off-road adventures",
+                        "wheelSize": 29.5,
+                        "extraFeatures": [
+                          "Shimano XT gears",
+                          "Front suspension with 120mm travel"
+                        ]
+                      }
+                    },
+                    {
+                      "id": "uuid",
+                      "bikeType": "road_bike",
+                      "status": "rented",
+                      "bikeModel": {
+                        "name": "Road Bike Pro",
+                        "description": "High-performance road bike for speed enthusiasts",
+                        "wheelSize": 28,
+                        "extraFeatures": [
+                          "Carbon fiber frame",
+                          "Aero handlebars"
+                        ]
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "No individual bikes found"
+                }
+              }
+            }
+          }
+        }
+      },
       "post": {
         "summary": "Create a new individual bike",
         "tags": [
