@@ -123,6 +123,86 @@ const stationController = {
         }
     },
 
+    async getAllBikeModels(req, res) {
+        try {
+            const bikeModels = await StationModel.getAllBikeModels();
+            res.json(bikeModels);
+        } catch (error) {
+            console.error(error);
+            res.status(500).send('Internal Server Error');
+        }
+    },
+
+    async createBikeModel(req, res) {
+        try {
+            const bikeModelData = req.body;
+
+            const newBikeModel = await StationModel.createBikeModel(bikeModelData);
+
+            res.status(201).json({ bikeModel: newBikeModel, message: 'Bike model created successfully.' });
+        } catch (error) {
+            console.error(error);
+            res.status(400).json({ error: 'Invalid input data' });
+        }
+    },
+
+    async deleteBikeModelById(req, res) {
+        const { id } = req.params;
+
+        try {
+            const deleteResult = await StationModel.deleteBikeModel(id);
+
+            if (!deleteResult) {
+                return res.status(404).json({ error: 'Bike model not found' });
+            }
+
+            res.json({ message: 'Bike model deleted successfully' });
+        } catch (error) {
+            console.error(error);
+            res.status(500).send('Internal Server Error');
+        }
+    },
+
+    async getAllIndividualBikes(req, res) {
+        try {
+            const individualBikes = await StationModel.getAllIndividualBikes();
+            res.json(individualBikes);
+        } catch (error) {
+            console.error(error);
+            res.status(500).send('Internal Server Error');
+        }
+    },
+
+    async createIndividualBike(req, res) {
+        try {
+            const individualBikeData = req.body;
+
+            const newIndividualBike = await StationModel.createIndividualBike(individualBikeData);
+
+            res.status(201).json({ individualBike: newIndividualBike, message: 'Bike created successfully.' });
+        } catch (error) {
+            console.error(error);
+            res.status(400).json({ error: 'Invalid input data' });
+        }
+    },
+
+    async deleteIndividualBikeById(req, res) {
+        const { id } = req.params;
+
+        try {
+            const deleteResult = await StationModel.deleteIndividualBikeById(id);
+
+            if (!deleteResult) {
+                return res.status(404).json({ error: 'Individual bike not found' });
+            }
+
+            res.json({ message: 'Individual bike deleted successfully' });
+        } catch (error) {
+            console.error(error);
+            res.status(500).send('Internal Server Error');
+        }
+    },
+
 };
 
 module.exports = stationController;

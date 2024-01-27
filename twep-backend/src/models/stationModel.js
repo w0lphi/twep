@@ -161,6 +161,79 @@ class StationModel {
         }
     }
 
+    static async getAllBikeModels() {
+        try {
+            const { rows } = await pool.query(stationQueries.getAllBikeModels);
+            return rows;
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    static async createBikeModel(bikeModelData) {
+        try {
+
+            const newBikeModel = await pool.query(stationQueries.createBikeModel, [
+                uuidv4(),
+                bikeModelData.name,
+                bikeModelData.description,
+                bikeModelData.wheelSize,
+                bikeModelData.extraFeatures,
+            ]);
+
+            return newBikeModel.rows[0];
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    static async deleteBikeModel(modelId) {
+        try {
+
+            const deleteResult = await pool.query(stationQueries.deleteBikeModel, [modelId]);
+
+            return deleteResult.rowCount > 0;
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    static async getAllIndividualBikes() {
+        try {
+            const { rows } = await pool.query(stationQueries.getAllIndividualBikes);
+            return rows;
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    static async createIndividualBike(individualBikeData) {
+        try {
+
+            const newIndividualBike = await pool.query(stationQueries.createIndividualBike, [
+                uuidv4(),
+                individualBikeData.bike_category,
+                individualBikeData.status,
+                individualBikeData.bike_model_id,
+            ]);
+
+            return newIndividualBike.rows[0];
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    static async deleteIndividualBikeById(bikeId) {
+        try {
+
+            const deleteResult = await pool.query(stationQueries.deleteIndividualBikeById, [bikeId]);
+
+            return deleteResult.rowCount > 0;
+        } catch (error) {
+            throw error;
+        }
+    }
+
 }
 
 module.exports = StationModel;

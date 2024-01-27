@@ -11,6 +11,14 @@ const getBikeCategoryByName = 'SELECT * FROM bike_categories WHERE name = $1';
 const deleteBikeCategoryById = 'DELETE FROM bike_categories WHERE id = $1';
 const getBikeCategoryById = 'SELECT * FROM bike_categories WHERE id = $1';
 
+const getAllBikeModels = 'SELECT * FROM bike_models';
+const createBikeModel = 'INSERT INTO bike_models(id, name, description, wheel_size, extra_features) VALUES($1, $2, $3, $4, $5)';
+const updateBikeModel = 'UPDATE bike_models SET name = $1, description = $2, wheel_size = $3, extra_features = $4 WHERE name = $5';
+const deleteBikeModel = 'DELETE FROM bike_models WHERE id = $1';
+
+const getAllIndividualBikes = 'SELECT * FROM individual_bikes';
+const createIndividualBike = 'INSERT INTO individual_bikes(id, bike_category, status, bike_model_id) VALUES ($1, $2, $3, $4)';
+const deleteIndividualBikeById = 'DELETE FROM individual_bikes WHERE id = $1';
 
 module.exports = {
     getStations,
@@ -24,4 +32,11 @@ module.exports = {
     getBikeCategoryByName,
     deleteBikeCategoryById,
     getBikeCategoryById,
+    getAllBikeModels,
+    createBikeModel,
+    updateBikeModel,
+    deleteBikeModel,
+    getAllIndividualBikes,
+    createIndividualBike,
+    deleteIndividualBikeById,
 };

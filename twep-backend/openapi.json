@@ -357,7 +357,11 @@
             "extraFeatures": [
               "Shimano XT gears",
               "Front suspension with 120mm travel"
-            ]
+            ],
+            "bikeCategory": {
+              "id": "uuid",
+              "name": "Mountain Bike"
+            }
           }
         }
       },
@@ -379,6 +383,9 @@
             "items": {
               "type": "string"
             }
+          },
+          "bikeCategory": {
+            "$ref": "#/components/schemas/BikeCategory"
           }
         },
         "required": [
