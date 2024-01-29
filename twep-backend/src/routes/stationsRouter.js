@@ -13,4 +13,13 @@ router.get('/bike-categories', stationController.getAllBikeCategories);
 router.post('/bike-categories', stationController.createBikeCategory);
 router.delete('/bike-categories/:id', stationController.deleteBikeCategoryById);
 
+
+router.get('/bike-models', stationController.getAllBikeModels);
+router.post('/bike-models', stationController.createBikeModel);
+router.delete('/bike-models/:id', stationController.deleteBikeModelById);
+
+router.get('/bikes', stationController.getAllIndividualBikes);
+router.post('/bikes', stationController.createIndividualBike);
+router.delete('/bikes/:id', stationController.deleteIndividualBikeById);
+
 module.exports = router;

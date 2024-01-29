@@ -40,3 +40,18 @@ CREATE TABLE parking_place_bike_categories (
     PRIMARY KEY (parking_place_id, bike_category_id)
 );
 
+CREATE TABLE bike_models (
+    id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    description TEXT,
+    wheel_size FLOAT,
+    extra_features TEXT[]
+);
+
+CREATE TABLE individual_bikes (
+    id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
+    bike_category VARCHAR(50) NOT NULL,
+    status VARCHAR(50) NOT NULL,
+    bike_model_id UUID REFERENCES bike_models(id) ON DELETE CASCADE
+);
+
