@@ -3,12 +3,20 @@ const router = express.Router();
 const { v4: uuidv4 } = require('uuid');
 const StationModel = require('../models/stationModel');
 
+const snakeCaseToCamelCase = (snakeCaseString) => {
+    return snakeCaseString.replace(/_([a-z])/g, (match, letter) => letter.toUpperCase());
+};
+
 
 const stationController = {
     async getStations(req, res) {
         try {
             const stations = await StationModel.getAllStations();
-            res.json(stations);
+
+            // Convert snake_case keys to CamelCase
+            const camelCaseStations = stations.map(station => convertKeysToCamelCase(station));
+
+            res.json(camelCaseStations);
         } catch (error) {
             console.error(error);
             res.status(500).send('Internal Server Error');
@@ -26,7 +34,9 @@ const stationController = {
                 return res.status(404).json({ error: 'Station not found' });
             }
 
-            res.json(station);
+            const camelCaseStation = convertKeysToCamelCase(station);
+
+            res.json(camelCaseStation);
         } catch (error) {
             console.error(error);
             res.status(500).send('Internal Server Error');
@@ -76,7 +86,10 @@ const stationController = {
     async getAllBikeCategories(req, res) {
         try {
             const bikeCategories = await StationModel.getAllBikeCategories();
-            res.json(bikeCategories);
+
+            const camelCaseBikeCategories = bikeCategories.map(category => convertKeysToCamelCase(category));
+
+            res.json(camelCaseBikeCategories);
         } catch (error) {
             console.error(error);
             res.status(500).send('Internal Server Error');
@@ -126,7 +139,10 @@ const stationController = {
     async getAllBikeModels(req, res) {
         try {
             const bikeModels = await StationModel.getAllBikeModels();
-            res.json(bikeModels);
+
+            const camelCaseBikeModels = bikeModels.map(model => convertKeysToCamelCase(model));
+
+            res.json(camelCaseBikeModels);
         } catch (error) {
             console.error(error);
             res.status(500).send('Internal Server Error');
@@ -166,7 +182,11 @@ const stationController = {
     async getAllIndividualBikes(req, res) {
         try {
             const individualBikes = await StationModel.getAllIndividualBikes();
-            res.json(individualBikes);
+
+            const camelCaseIndividualBikes = individualBikes.map(bikeObject => convertKeysToCamelCase(bikeObject));
+
+
+            res.json(camelCaseIndividualBikes);
         } catch (error) {
             console.error(error);
             res.status(500).send('Internal Server Error');
@@ -204,5 +224,26 @@ const stationController = {
     },
 
 };
+
+// Utility function to convert keys to CamelCase
+function convertKeysToCamelCase(obj) {
+    if (typeof obj !== 'object' || obj === null) {
+        return obj;
+    }
+
+    if (Array.isArray(obj)) {
+        return obj.map((item) => convertKeysToCamelCase(item));
+    }
+
+    const camelCaseObj = {};
+    for (const key in obj) {
+        if (Object.hasOwnProperty.call(obj, key)) {
+            const camelCaseKey = snakeCaseToCamelCase(key);
+            camelCaseObj[camelCaseKey] = convertKeysToCamelCase(obj[key]);
+        }
+    }
+
+    return camelCaseObj;
+}
 
 module.exports = stationController;
