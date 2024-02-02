@@ -4,6 +4,8 @@ const { v4: uuidv4 } = require('uuid');
 
 const router = Router();
 
+router.get('/users', stationController.getUsers);
+
 router.get('/stations', stationController.getStations);
 router.get('/stations/:id', stationController.getStationById);
 router.post('/stations', stationController.createStation);

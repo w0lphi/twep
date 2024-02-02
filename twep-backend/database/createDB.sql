@@ -11,7 +11,8 @@ CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 CREATE TABLE users (
     id UUID PRIMARY KEY,
     email VARCHAR(255) NOT NULL,
-    password VARCHAR(255) NOT NULL
+    password VARCHAR(255) NOT NULL,
+    role VARCHAR(50) DEFAULT 'user' NOT NULL
 );
 
  CREATE TABLE stations (
@@ -54,4 +55,7 @@ CREATE TABLE individual_bikes (
     status VARCHAR(50) NOT NULL,
     bike_model_id UUID REFERENCES bike_models(id) ON DELETE CASCADE
 );
+
+INSERT INTO users (id, email, password, role)
+VALUES (uuid_generate_v4(), 'management@twep.com', 'password', 'management');
 

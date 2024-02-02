@@ -1,3 +1,4 @@
+const getUsers = 'SELECT * FROM users WHERE role = \'user\'';
 const getStations = 'SELECT * FROM stations';
 const getStationById = 'SELECT * FROM stations WHERE id = $1';
 const createStation = 'INSERT INTO stations(id, name, location, operational, parking_places) VALUES($1, $2, $3, $4, $5)';
@@ -21,6 +22,7 @@ const createIndividualBike = 'INSERT INTO individual_bikes(id, bike_category, st
 const deleteIndividualBikeById = 'DELETE FROM individual_bikes WHERE id = $1';
 
 module.exports = {
+    getUsers,
     getStations,
     getStationById,
     createStation,

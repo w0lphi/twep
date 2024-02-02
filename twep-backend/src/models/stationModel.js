@@ -4,6 +4,16 @@ const { v4: uuidv4 } = require('uuid');
 
 
 class StationModel {
+
+    static async getAllUsers() {
+        try {
+            const { rows } = await pool.query(stationQueries.getUsers);
+            return rows;
+        } catch (error) {
+            throw error;
+        }
+    }
+
     static async getAllStations() {
         try {
             const { rows } = await pool.query(stationQueries.getStations);

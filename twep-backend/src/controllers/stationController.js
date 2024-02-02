@@ -9,6 +9,19 @@ const snakeCaseToCamelCase = (snakeCaseString) => {
 
 
 const stationController = {
+
+    async getUsers(req, res) {
+        try {
+            const users = await StationModel.getAllUsers();
+
+            res.json(users);
+        } catch (error) {
+            console.error(error);
+            res.status(500).send('Internal Server Error');
+        }
+    },
+
+
     async getStations(req, res) {
         try {
             const stations = await StationModel.getAllStations();
