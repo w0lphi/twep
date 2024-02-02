@@ -2,6 +2,9 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const pool = require('../../src/db');
 const { v4: uuidv4 } = require('uuid');
+const userQueries = require('../queries/userQueries');
+const { convertKeysToCamelCase, snakeCaseToCamelCase } = require('../utility/utility');
+const UserModel = require('../models/userModel');
 
 const registerUser = async (req, res) => {
     try {
@@ -52,7 +55,36 @@ const loginUser = async (req, res) => {
     }
 };
 
+const getUserAccount = async (userId) => {
+    try {
+        const accountDetails = await pool.query(userQueries.getUserAccount, [userId]);
+
+        if (accountDetails.rows.length === 0) {
+            throw { status: 404, message: 'User account not found' };
+        }
+
+        const camelCaseAccountDetails = convertKeysToCamelCase(accountDetails.rows[0]);
+
+        return camelCaseAccountDetails;
+    } catch (error) {
+        throw error;
+    }
+};
+
+const addMoneyToWallet = async (userId, amount) => {
+    try {
+
+        const updatedUser = await UserModel.addMoneyToWallet(userId, amount);
+
+        return convertKeysToCamelCase(updatedUser);
+    } catch (error) {
+        throw error;
+    }
+};
+
 module.exports = {
     registerUser,
     loginUser,
+    getUserAccount,
+    addMoneyToWallet
 };

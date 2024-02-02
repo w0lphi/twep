@@ -22,9 +22,37 @@ const purchaseTicket = `
     RETURNING *;
 `;
 
+const getUserAccount = `
+    SELECT
+    u.id,
+    u.email,
+    u.wallet,
+    t.id AS ticket_id,
+    t.bike_type AS bike_type,
+    t.station,
+    t.purchase_date AS purchase_date,
+    t.immediate_renting AS immediate_renting,
+    t.reserved_station AS reserved_Station
+    FROM
+    users u
+    LEFT JOIN
+    tickets t ON u.id = t.user_id
+    WHERE u.id = $1; 
+`;
+
+const addMoneyToWallet = `
+    UPDATE users
+    SET wallet = wallet + $1
+    WHERE id = $2
+    RETURNING *;
+`;
+
+
 module.exports = {
     registerUser,
     loginUser,
     getUserTickets,
     purchaseTicket,
+    getUserAccount,
+    addMoneyToWallet
 };

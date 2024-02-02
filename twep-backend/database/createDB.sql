@@ -12,6 +12,7 @@ CREATE TABLE users (
     id UUID PRIMARY KEY,
     email VARCHAR(255) NOT NULL,
     password VARCHAR(255) NOT NULL,
+    wallet NUMERIC DEFAULT 0,
     role VARCHAR(50) DEFAULT 'user' NOT NULL
 );
 
@@ -54,6 +55,17 @@ CREATE TABLE individual_bikes (
     bike_category VARCHAR(50) NOT NULL,
     status VARCHAR(50) NOT NULL,
     bike_model_id UUID REFERENCES bike_models(id) ON DELETE CASCADE
+);
+
+CREATE TABLE tickets (
+    id UUID PRIMARY KEY,
+    user_id UUID REFERENCES users(id) ON DELETE CASCADE,
+    bike_type VARCHAR(255) NOT NULL,
+    station VARCHAR(255) NOT NULL,
+    purchase_date TIMESTAMPTZ NOT NULL,
+    immediate_renting BOOLEAN NOT NULL,
+    reserved_station VARCHAR(255),
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
 INSERT INTO users (id, email, password, role)

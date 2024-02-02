@@ -44,6 +44,42 @@ class UserModel {
             throw error;
         }
     }
+
+    static async getUserAccount(userId) {
+        try {
+            const queryString = userQueries.getUserAccount;
+            console.log('Executing SQL Query:', queryString);  // Log the query string
+
+            const { rows } = await pool.query(queryString, [userId]);
+
+            if (rows.length === 0) {
+                throw { status: 404, message: 'User account not found' };
+            }
+
+            return rows[0];
+        } catch (error) {
+            throw error;
+        }
+    }
+
+
+    static async addMoneyToWallet(userId, amount) {
+        try {
+
+            if (typeof amount !== 'number' || amount <= 0) {
+                throw { status: 400, message: 'Invalid amount' };
+            }
+
+            // Update the user's wallet in the database
+            const { rows } = await pool.query(userQueries.addMoneyToWallet, [amount, userId]);
+
+            return rows[0];
+        } catch (error) {
+            throw error;
+        }
+    }
+
+
 }
 
 module.exports = UserModel;
