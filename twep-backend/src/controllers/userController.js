@@ -82,9 +82,29 @@ const addMoneyToWallet = async (userId, amount) => {
     }
 };
 
+const purchaseTicket = async (userId, { bikeType, station, purchaseDate, immediateRenting, reservedStation }) => {
+    try {
+        const purchasedTicket = await UserModel.purchaseTicket(userId, {
+            bikeType,
+            station,
+            purchaseDate,
+            immediateRenting,
+            reservedStation,
+        });
+
+        const camelCasePurchasedTicket = convertKeysToCamelCase(purchasedTicket);
+
+        return camelCasePurchasedTicket;
+    } catch (error) {
+        throw error;
+    }
+};
+
+
 module.exports = {
     registerUser,
     loginUser,
     getUserAccount,
-    addMoneyToWallet
+    addMoneyToWallet,
+    purchaseTicket
 };

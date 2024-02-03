@@ -16,12 +16,6 @@ const getUserTickets = `
     WHERE user_id = $1;
 `;
 
-const purchaseTicket = `
-    INSERT INTO tickets (user_id, bike_type, station, purchase_date, immediate_renting, reserved_station)
-    VALUES ($1, $2, $3, $4, $5, $6)
-    RETURNING *;
-`;
-
 const getUserAccount = `
     SELECT
     u.id,
@@ -30,7 +24,7 @@ const getUserAccount = `
     t.id AS ticket_id,
     t.bike_type AS bike_type,
     t.station,
-    t.purchase_date AS purchase_date,
+    to_char(t.purchase_date, 'YYYY-MM-DD"T"HH24:MI:SS"Z"') AS purchase_date,
     t.immediate_renting AS immediate_renting,
     t.reserved_station AS reserved_Station
     FROM
@@ -47,12 +41,24 @@ const addMoneyToWallet = `
     RETURNING *;
 `;
 
+const purchaseTicket = `
+    INSERT INTO tickets (id, user_id, bike_type, station, purchase_date, immediate_renting, reserved_station)
+    VALUES (uuid_generate_v4(), $1, $2, $3, $4, $5, $6)
+    RETURNING
+        id,
+        bike_type,
+        station,
+        to_char(purchase_date, 'YYYY-MM-DD"T"HH24:MI:SS"Z"') AS purchase_date,
+        immediate_renting,
+        reserved_station;
+`;
+
 
 module.exports = {
     registerUser,
     loginUser,
     getUserTickets,
-    purchaseTicket,
     getUserAccount,
-    addMoneyToWallet
+    addMoneyToWallet,
+    purchaseTicket,
 };

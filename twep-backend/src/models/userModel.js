@@ -70,7 +70,6 @@ class UserModel {
                 throw { status: 400, message: 'Invalid amount' };
             }
 
-            // Update the user's wallet in the database
             const { rows } = await pool.query(userQueries.addMoneyToWallet, [amount, userId]);
 
             return rows[0];
@@ -79,6 +78,21 @@ class UserModel {
         }
     }
 
+    static async purchaseTicket(userId, { bikeType, station, purchaseDate, immediateRenting, reservedStation }) {
+        try {
+            const { rows } = await pool.query(userQueries.purchaseTicket, [
+                userId,
+                bikeType,
+                station,
+                purchaseDate,
+                immediateRenting,
+                reservedStation,
+            ]);
+            return rows[0];
+        } catch (error) {
+            throw error;
+        }
+    }
 
 }
 

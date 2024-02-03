@@ -63,6 +63,26 @@ router.get('/:userId/account', async (req, res) => {
     }
 });
 
+router.post('/:userId/tickets', async (req, res) => {
+    try {
+        const { bikeType, station, purchaseDate, immediateRenting, reservedStation } = req.body;
+        const userId = req.params.userId;
+
+        // Purchase the ticket
+        const purchasedTicket = await userController.purchaseTicket(userId, {
+            bikeType,
+            station,
+            purchaseDate,
+            immediateRenting,
+            reservedStation,
+        });
+
+        res.status(201).json(purchasedTicket);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+});
 
 
 
