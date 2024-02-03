@@ -1,7 +1,12 @@
 const registerUser = `
-    INSERT INTO users (email, password, wallet)
-    VALUES ($1, $2, $3)
-    RETURNING user_id, email, wallet;
+    WITH inserted_user AS (
+        INSERT INTO users (email, password, wallet)
+        VALUES ($1, $2, $3)
+        RETURNING id, email, password, role, wallet
+    )
+    INSERT INTO tickets (user_id, bike_type, station, purchase_date, immediate_renting, reserved_station)
+    VALUES ( (SELECT id FROM inserted_user), $4, $5, $6, $7, $8)
+    RETURNING *;
 `;
 
 const loginUser = `
