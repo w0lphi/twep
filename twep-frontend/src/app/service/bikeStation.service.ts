@@ -3,6 +3,7 @@ import { Observable } from "rxjs";
 import { HttpClient } from "@angular/common/http";
 import { environment } from "../environment/environment";
 import { BikeStation } from "../model/bikeStation";
+import { BikeStationResponse } from "../model/bikeStationResponse";
 
 @Injectable({ providedIn: 'root' })
 export class BikeStationService{
@@ -10,8 +11,8 @@ export class BikeStationService{
 
     constructor(private http: HttpClient) { }
 
-    public getBikeStations(): Observable<BikeStation[]>{
-        return this.http.get<BikeStation[]>(`${this.apiUrl}/management/stations`);
+    public getBikeStations(): Observable<BikeStationResponse>{
+        return this.http.get<BikeStationResponse>(`${this.apiUrl}/management/stations`);
     }
 
     public getBikeStation(id: string): Observable<BikeStation>{
