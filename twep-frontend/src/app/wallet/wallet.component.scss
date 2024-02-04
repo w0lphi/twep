@@ -64,3 +64,34 @@ mat-toolbar {
     background-color: orange;
     
 }
+
+.wallet-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center; 
+    justify-content: center; 
+    gap: 20px; 
+    margin-top: 50px; 
+    width: 100%; 
+    height: 100vh;
+}
+
+
+#addmoney, #removemoney {
+
+    width: 100%;
+    max-width: 30%; 
+    padding: 20px; 
+    border: 1px solid #ccc; 
+    border-radius: 8px; 
+    background-color: #f9f9f9; 
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    align-items: center; 
+    justify-content: center; 
+
+
+
+}
+
