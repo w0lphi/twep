@@ -131,13 +131,13 @@
                         <mat-form-field>
                             <mat-label>Categories</mat-label>
                             <mat-select
-                                [value]="parkingPlace.bike_categories"
+                                [value]="getCategories(parkingPlace)"
                                 [required]="true"
                                 multiple
                                 (selectionChange)="updateCategories(parkingPlace, $event)"
                             >
-                                @for (category of bikeCategories; track id) {
-                                <mat-option [value]="category">{{category.name}}</mat-option>
+                                @for (category of bikeCategories; track name) {
+                                <mat-option [value]="category.name">{{category.name}}</mat-option>
                                 }
                             </mat-select>
                         </mat-form-field>

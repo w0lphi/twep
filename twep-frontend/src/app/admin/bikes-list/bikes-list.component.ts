@@ -66,7 +66,6 @@ export class BikesListComponent {
 
   getBikeModelName(bike: Bike): string {
     const model: BikeModel | undefined = this.bikeModels.find(({ id }) => bike.bikeModelId === id);
-    console.log(this.bikeModels, bike);
     return model?.name ?? "-";
   }
 

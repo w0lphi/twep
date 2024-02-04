@@ -221,8 +221,14 @@ export class StationDetailComponent {
     this.router.navigateByUrl("/admin/stations");
   }
 
+  getCategories(parkingPlace: ParkingPlace): (string | undefined)[] {
+    if (!Array.isArray(parkingPlace.bikeCategories)) return [];
+    return parkingPlace.bikeCategories.map(({ name }) => name);
+  }
+
   updateCategories(parkingPlace: ParkingPlace, event: MatSelectChange): void {
-    parkingPlace.bike_categories = event.value
+    const categoryNames: string[] = event.value;
+    parkingPlace.bikeCategories = this.bikeCategories.filter(({ name }) => name !== undefined && categoryNames.includes(name));
   }
 
   get isNew(): boolean{

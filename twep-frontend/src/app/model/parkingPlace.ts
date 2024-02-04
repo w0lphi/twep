@@ -2,10 +2,10 @@ import { BikeCategory } from "./bikeCategory";
 
 export class ParkingPlace{
     id: string;
-    bike_categories: BikeCategory[];
+    bikeCategories: BikeCategory[];
 
-    constructor(id: string, bike_categories: BikeCategory[]) {
+    constructor(id: string, bikeCategories: BikeCategory[]) {
         this.id = id;
-        this.bike_categories = bike_categories;
+        this.bikeCategories = bikeCategories;
     }
 }
