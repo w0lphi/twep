@@ -626,7 +626,9 @@
             }
           }
         }
-      },
+      }
+    },
+    "/users/{userId}/account/add-money": {
       "post": {
         "summary": "Add money to user's wallet",
         "tags": [
