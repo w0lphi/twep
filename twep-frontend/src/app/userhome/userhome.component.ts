@@ -1,23 +1,19 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormsModule, ReactiveFormsModule, FormGroup, FormControl, Validators, AbstractControl } from '@angular/forms';
-import { Router } from '@angular/router';
-import { FormBuilder } from '@angular/forms';
+import { Component, ChangeDetectorRef } from '@angular/core';
+import { CommonModule} from '@angular/common';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
-import { MatInputModule } from '@angular/material/input';
-import { MatFormFieldModule } from '@angular/material/form-field';
+
 import { MatButtonModule } from '@angular/material/button';
-import { MatIconModule } from '@angular/material/icon';
 import { MatToolbarModule } from '@angular/material/toolbar';
-import { MatCheckboxModule } from '@angular/material/checkbox';
-import { MatDividerModule } from '@angular/material/divider';
-import { MatSelectModule, MatSelectChange } from '@angular/material/select';
+import { MatIconModule } from '@angular/material/icon';
+import { MatCardModule } from '@angular/material/card';
 
 import { LeafletModule } from '@asymmetrik/ngx-leaflet';
 import { LeafletUtil } from '../util/leaflet-util'
-import * as L from 'leaflet';
-
-
+import * as Leaflet from 'leaflet';
+import { BikeStationService } from '../service/bikeStation.service';
+import { BikeStation } from '../model/bikeStation';
+import { Location } from '../model/location';
 
 @Component({
   selector: 'app-userhome',
@@ -27,39 +23,66 @@ import * as L from 'leaflet';
     FormsModule,
     ReactiveFormsModule,
     MatButtonModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatIconModule,
     MatToolbarModule,
+    MatIconModule,
+    MatCardModule,
     LeafletModule,
-    MatCheckboxModule,
-    MatDividerModule,
-    MatSelectModule
   ],
   templateUrl: './userhome.component.html',
   styleUrl: './userhome.component.scss'
 })
 export class UserhomeComponent {
-  mapOptions = {
+  layers: Leaflet.Layer[] = [];
+  bikeStations: BikeStation[] = [];
+  displayedBikeStation: BikeStation | null;
+  showDetail: boolean = false;
+  map?: Leaflet.Map;
+  mapOptions: Leaflet.MapOptions = {
     layers: [
-      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      Leaflet.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
         attribution: '© OpenStreetMap contributors'
       })
     ],
     zoom: 14,
-    center: L.latLng(46.625800, 14.31181)
+    center: Leaflet.latLng(46.625800, 14.31181)
   };
 
-  
+  constructor(
+    private bikeStationService: BikeStationService,
+    private changeDetector: ChangeDetectorRef
+  ) {
+    this.displayedBikeStation = null;
+    this.loadStations();
+  }
 
+  onMapReady(map: Leaflet.Map): void {
+    this.map = map;
+  }
 
+  loadStations(): void {
+    this.bikeStationService.getBikeStations().subscribe({
+      next: (bikeStations: BikeStation[]): void => {
+        this.bikeStations = bikeStations;
+        this.layers = bikeStations.map((station) => {
+          const latitude: number = station.location.latitude;
+          const longitude: number = station.location.longitude;
+          const marker: Leaflet.Marker<any> = LeafletUtil.getStationMarker(latitude, longitude)
+          marker.addEventListener('click', () => this.openDetail(station));
+          return marker;
+        })
+      }
+    })
+  }
 
-  
-  userForm: FormGroup;
+  openDetail(bikeStation: BikeStation): void{
+    this.displayedBikeStation = bikeStation;
+    this.changeDetector.detectChanges();
+    const location: Location = bikeStation.location;
+    this.map?.flyTo(new Leaflet.LatLng(location.latitude, location.longitude), 17);
+  }
 
-  constructor(private fb: FormBuilder) {
-    this.userForm = this.fb.group({
-      
-    });
+  closeDetail() {
+    this.displayedBikeStation = null;
+    this.changeDetector.detectChanges();
   }
 }

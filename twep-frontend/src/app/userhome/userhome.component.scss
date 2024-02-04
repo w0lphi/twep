@@ -1,7 +1,25 @@
 .userhome-container {
     display: flex;
     flex-direction: column;
-    height: 100vh;
+    height: 100%;
+
+    .twep-open-station-detail{
+        position: absolute;
+        left: 16px;
+        top: 80px;
+        bottom: 16px;
+        background-color: white;
+        height: calc(100% - 110px);
+        min-height: 200px;
+        width: 600px;
+        z-index: 1000;
+        overflow-y: scroll;
+
+        .mat-mdc-card-content{
+            padding: 16px;
+        }
+    }
+
 }
 
 mat-toolbar {
