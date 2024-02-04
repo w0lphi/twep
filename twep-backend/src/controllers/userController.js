@@ -110,8 +110,17 @@ const addMoneyToWallet = async (userId, amount) => {
     }
 };
 
+const ticketCost = 10;
 const purchaseTicket = async (userId, { bikeType, station, purchaseDate, immediateRenting, reservedStation }) => {
     try {
+        // Check user's wallet balance
+        const userAccount = await UserModel.getUserAccount(userId);
+
+        if (userAccount.wallet < 10) {
+            throw { status: 400, message: 'Insufficient funds in the wallet for ticket purchase' };
+        }
+
+        // Proceed with ticket purchase if wallet balance is sufficient
         const purchasedTicket = await UserModel.purchaseTicket(userId, {
             bikeType,
             station,
@@ -120,6 +129,9 @@ const purchaseTicket = async (userId, { bikeType, station, purchaseDate, immedia
             reservedStation,
         });
 
+        // Deduct ticket cost from the user's wallet
+        await UserModel.deductMoneyFromWallet(userId, ticketCost);
+
         const camelCasePurchasedTicket = convertKeysToCamelCase(purchasedTicket);
 
         return camelCasePurchasedTicket;
@@ -127,6 +139,7 @@ const purchaseTicket = async (userId, { bikeType, station, purchaseDate, immedia
         throw error;
     }
 };
+
 
 
 module.exports = {

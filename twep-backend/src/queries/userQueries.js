@@ -21,6 +21,8 @@ const getUserTickets = `
     WHERE user_id = $1;
 `;
 
+const deductMoneyFromWallet = 'UPDATE users SET wallet = wallet - $1 WHERE id = $2 RETURNING *'
+
 const getUserAccount = `
     SELECT
     u.id,
@@ -67,4 +69,5 @@ module.exports = {
     getUserAccount,
     addMoneyToWallet,
     purchaseTicket,
+    deductMoneyFromWallet,
 };
