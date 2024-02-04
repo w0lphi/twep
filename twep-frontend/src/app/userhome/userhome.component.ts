@@ -53,9 +53,9 @@ export class UserhomeComponent {
 
   loadStations(): void {
     this.bikeStationService.getBikeStations().subscribe({
-      next: (bikeStations: BikeStation[]): void => {
-        this.bikeStations = bikeStations;
-        this.layers = bikeStations.map((station) => {
+      next: ({ stations }): void => {
+        this.bikeStations = stations;
+        this.layers = stations.map((station) => {
           const latitude: number = station.location.latitude;
           const longitude: number = station.location.longitude;
           const marker: Leaflet.Marker<any> = LeafletUtil.getStationMarker(latitude, longitude)
