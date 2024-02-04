@@ -76,6 +76,19 @@ class UserModel {
         }
     }
 
+    static async deductMoneyFromWallet(userId, amount) {
+        try {
+            const queryString = userQueries.deductMoneyFromWallet;
+            const result = await pool.query(queryString, [amount, userId]);
+
+            // Check if the query was successful
+            if (result.rowCount === 0) {
+                throw { status: 500, message: 'Failed to deduct money from the wallet' };
+            }
+        } catch (error) {
+            throw error;
+        }
+    }
 
 
     static async addMoneyToWallet(userId, amount) {
