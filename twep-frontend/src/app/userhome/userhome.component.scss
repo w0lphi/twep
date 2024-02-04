@@ -1,17 +1,20 @@
 .userhome-container {
-    display: flex;
-    flex-direction: column;
+    display: grid;
     height: 100%;
+    grid-template-rows: min-content 1fr;
+    grid-template-areas:
+        "toolbar"
+        "map";
+
+    &.detail-open{
+    grid-template-columns: 400px 1fr;
+    grid-template-areas:
+        "toolbar toolbar"
+        "detail map";
+    }
 
     .twep-open-station-detail{
-        position: absolute;
-        left: 16px;
-        top: 80px;
-        bottom: 16px;
-        height: calc(100% - 110px);
-        min-height: 200px;
-        width: 600px;
-        z-index: 1000;
+        grid-area: detail;
 
         .mat-mdc-card-content{
             padding: 16px;
@@ -20,9 +23,20 @@
         }
     }
 
+    .twep-main-toolbar{
+        grid-area: toolbar;
+    }
+
+    .twep-user-map {
+        grid-area: map;
+        display: flex;
+        flex-grow: 1;
+        height: 100%;
+    }
+
 }
 
-mat-toolbar {
+.twep-main-toolbar {
     display: flex;
     align-items: center;
     background-color: white; 
@@ -55,11 +69,6 @@ mat-toolbar {
     margin-bottom: 0px; 
 }
 
-.leaflet-map {
-    flex: 1;
-}
-
-
 
 #trenner {
     height: 0.3em;
@@ -67,8 +76,6 @@ mat-toolbar {
     background-color: orange;
     margin-bottom: 0;
     border-radius: 15px;
-
-
 }
 
 
@@ -91,12 +98,13 @@ mat-toolbar {
 
 @media (max-width: 600px) {
     .userhome-container {
-        .twep-open-station-detail {
-            left: 0px;
-            bottom: 0px;
-            right: 0px;
-            height: calc(100% - 80px);
-            width: 100%;
+        &.detail-open {
+            grid-template-columns: 1fr;
+            grid-template-rows: min-content 100px 1fr;
+            grid-template-areas:
+                "toolbar"
+                "map"
+                "detail";
         }
     }
 }

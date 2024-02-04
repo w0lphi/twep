@@ -1,4 +1,9 @@
-<div class="userhome-container">
+<div 
+    [ngClass]="{
+        'userhome-container': true, 
+        'detail-open': displayedBikeStation !== null
+    }"
+>
     
     <mat-toolbar color="secondary" class="twep-main-toolbar">
         <a routerLink="/userhome" id="logo">
@@ -17,7 +22,7 @@
     </mat-toolbar>
     <div
         leaflet
-        class="leaflet-map"
+        class="twep-user-map"
         [leafletOptions]="mapOptions"
         [leafletLayers]="layers"
         (leafletMapReady)="onMapReady($event)"
