@@ -98,7 +98,13 @@ const addMoneyToWallet = async (userId, amount) => {
 
         const updatedUser = await UserModel.addMoneyToWallet(userId, amount);
 
-        return convertKeysToCamelCase(updatedUser);
+        const response = {
+            id: updatedUser.id,
+            email: updatedUser.email,
+            wallet: updatedUser.wallet,
+        };
+
+        return convertKeysToCamelCase(response);
     } catch (error) {
         throw error;
     }
