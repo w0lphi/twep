@@ -136,9 +136,9 @@ class StationModel {
         }
     }
 
-    static async getBikeCategoryByName(categoryName) {
+    static async getBikeCategoryByName(categoryId) {
         try {
-            const { rows } = await pool.query(stationQueries.getBikeCategoryByName, [categoryName]);
+            const { rows } = await pool.query(stationQueries.getBikeCategoryById, [categoryId]);
 
             if (rows.length === 0) {
                 return null; // Bike category not found
