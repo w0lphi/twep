@@ -12,6 +12,7 @@ router.post('/stations', stationController.createStation);
 router.delete('/stations/:id', stationController.deleteStationById);
 
 router.get('/bike-categories', stationController.getAllBikeCategories);
+router.get('/bike-categories/:id', stationController.getBikeCategoryById);
 router.post('/bike-categories', stationController.createBikeCategory);
 router.delete('/bike-categories/:id', stationController.deleteBikeCategoryById);
 

@@ -110,6 +110,27 @@ const stationController = {
         }
     },
 
+    async getBikeCategoryById(req, res) {
+        const { id } = req.params;
+
+        try {
+            // Check if the bike category exists
+            const bikeCategory = await StationModel.getBikeCategoryById(id);
+
+            if (!bikeCategory) {
+                return res.status(404).json({ error: 'Bike category not found' });
+            }
+
+
+            const camelCaseBikeCategory = convertKeysToCamelCase(bikeCategory);
+
+            res.json(bikeCategory);
+        } catch (error) {
+            console.error(error);
+            res.status(500).send('Internal Server Error');
+        }
+    },
+
     async getAllBikeCategories(req, res) {
         try {
             const bikeCategories = await StationModel.getAllBikeCategories();
