@@ -25,6 +25,7 @@ const getUserAccount = `
     SELECT
     u.id,
     u.email,
+    u.role,
     u.wallet,
     t.id AS ticket_id,
     t.bike_type AS bike_type,

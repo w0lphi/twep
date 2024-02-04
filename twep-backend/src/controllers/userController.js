@@ -63,13 +63,35 @@ const getUserAccount = async (userId) => {
             throw { status: 404, message: 'User account not found' };
         }
 
-        const camelCaseAccountDetails = convertKeysToCamelCase(accountDetails.rows[0]);
+        const { id, email, role, wallet, ticket_id, bike_type, station, purchase_date, immediate_renting, reserved_station } = accountDetails.rows[0];
 
-        return camelCaseAccountDetails;
+        const response = {
+            id,
+            email,
+            role,
+            wallet,
+            tickets: [],
+        };
+
+        if (ticket_id) {
+            response.tickets.push({
+                id: ticket_id,
+                bikeType: bike_type,
+                station,
+                purchaseDate: purchase_date,
+                immediateRenting: immediate_renting,
+                reservedStation: reserved_station,
+            });
+        }
+
+        return response;
     } catch (error) {
         throw error;
     }
 };
+
+
+
 
 const addMoneyToWallet = async (userId, amount) => {
     try {

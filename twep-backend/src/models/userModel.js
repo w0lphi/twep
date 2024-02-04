@@ -48,7 +48,6 @@ class UserModel {
     static async getUserAccount(userId) {
         try {
             const queryString = userQueries.getUserAccount;
-            console.log('Executing SQL Query:', queryString);  // Log the query string
 
             const { rows } = await pool.query(queryString, [userId]);
 
@@ -56,11 +55,27 @@ class UserModel {
                 throw { status: 404, message: 'User account not found' };
             }
 
-            return rows[0];
+            const userAccount = {
+                id: rows[0].id,
+                email: rows[0].email,
+                role: rows[0].role,
+                wallet: rows[0].wallet,
+                tickets: rows.map(ticket => ({
+                    id: ticket.ticketId,
+                    bikeType: ticket.bikeType,
+                    station: ticket.station,
+                    purchaseDate: ticket.purchaseDate,
+                    immediateRenting: ticket.immediateRenting,
+                    reservedStation: ticket.reservedStation,
+                })),
+            };
+
+            return userAccount;
         } catch (error) {
             throw error;
         }
     }
+
 
 
     static async addMoneyToWallet(userId, amount) {
