@@ -29,10 +29,6 @@
             "type": "string",
             "format": "email"
           },
-          "password": {
-            "type": "string",
-            "format": "password"
-          },
           "role": {
             "type": "string"
           },
@@ -614,17 +610,7 @@
             "content": {
               "application/json": {
                 "example": {
-                  "id": 1,
-                  "email": "user@example.com",
-                  "wallet": 100,
-                  "tickets": [
-                    {
-                      "id": 1,
-                      "bikeType": "Mountain Bike",
-                      "station": "Station A",
-                      "purchaseDate": "2024-01-10T08:00:00Z"
-                    }
-                  ]
+                  "$ref": "#/components/schemas/User"
                 }
               }
             }
@@ -1729,6 +1715,54 @@
               "application/json": {
                 "example": {
                   "error": "Invalid input data"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/management/bike-models/{id}": {
+      "get": {
+        "summary": "Get a bike model by ID",
+        "tags": [
+          "management-bike models and categories"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID of the bike model to retrieve"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Bike model retrieved successfully",
+            "content": {
+              "application/json": {
+                "example": {
+                  "id": "uuid",
+                  "name": "Mountain Bike XL",
+                  "description": "A robust mountain bike for off-road adventures",
+                  "wheelSize": 29.5,
+                  "extraFeatures": [
+                    "Shimano XT gears",
+                    "Front suspension with 120mm travel"
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Bike model not found",
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "Bike model not found"
                 }
               }
             }

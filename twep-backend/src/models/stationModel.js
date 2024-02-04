@@ -181,6 +181,17 @@ class StationModel {
         }
     }
 
+    static async getBikeModelById(bikeModelId) {
+        try {
+            const queryString = 'SELECT * FROM bike_models WHERE id = $1';
+            const { rows } = await pool.query(queryString, [bikeModelId]);
+
+            return rows[0];
+        } catch (error) {
+            throw error;
+        }
+    }
+
     static async createBikeModel(bikeModelData) {
         try {
 

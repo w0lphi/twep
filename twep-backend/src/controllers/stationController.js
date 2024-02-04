@@ -176,6 +176,25 @@ const stationController = {
         }
     },
 
+    async getBikeModelById(req, res) {
+        const bikeModelId = req.params.id;
+
+        try {
+            const bikeModel = await StationModel.getBikeModelById(bikeModelId);
+
+            if (!bikeModel) {
+                return res.status(404).json({ error: 'Bike model not found' });
+            }
+
+            const camelCaseBikeModel = convertKeysToCamelCase(bikeModel);
+
+            res.json(camelCaseBikeModel);
+        } catch (error) {
+            console.error(error);
+            res.status(500).send('Internal Server Error');
+        }
+    },
+
     async createBikeModel(req, res) {
         try {
             const bikeModelData = req.body;
