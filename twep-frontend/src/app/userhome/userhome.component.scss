@@ -58,3 +58,15 @@ mat-toolbar {
 .leaflet-map {
     flex: 1;
 }
+
+@media (max-width: 600px) {
+    .userhome-container {
+        .twep-open-station-detail {
+            left: 0px;
+            bottom: 0px;
+            right: 0px;
+            height: calc(100% - 80px);
+            width: 100%;
+        }
+    }
+}

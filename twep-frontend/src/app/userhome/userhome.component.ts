@@ -39,7 +39,7 @@ export class UserhomeComponent {
   map?: Leaflet.Map;
   mapOptions: Leaflet.MapOptions = {
     layers: [
-      Leaflet.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+      Leaflet.tileLayer('https://tile.openstreetmap.de/{z}/{x}/{y}.png', {
         attribution: '© OpenStreetMap contributors'
       })
     ],
@@ -76,6 +76,7 @@ export class UserhomeComponent {
 
   openDetail(bikeStation: BikeStation): void{
     this.displayedBikeStation = bikeStation;
+    //This is needed, since the change of the displayedBikeStation would not be recognized in the HTML
     this.changeDetector.detectChanges();
     const location: Location = bikeStation.location;
     this.map?.flyTo(new Leaflet.LatLng(location.latitude, location.longitude), 17);
