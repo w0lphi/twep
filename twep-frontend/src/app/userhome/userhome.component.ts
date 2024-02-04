@@ -37,15 +37,7 @@ export class UserhomeComponent {
   displayedBikeStation: BikeStation | null;
   showDetail: boolean = false;
   map?: Leaflet.Map;
-  mapOptions: Leaflet.MapOptions = {
-    layers: [
-      Leaflet.tileLayer('https://tile.openstreetmap.de/{z}/{x}/{y}.png', {
-        attribution: '© OpenStreetMap contributors'
-      })
-    ],
-    zoom: 14,
-    center: Leaflet.latLng(46.625800, 14.31181)
-  };
+  mapOptions: Leaflet.MapOptions = LeafletUtil.mapOptions;
 
   constructor(
     private bikeStationService: BikeStationService,

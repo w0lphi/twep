@@ -3,6 +3,7 @@ import { Observable } from "rxjs";
 import { HttpClient } from "@angular/common/http";
 import { environment } from "../environment/environment";
 import { Bike } from "../model/bike";
+import { BikeStation } from "../model/bikeStation";
 
 @Injectable({ providedIn: 'root' })
 export class BikeService{
@@ -28,6 +29,14 @@ export class BikeService{
 
     public deleteBike(id: string): Observable<any>{
         return this.http.delete(`${this.apiUrl}/management/bikes/${id}`);
+    }
+
+    public assignBikesToStation(bikes: Bike[], bikeStation: BikeStation): Observable<any>{
+        const body: object = {
+            stationId: bikeStation.id,
+            bikeIds: bikes.map(({ id }) => id)
+        }
+        return this.http.post(`${this.apiUrl}/management/reassign-bikes`, body);
     }
 
 }

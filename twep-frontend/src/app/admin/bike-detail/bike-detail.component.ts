@@ -21,6 +21,7 @@ import { LoadingOverlayComponent } from '../../common/loading-overlay/loading-ov
 import { LeafletModule } from '@asymmetrik/ngx-leaflet';
 import { LeafletUtil } from '../../util/leaflet-util'
 import * as Leaflet from 'leaflet';
+import { DialogService } from '../../service/dialog.service';
 
 @Component({
   selector: 'app-bike-detail',
@@ -64,9 +65,11 @@ export class BikeDetailComponent {
     private bikeModelService: BikeModelService,
     private bikeStationService: BikeStationService,
     private router: Router,
+    private dialogService: DialogService
   ) {
     this.bikeForm = new FormGroup({
       model: new FormControl("", Validators.required),
+      status: new FormControl(""),
       station: new FormControl("", Validators.required)
     });
   }
@@ -88,7 +91,7 @@ export class BikeDetailComponent {
 
     if (this.isNew) {
       this.bikeName = "New bike"
-      this.bike = new Bike("");
+      this.bike = new Bike("", null);
     } else {
       this.runningAction = true;
 
@@ -103,6 +106,74 @@ export class BikeDetailComponent {
         }
       })
     }
+  }
+
+  upsertBike(): void{
+    if (this.bike === undefined) return;
+    this.runningAction = true;
+    const bikeModel: BikeModel = this.model?.value;
+    const bike: Bike = new Bike(this.bike.id, bikeModel);
+    if (this.isNew) {
+      this.bikeService.createBike(bike).subscribe({
+         next: (response: any): void => {
+          const id: string = response?.id;
+          if(id !== undefined && id !== null && id !== ""){
+            this.router.navigateByUrl(`/admin/bikes/${id}`);
+          }else{
+            this.router.navigateByUrl("/admin/bikes");
+          }
+        },
+        error: (): void => {
+          this.runningAction = false;
+        }
+      })
+    } else {
+      
+    }
+  }
+
+  async deleteBike() {
+     if (this.bike?.id === undefined) return;
+
+    const confirmed: boolean = await this.dialogService.openConfirmDialog(
+      "Delete bike?",
+      "Do you really want to delete the bike? This cannot be undone!"
+    )
+
+    if(!confirmed) return;
+
+    this.runningAction = true;
+    this.bikeService.deleteBike(this.bike?.id).subscribe({
+      next: (): void => {
+        this.runningAction = false;
+        this.router.navigateByUrl("/admin/bikes");
+        return;
+      },
+      error: (): void => {
+        this.runningAction = false;
+      }
+    });
+  }
+
+  async assignToStation(bikeStation: BikeStation): Promise<void> {
+    if (this.bike?.id === undefined) return;
+
+    const confirmed: boolean = await this.dialogService.openConfirmDialog(
+      `Assign bike to station ${bikeStation.name}?`,
+      "The bike will be removed from the previous station"
+    )
+
+    if (!confirmed) return;
+
+    this.runningAction = true;
+    this.bikeService.assignBikesToStation([this.bike], bikeStation).subscribe({
+      next: (): void => {
+        this.runningAction = false;
+      },
+      error: (): void => {
+        this.runningAction = false;
+      }
+    })
   }
 
   loadModels(): void {
@@ -121,6 +192,7 @@ export class BikeDetailComponent {
           const latitude: number = station.location.latitude;
           const longitude: number = station.location.longitude;
           const marker: Leaflet.Marker<any> = LeafletUtil.getStationMarker(latitude, longitude)
+          marker.addEventListener('click', () => this.assignToStation(station));
           return marker;
         })
       }

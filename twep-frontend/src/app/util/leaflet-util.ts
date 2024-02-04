@@ -1,14 +1,8 @@
 import * as Leaflet from 'leaflet';
 
 //Leaflet Layers, found here https://leaflet-extras.github.io/leaflet-providers/preview/
-const esri_WorldImagery: Leaflet.TileLayer = Leaflet.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
-	attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
-});
-
-const stadia_StamenTerrainLabels: Leaflet.TileLayer = Leaflet.tileLayer('https://tiles.stadiamaps.com/tiles/stamen_terrain_labels/{z}/{x}/{y}{r}.png', {
-	minZoom: 0,
-	maxZoom: 18,
-	attribution: '&copy; <a href="https://www.stadiamaps.com/" target="_blank">Stadia Maps</a> &copy; <a href="https://www.stamen.com/" target="_blank">Stamen Design</a> &copy; <a href="https://openmaptiles.org/" target="_blank">OpenMapTiles</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+const osm_common: Leaflet.TileLayer = Leaflet.tileLayer('https://tile.openstreetmap.de/{z}/{x}/{y}.png', {
+    attribution: '© OpenStreetMap contributors'
 });
 
 const stationIconUrl: string = '../../assets/station_marker.png'
@@ -19,8 +13,7 @@ export class LeafletUtil {
     static get mapOptions(): Leaflet.MapOptions {
         return {
             layers: [
-                esri_WorldImagery,
-                stadia_StamenTerrainLabels
+                osm_common,
             ],
             zoom: 12,
             center: coordinatesKlu
