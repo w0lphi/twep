@@ -1532,86 +1532,38 @@
         }
       }
     },
-    "/management/bike-categories/{name}": {
-      "put": {
-        "summary": "Update a bike category",
+    "/management/bike-categories/{categoryId}": {
+      "get": {
+        "summary": "Get a bike category by ID",
         "tags": [
           "management-bike models and categories"
         ],
         "parameters": [
           {
-            "name": "name",
+            "name": "categoryId",
             "in": "path",
             "required": true,
             "schema": {
-              "type": "string"
+              "type": "string",
+              "format": "uuid"
             },
-            "description": "The name of the bike category to update"
-          }
-        ],
-        "requestBody": {
-          "description": "Updated bike category details",
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/BikeCategory"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Bike category updated successfully",
-            "content": {
-              "application/json": {
-                "example": {
-                  "bikeCategory": "mountain_bike"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad request",
-            "content": {
-              "application/json": {
-                "example": {
-                  "error": "Invalid input data"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Bike category not found",
-            "content": {
-              "application/json": {
-                "example": {
-                  "error": "Bike category not found"
-                }
-              }
-            }
-          }
-        }
-      },
-      "delete": {
-        "summary": "Delete a bike category",
-        "tags": [
-          "management-bike models and categories"
-        ],
-        "parameters": [
-          {
-            "name": "name",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            },
-            "description": "The name of the bike category to delete"
+            "description": "The ID of the bike category to retrieve"
           }
         ],
         "responses": {
-          "204": {
-            "description": "Bike category deleted successfully"
+          "200": {
+            "description": "Bike category retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BikeCategory"
+                },
+                "example": {
+                  "id": "uuid",
+                  "name": "City Bike"
+                }
+              }
+            }
           },
           "404": {
             "description": "Bike category not found",
