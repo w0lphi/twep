@@ -13,6 +13,7 @@ import { BikeDetailComponent } from './admin/bike-detail/bike-detail.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 
 import {UserhomeComponent} from './userhome/userhome.component';
+import { WalletComponent } from './wallet/wallet.component';
 
 export const routes: Routes = [
     {
@@ -71,7 +72,10 @@ export const routes: Routes = [
         path: 'userhome',
         component: UserhomeComponent
     },
-
+    {
+        path: 'wallet',
+        component: WalletComponent
+    },
 
 
 

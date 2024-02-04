@@ -1,0 +1,66 @@
+mat-toolbar {
+    display: flex;
+    align-items: center;
+    background-color: white; 
+    color: #333; 
+}
+
+#logo {
+    display: flex;
+    align-items: center;
+    margin-right: 1vw;
+}
+
+.logo {
+    width: 40px; 
+    height: 40px; 
+    margin-right: 8px; 
+}
+
+.twep-toolbar-title {
+    font-size: 24px;
+    color: #333; 
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    margin-left: 1vw;
+    
+}
+
+#trenner {
+    height: 0.3em;
+    width: 100%;
+    background-color: orange;
+    margin-bottom: 0;
+    border-radius: 15px;
+
+
+}
+
+#button1 {
+    padding: 1em; 
+    margin: 0.5em 8px; 
+    color: black;
+    border-radius: 4px;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background-color 0.5s;
+    background-color: orange;
+
+}
+
+
+#button2, #button3 {
+    padding: 1em; 
+    margin: 0.5em 8px; 
+    color: black;
+    border-radius: 4px;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background-color 0.5s;
+}
+
+#button2:hover, #button3:hover {
+    background-color: orange;
+    
+}
