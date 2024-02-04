@@ -26,10 +26,13 @@ const stationController = {
         try {
             const stations = await StationModel.getAllStations();
 
-            // Convert snake_case keys to CamelCase
             const camelCaseStations = stations.map(station => convertKeysToCamelCase(station));
 
-            res.json(camelCaseStations);
+            const responseObject = {
+                stations: camelCaseStations
+            };
+
+            res.json(responseObject);
         } catch (error) {
             console.error(error);
             res.status(500).send('Internal Server Error');
@@ -60,20 +63,31 @@ const stationController = {
         const { name, location, operational, parkingPlaces } = req.body;
 
         try {
+            // Check if parkingPlaces is present and is an array
+            if (!parkingPlaces || !Array.isArray(parkingPlaces)) {
+                return res.status(400).json({ error: 'Invalid or missing parkingPlaces field in the request body.' });
+            }
+
             // Convert bike categories array to an array of objects with 'name' property
             const parkingPlacesData = parkingPlaces.map(place => ({
-                bike_categories: place.bike_categories.map(category => ({ name: category })),
+                bike_categories: place.bike_categories.map(category => ({ name: category.name })),
                 occupied: place.occupied,
             }));
 
-            const newStationId = await StationModel.createStation({ name, location, operational }, parkingPlacesData);
+            // Create a new station
+            const newStation = await StationModel.createStation({ name, location, operational }, parkingPlacesData);
 
-            res.json({ id: newStationId });
+            // Convert keys to CamelCase before sending the response
+            const camelCaseStation = convertKeysToCamelCase(newStation);
+
+            res.status(201).json(camelCaseStation);
         } catch (error) {
             console.error(error);
             res.status(500).send('Internal Server Error');
         }
     },
+
+
 
     async deleteStationById(req, res) {
         const { id } = req.params;

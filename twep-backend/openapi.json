@@ -123,6 +123,56 @@
           "reservedStation": "Station B"
         }
       },
+      "CreateStation": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "location": {
+            "type": "object",
+            "properties": {
+              "latitude": {
+                "type": "number",
+                "format": "float"
+              },
+              "longitude": {
+                "type": "number",
+                "format": "float"
+              }
+            },
+            "required": [
+              "latitude",
+              "longitude"
+            ]
+          },
+          "operational": {
+            "type": "boolean"
+          },
+          "parkingPlaces": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "bike_categories": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "name": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                },
+                "occupied": {
+                  "type": "boolean"
+                }
+              }
+            }
+          }
+        }
+      },
       "Station": {
         "type": "object",
         "properties": {
@@ -150,14 +200,14 @@
               "longitude"
             ]
           },
+          "operational": {
+            "type": "boolean"
+          },
           "parkingPlaces": {
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/ParkingPlace"
             }
-          },
-          "operational": {
-            "type": "boolean"
           }
         },
         "example": {
@@ -282,15 +332,15 @@
             "type": "string",
             "format": "uuid"
           },
+          "occupied": {
+            "type": "boolean",
+            "description": "If the parking place is occupied or not"
+          },
           "bikeCategories": {
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/BikeCategory"
             }
-          },
-          "occupied": {
-            "type": "boolean",
-            "description": "If the parking place is occupied or not"
           }
         }
       },
@@ -1126,6 +1176,9 @@
             "description": "Successful response",
             "content": {
               "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Station"
+                },
                 "example": {
                   "stations": [
                     {
@@ -1135,16 +1188,21 @@
                         "latitude": 40.7128,
                         "longitude": -74.006
                       },
+                      "operational": true,
                       "parkingPlaces": [
                         {
                           "id": "uuid",
+                          "occupied": false,
                           "bikeCategories": [
-                            "city_bike",
-                            "mountain_bike"
+                            {
+                              "name": "city_bike"
+                            },
+                            {
+                              "name": "mountain_bike"
+                            }
                           ]
                         }
-                      ],
-                      "operational": true
+                      ]
                     },
                     {
                       "id": "uuid2",
@@ -1192,7 +1250,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/Station"
+                "$ref": "#/components/schemas/CreateStation"
               }
             }
           }
@@ -1266,16 +1324,21 @@
                     "latitude": 40.7128,
                     "longitude": -74.006
                   },
+                  "operational": true,
                   "parkingPlaces": [
                     {
                       "id": "uuid",
+                      "occupied": false,
                       "bikeCategories": [
-                        "city_bike",
-                        "mountain_bike"
+                        {
+                          "name": "City Bike"
+                        },
+                        {
+                          "name": "Mountain Bike"
+                        }
                       ]
                     }
-                  ],
-                  "operational": true
+                  ]
                 }
               }
             }
@@ -1387,7 +1450,14 @@
         ],
         "responses": {
           "204": {
-            "description": "Station deleted successfully"
+            "description": "Station deleted successfully",
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "Station deleted successfully"
+                }
+              }
+            }
           },
           "404": {
             "description": "Station not found",

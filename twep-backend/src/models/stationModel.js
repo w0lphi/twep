@@ -45,50 +45,51 @@ class StationModel {
             await pool.query('BEGIN');
 
             // Insert the new station
-            await pool.query(stationQueries.createStation, [
+            const result = await pool.query(stationQueries.createStation, [
                 stationId,
                 stationData.name,
                 stationData.location,
                 stationData.operational,
-                parkingPlacesData,
             ]);
+
+            const createdStation = result.rows[0];
 
             // Insert parking places for the station
             for (const parkingPlaceData of parkingPlacesData) {
                 const parkingPlaceId = uuidv4();
 
+                // Convert bike categories array to an array of stringified JSON objects
+                const bikeCategoriesArray = parkingPlaceData.bike_categories.map(category => JSON.stringify(category));
+
                 await pool.query(stationQueries.createParkingPlace, [
                     parkingPlaceId,
                     stationId,
-                    parkingPlaceData.bike_categories,
                     parkingPlaceData.occupied,
+                    bikeCategoriesArray,
                 ]);
 
-                // Insert bike categories for the parking place
-                for (const bikeCategory of parkingPlaceData.bike_categories) {
-                    const bikeCategoryId = uuidv4();
 
-                    await pool.query(stationQueries.createBikeCategory, [
-                        bikeCategoryId,
-                        bikeCategory.name,
-                    ]);
-
-                    // Associate bike category with parking place
-                    await pool.query(stationQueries.createParkingPlaceBikeCategory, [
-                        parkingPlaceId,
-                        bikeCategoryId,
-                    ]);
-                }
             }
+            const detailedStationInfo = await pool.query(stationQueries.getStationById, [stationId]);
+            const detailedStation = detailedStationInfo.rows[0];
 
             await pool.query('COMMIT');
 
-            return stationId;
+            const response = {
+                ...detailedStation,
+                parkingPlaces: parkingPlacesData.map(place => ({
+                    id: uuidv4(), // You may want to generate a new ID for each parking place
+                    bikeCategories: place.bike_categories.map(category => category.name),
+                })),
+            };
+
+            return response;
         } catch (error) {
             await pool.query('ROLLBACK');
             throw error;
         }
     }
+
 
     static async deleteStationById(stationId) {
         try {
