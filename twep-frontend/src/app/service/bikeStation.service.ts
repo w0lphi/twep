@@ -30,4 +30,12 @@ export class BikeStationService{
     public deleteBikeStation(id: string): Observable<any>{
         return this.http.delete(`${this.apiUrl}/management/stations/${id}`)
     }
+
+    public getBikeStationsForUser(): Observable<BikeStationResponse>{
+        return this.http.get<BikeStationResponse>(`${this.apiUrl}/users/stations`);
+    }
+
+    public getBikeStationForUser(id: string): Observable<BikeStation>{
+        return this.http.get<BikeStation>(`${this.apiUrl}/users/stations/${id}`)
+    }
 }

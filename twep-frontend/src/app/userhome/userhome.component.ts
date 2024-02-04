@@ -15,6 +15,8 @@ import { BikeStationService } from '../service/bikeStation.service';
 import { BikeStation } from '../model/bikeStation';
 import { Location } from '../model/location';
 
+import { StationCardComponent } from '../station-card/station-card.component';
+
 @Component({
   selector: 'app-userhome',
   standalone: true,
@@ -27,6 +29,7 @@ import { Location } from '../model/location';
     MatIconModule,
     MatCardModule,
     LeafletModule,
+    StationCardComponent
   ],
   templateUrl: './userhome.component.html',
   styleUrl: './userhome.component.scss'
