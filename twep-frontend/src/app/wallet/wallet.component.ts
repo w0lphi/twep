@@ -69,11 +69,11 @@ export class WalletComponent {
   constructor(private walletService: WalletService) {}
 
 
-  saveAdding(amount: number): void {
+  saveAdding(): void {
     const userId: number = 123; 
-    const amountToRemove: number = 50; 
+    const amountToAdd: number = 50; 
 
-    this.walletService.addMoneyToWallet(userId, amount)
+    this.walletService.addMoneyToWallet(userId, amountToAdd)
       .subscribe({
         next: response => {
           console.log('Money got added to wallet: ', response);
@@ -109,10 +109,6 @@ export class WalletComponent {
        // ToDo: userid is just for testing, amount is fixed.
   }
   
-
-  
-
-
 
 
 

@@ -20,4 +20,9 @@ export class WalletService {
     const requestBody = { amount: amount };
     return this.http.post(`${this.apiUrl}/users/${userId}/account`, requestBody);
   }
+
+
+  public getWalletStatus(userId: number): Observable<any> {
+    return this.http.get(`${this.apiUrl}/users/${userId}/account`);
+  }
 }
