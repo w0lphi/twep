@@ -1,6 +1,6 @@
 <div class="userhome-container">
     <mat-toolbar color="secondary" class="twep-main-toolbar">
-        <a routerLink="/home" id="logo">
+        <a routerLink="/user" id="logo">
             <img
                 src="../../../assets/logo_small.svg"
                 height="40"
@@ -8,21 +8,16 @@
             >
         </a>
         <span class="twep-toolbar-title">TWEP Home</span>
-        <nav 
+        <mat-tab-group
             class="twep-user-nav-bar" 
-            mat-tab-nav-bar
-            [tabPanel]="tabPanel"
-            color="primary" 
+            [selectedIndex]="activeLinkIndex"
+            (selectedTabChange)="navigate($event)"
         >
-            <a
-                *ngFor="let link of navigationLinks"
-                mat-tab-link
-                (click)="navigate(link)"
-                [active]="activeLink?.route === link.route"
-            >
-                {{link.title}}
-            </a>
-        </nav>
+            <mat-tab
+                *ngFor="let tab of navigationLinks"
+                [label]="tab.title"
+            />
+        </mat-tab-group>
     </mat-toolbar>
     <div class="twep-user-content">
         <mat-tab-nav-panel #tabPanel>

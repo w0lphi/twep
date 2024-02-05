@@ -6,8 +6,6 @@
         "toolbar"
         "content";
 
-    
-
     .twep-main-toolbar{
         grid-area: toolbar;
         display: flex;
@@ -18,7 +16,7 @@
         .twep-user-nav-bar{
             margin-left: 16px;
             --mdc-tab-indicator-active-indicator-height: 0px;
-            
+            max-width: calc(100% - 212px);
         }
     }
 
@@ -37,7 +35,6 @@
 .logo {
     width: 40px; 
     height: 40px; 
-    margin-right: 8px; 
 }
 
 .twep-toolbar-title {
@@ -46,28 +43,9 @@
     font-weight: bold;
     display: flex;
     align-items: center;
-    margin-left: 1vw;
+    margin-left: 8px;
     
 }
-
-.user-form {
-    margin-bottom: 0px; 
-}
-
-#button1, #button2, #button3 {
-    padding: 1em; 
-    margin: 0.5em 8px; 
-    color: black;
-    border-radius: 4px;
-    text-decoration: none;
-    cursor: pointer;
-    transition: background-color 0.5s;
-}
-
-#button1:hover, #button2:hover, #button3:hover {
-    background-color: var(--twep-main);
-}
-
 
 @media (max-width: 600px) {
     .userhome-container {
@@ -78,6 +56,16 @@
                 "toolbar"
                 "map"
                 "detail";
+        }
+
+        .twep-main-toolbar{
+            .twep-toolbar-title {
+                display: none;
+            }
+        
+            .twep-user-nav-bar {
+                max-width: calc(100% - 60px);
+            }
         }
     }
 }

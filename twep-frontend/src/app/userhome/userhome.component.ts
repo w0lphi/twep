@@ -7,7 +7,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatIconModule } from '@angular/material/icon';
 import { MatCardModule } from '@angular/material/card';
-import { MatTabsModule } from '@angular/material/tabs';
+import { MatTabChangeEvent, MatTabsModule } from '@angular/material/tabs';
 
 import { NavigationLink } from '../model/navigationLink';
 
@@ -33,7 +33,7 @@ import { NavigationLink } from '../model/navigationLink';
   styleUrl: './userhome.component.scss'
 })
 export class UserhomeComponent {
-  activeLink?: NavigationLink;
+  activeLinkIndex?: number;
   navigationLinks: NavigationLink[] = [
     new NavigationLink("Map", "", "/user/home"),
     new NavigationLink("Wallet", "", "/user/wallet"),
@@ -49,11 +49,12 @@ export class UserhomeComponent {
   
   ngOnInit(): void {
     console.log(this.router.url);
-    this.activeLink = this.navigationLinks.find(tab => tab.route === this.router.url);
+    this.activeLinkIndex = this.navigationLinks.findIndex(tab => tab.route === this.router.url);
   }
 
-  navigate(link: NavigationLink): void {
-    this.activeLink = link;
+  navigate(event: MatTabChangeEvent): void {
+    const link: NavigationLink = this.navigationLinks[event.index];
+    this.activeLinkIndex = event.index;
     this.router.navigateByUrl(link.route);
   }
 }
