@@ -51,7 +51,7 @@ export class UserMapComponent {
   loadStations(): void {
     this.bikeStationService.getBikeStations().subscribe({
       next: ({ stations }): void => {
-        this.bikeStations = stations;
+        this.bikeStations = stations.filter(({operational}) => operational);
         this.layers = stations.map((station) => {
           const latitude: number = station.location.latitude;
           const longitude: number = station.location.longitude;
