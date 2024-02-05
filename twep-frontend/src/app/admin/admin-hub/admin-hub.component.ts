@@ -53,7 +53,7 @@ export class AdminHubComponent {
     this.router.navigateByUrl("/")
   }
 
-  get navigationLinks(): (NavigationLink | null)[]{
+  get navigationLinks(): NavigationLink[]{
     return [
       new NavigationLink("Stations", "place", "stations"),
       new NavigationLink("Categories", "category", "categories"),

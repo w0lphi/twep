@@ -1,0 +1,40 @@
+.twep-user-map-container{
+    display: grid;
+    height: 100%;
+    grid-template-areas: "map";
+
+    &.detail-open {
+        grid-template-columns: 400px 1fr;
+        grid-template-areas:
+            "detail map";
+    }
+
+    .twep-open-station-detail {
+        grid-area: detail;
+
+        .mat-mdc-card-content {
+            padding: 16px;
+            overflow-y: scroll;
+            height: calc(100% - 110px);
+        }
+    }
+
+    .twep-user-map {
+        grid-area: map;
+        display: flex;
+        flex-grow: 1;
+        height: 100%;
+    }
+}
+
+@media (max-width: 600px) {
+    .twep-user-map-container {
+        &.detail-open {
+            grid-template-columns: 1fr;
+            grid-template-rows: 100px 1fr;
+            grid-template-areas:
+                "map"
+                "detail";
+        }
+    }
+}

@@ -14,6 +14,7 @@ import { PageNotFoundComponent } from './page-not-found/page-not-found.component
 
 import {UserhomeComponent} from './userhome/userhome.component';
 import { WalletComponent } from './wallet/wallet.component';
+import { UserMapComponent } from './user-map/user-map.component';
 
 export const routes: Routes = [
     {
@@ -69,15 +70,24 @@ export const routes: Routes = [
 
     // user view
     {
-        path: 'userhome',
-        component: UserhomeComponent
+        path: "user",
+        pathMatch: 'full',
+        redirectTo: "user/home"
     },
     {
-        path: 'wallet',
-        component: WalletComponent
+        path: 'user',
+        component: UserhomeComponent,
+        children: [
+            {
+                path: "home",
+                component: UserMapComponent
+            },
+            {
+                path: 'wallet',
+                component: WalletComponent
+            },
+        ]
     },
-
-
 
 
     //Not found route, needs to be at the bottom

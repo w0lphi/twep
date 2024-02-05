@@ -1,0 +1,38 @@
+<div 
+    [ngClass]="{
+        'twep-user-map-container': true, 
+        'detail-open': displayedBikeStation !== null
+    }"
+>
+    <div
+        leaflet
+        class="twep-user-map"
+        [leafletOptions]="mapOptions"
+        [leafletLayers]="layers"
+        (leafletMapReady)="onMapReady($event)"
+    ></div>
+    <mat-card
+        *ngIf="displayedBikeStation !== null"
+        appearance="raised"
+        class="twep-open-station-detail"
+    >
+        <mat-card-header>
+            <mat-card-title-group>
+                <mat-card-title>{{displayedBikeStation.name}}</mat-card-title>
+                <mat-card-subtitle>Bike Station</mat-card-subtitle>
+            </mat-card-title-group>
+    
+            <div class="twep-spacer"></div>
+            <button
+                mat-icon-button
+                class="back-button"
+                (click)="closeDetail()"
+            >
+                <mat-icon>close</mat-icon>
+            </button>
+        </mat-card-header>
+        <mat-card-content>
+            <app-station-card [stationId]="displayedBikeStation.id" />
+        </mat-card-content>
+    </mat-card>
+</div>

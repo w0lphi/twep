@@ -4,43 +4,28 @@
     grid-template-rows: min-content 1fr;
     grid-template-areas:
         "toolbar"
-        "map";
+        "content";
 
-    &.detail-open{
-    grid-template-columns: 400px 1fr;
-    grid-template-areas:
-        "toolbar toolbar"
-        "detail map";
-    }
-
-    .twep-open-station-detail{
-        grid-area: detail;
-
-        .mat-mdc-card-content{
-            padding: 16px;
-            overflow-y: scroll;
-            height: calc(100% - 110px);
-        }
-    }
+    
 
     .twep-main-toolbar{
         grid-area: toolbar;
-    }
-
-    .twep-user-map {
-        grid-area: map;
         display: flex;
-        flex-grow: 1;
-        height: 100%;
+        align-items: center;
+        background-color: white;
+        color: #333;
+
+        .twep-user-nav-bar{
+            margin-left: 16px;
+            --mdc-tab-indicator-active-indicator-height: 0px;
+            
+        }
     }
 
-}
+    .twep-user-content{
+        grid-area: content;
+    }
 
-.twep-main-toolbar {
-    display: flex;
-    align-items: center;
-    background-color: white; 
-    color: #333; 
 }
 
 #logo {
@@ -69,17 +54,6 @@
     margin-bottom: 0px; 
 }
 
-
-#trenner {
-    height: 0.3em;
-    width: 100%;
-    background-color: orange;
-    margin-bottom: 0;
-    border-radius: 15px;
-}
-
-
-
 #button1, #button2, #button3 {
     padding: 1em; 
     margin: 0.5em 8px; 
@@ -91,8 +65,7 @@
 }
 
 #button1:hover, #button2:hover, #button3:hover {
-    background-color: orange;
-    
+    background-color: var(--twep-main);
 }
 
 
