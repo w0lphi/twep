@@ -31,11 +31,11 @@ export class AuthService{
     }
 
     public isLoggedIn() {
-        const token: string | null =  this.getToken();
+        const token: string | null = this.getToken();
         if (token === null || token == undefined) return false;
-        const decodedToken: JwtToken = this.decodeToken(token);
-        const exp: number | undefined = decodedToken.exp;
-        if (exp === undefined || exp < new Date().getTime()) {
+        //exp gives times in seconds since unix epoch
+        const exp: number | undefined = this.decodedToken?.exp;
+        if (exp === undefined || (exp * 1000) < new Date().getTime()) {
             return false
         }
         return true;

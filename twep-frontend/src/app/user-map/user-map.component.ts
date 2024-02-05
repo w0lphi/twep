@@ -13,6 +13,7 @@ import { BikeStation } from '../model/bikeStation';
 import { Location } from '../model/location';
 
 import { StationCardComponent } from '../station-card/station-card.component';
+import { NotificationService } from '../service/notification.service';
 
 @Component({
   selector: 'app-user-map',
@@ -38,14 +39,29 @@ export class UserMapComponent {
 
   constructor(
     private bikeStationService: BikeStationService,
-    private changeDetector: ChangeDetectorRef
+    private changeDetector: ChangeDetectorRef,
+    private notificationService: NotificationService
   ) {
     this.displayedBikeStation = null;
     this.loadStations();
+    this.getUserPosition();
   }
 
   onMapReady(map: Leaflet.Map): void {
     this.map = map;
+  }
+
+  getUserPosition() {
+    navigator.geolocation.getCurrentPosition((position) => {
+      const latitude: number = position.coords.latitude;
+      const longitude: number = position.coords.longitude;
+      const userMarker: Leaflet.Marker<any> = LeafletUtil.getUserMarker(latitude, longitude);
+      userMarker.bindPopup("You are here");
+      this.layers.push(userMarker);
+      this.map?.setView(new Leaflet.LatLng(latitude, longitude), 14);
+    }, () => {
+      this.notificationService.showClientError("Could not get user position");
+    });
   }
 
   loadStations(): void {
@@ -64,6 +80,7 @@ export class UserMapComponent {
   }
 
   openDetail(bikeStation: BikeStation): void{
+    setTimeout(() => this.map?.invalidateSize(true), 100);
     const location: Location = bikeStation.location;
     this.map?.flyTo(new Leaflet.LatLng(location.latitude, location.longitude), 17);
     this.displayedBikeStation = bikeStation;
@@ -72,6 +89,7 @@ export class UserMapComponent {
   }
 
   closeDetail() {
+    setTimeout(() => this.map?.invalidateSize(true), 100);
     this.displayedBikeStation = null;
     this.changeDetector.detectChanges();
   }

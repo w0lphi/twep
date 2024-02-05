@@ -61,7 +61,6 @@ export class UserhomeComponent {
   }
   
   ngOnInit(): void {
-    console.log(this.router.url);
     this.activeLinkIndex = this.navigationLinks.findIndex(tab => tab.route === this.router.url);
   }
 

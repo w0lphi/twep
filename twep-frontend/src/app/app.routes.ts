@@ -15,6 +15,7 @@ import { PageNotFoundComponent } from './page-not-found/page-not-found.component
 import {UserhomeComponent} from './userhome/userhome.component';
 import { WalletComponent } from './wallet/wallet.component';
 import { UserMapComponent } from './user-map/user-map.component';
+import { authenticationGuard } from './auth.guard';
 
 export const routes: Routes = [
     {
@@ -33,8 +34,14 @@ export const routes: Routes = [
 
     //Admin Routes
     {
+        path: "admin",
+        pathMatch: 'full',
+        redirectTo: "admin/stations"
+    },
+    {
         path: 'admin',
         component: AdminHubComponent,
+        canActivateChild: [authenticationGuard],
         children: [
             {
                 path: 'stations',
@@ -77,6 +84,7 @@ export const routes: Routes = [
     {
         path: 'user',
         component: UserhomeComponent,
+        canActivateChild: [authenticationGuard],
         children: [
             {
                 path: "home",
