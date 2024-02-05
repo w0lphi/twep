@@ -1,29 +1,73 @@
 <div class="userhome-container">
     <mat-toolbar color="secondary" class="twep-main-toolbar">
-        <a routerLink="/user" id="logo">
+        <button
+            *ngIf="isMobile"
+            class="twep-drawer-button"
+            mat-icon-button
+            (click)="drawer.toggle()"
+        >
+            <mat-icon>menu</mat-icon>
+        </button>
+        <a class="twep-logo" routerLink="/user">
             <img
                 src="../../../assets/logo_small.svg"
                 height="40"
                 width="40"
             >
         </a>
-        <span class="twep-toolbar-title">TWEP Home</span>
+        <h1 class="twep-toolbar-title">TWEP</h1>
         <mat-tab-group
+            *ngIf="!isMobile"
             class="twep-user-nav-bar" 
             [selectedIndex]="activeLinkIndex"
-            (selectedTabChange)="navigate($event)"
+            (selectedTabChange)="navigate($event.index)"
         >
             <mat-tab
                 *ngFor="let tab of navigationLinks"
                 [label]="tab.title"
             />
         </mat-tab-group>
+        <div class="twep-spacer"></div>
+        <button
+            *ngIf="!isMobile"
+            mat-icon-button
+            (click)="logout()"
+        >
+            <mat-icon>logout</mat-icon>
+        </button>
     </mat-toolbar>
-    <div class="twep-user-content">
-        <mat-tab-nav-panel #tabPanel>
-            <router-outlet></router-outlet>
-        </mat-tab-nav-panel>
-        
-    </div>
+    <mat-drawer-container class="twep-drawer-container">
+        <mat-drawer
+            #drawer
+            [opened]="false"
+            mode="over"
+        >
+            <!-- SIDEBAR -->
+            <div class="twep-drawer-title">Menu</div>
+            <mat-nav-list>
+                @for (navlink of navigationLinks; track $index) {
+                <mat-list-item
+                    [activated]="$index === activeLinkIndex"
+                    (click)="navigate($index)"
+                >
+                    <mat-icon matListItemIcon>{{ navlink.icon }}</mat-icon>
+                    <span matListItemTitle>{{ navlink.title }}</span>
+                </mat-list-item>
+                }
+                <mat-divider />
+                <mat-list-item (click)="logout()">
+                    <mat-icon matListItemIcon>logout</mat-icon>
+                    <span matListItemTitle>Logout</span>
+                </mat-list-item>
+            </mat-nav-list>
+    
+        </mat-drawer>
+        <mat-drawer-content>
+            <!-- MAIN CONTENT -->
+            <div class="twep-user-content">
+                <router-outlet></router-outlet>
+            </div>
+        </mat-drawer-content>
+    </mat-drawer-container>
   
 </div>

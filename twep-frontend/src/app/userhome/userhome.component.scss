@@ -12,42 +12,46 @@
         align-items: center;
         background-color: white;
         color: #333;
+        gap: 8px;
 
         .twep-user-nav-bar{
             margin-left: 16px;
             --mdc-tab-indicator-active-indicator-height: 0px;
             max-width: calc(100% - 212px);
         }
+
+        .twep-logo {
+            width: 40px;
+            height: 40px;
+        }
     }
 
-    .twep-user-content{
+    .twep-drawer-container {
         grid-area: content;
+        height: 100%;
+
+        >.mat-drawer {
+            width: 300px;
+
+            .twep-drawer-title {
+                font-size: 20px;
+                padding: 16px;
+                font-weight: 500;
+            }
+
+            .mat-divider {
+                margin: 8px;
+            }
+        }
+
+        .twep-user-content {
+            height: 100%;
+        }
     }
 
 }
 
-#logo {
-    display: flex;
-    align-items: center;
-    margin-right: 1vw;
-}
-
-.logo {
-    width: 40px; 
-    height: 40px; 
-}
-
-.twep-toolbar-title {
-    font-size: 24px;
-    color: #333; 
-    font-weight: bold;
-    display: flex;
-    align-items: center;
-    margin-left: 8px;
-    
-}
-
-@media (max-width: 600px) {
+@media (max-width: 599px) {
     .userhome-container {
         &.detail-open {
             grid-template-columns: 1fr;
@@ -56,16 +60,6 @@
                 "toolbar"
                 "map"
                 "detail";
-        }
-
-        .twep-main-toolbar{
-            .twep-toolbar-title {
-                display: none;
-            }
-        
-            .twep-user-nav-bar {
-                max-width: calc(100% - 60px);
-            }
         }
     }
 }

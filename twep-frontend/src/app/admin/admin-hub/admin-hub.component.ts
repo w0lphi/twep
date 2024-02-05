@@ -43,7 +43,7 @@ export class AdminHubComponent {
   }
 
   openLink(link: NavigationLink) {
-    this.router.navigate([`admin/${link.route}`]);
+    this.router.navigateByUrl(`admin/${link.route}`);
     this.activeLink = link;
     if(this.isSmallScreen) this.drawer?.close();
   }

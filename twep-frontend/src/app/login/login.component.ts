@@ -54,10 +54,16 @@ export class LoginComponent {
     this.authService.login(loginUser).subscribe({
       next: (res: any): void => {
         const token: string | null = res?.token;
-        if(token) this.authService.setSession(res?.token);
+        if (token) {
+          this.authService.setSession(token);
+          //TODO: Route to admin or user home page according to user profile
+          if (this.authService.getLoggedInUserRole() === 'management'){
+            this.router.navigateByUrl("/admin");
+          }else{
+            this.router.navigateByUrl("/user");
+          }
+        }
         this.runningAction = false;
-        //TODO: Route to admin or user home page according to user profile
-        this.router.navigateByUrl("/userhome");
       },
       error: (error: any): void => {
         console.error(error);
