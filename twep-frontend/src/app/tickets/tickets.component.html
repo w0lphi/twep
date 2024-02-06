@@ -1,0 +1,12 @@
+<div *ngIf="userTickets">
+    <h1>User Ticket History</h1>
+    <ul>
+      <li *ngFor="let ticket of userTickets">
+        <p>Ticket ID: {{ ticket.id }}</p>
+        <p>Bike Type: {{ ticket.bikeType }}</p>
+        <p>Station: {{ ticket.station }}</p>
+        <p>Purchase Date: {{ ticket.purchaseDate }}</p>
+      </li>
+    </ul>
+  </div>
+  

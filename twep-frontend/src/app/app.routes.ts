@@ -16,6 +16,7 @@ import {UserhomeComponent} from './userhome/userhome.component';
 import { WalletComponent } from './wallet/wallet.component';
 import { UserMapComponent } from './user-map/user-map.component';
 import { authenticationGuard } from './auth.guard';
+import { TicketsComponent } from './tickets/tickets.component';
 
 export const routes: Routes = [
     {
@@ -31,6 +32,7 @@ export const routes: Routes = [
         path: 'register',
         component: RegisterComponent
     },
+    
 
     //Admin Routes
     {
@@ -94,7 +96,13 @@ export const routes: Routes = [
                 path: 'wallet',
                 component: WalletComponent
             },
+            {
+                path: 'tickets',
+                component: TicketsComponent
+            },
+           
         ]
+        
     },
 
 
