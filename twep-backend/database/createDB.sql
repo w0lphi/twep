@@ -67,8 +67,14 @@ CREATE TABLE tickets (
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
-INSERT INTO users (id, email, password, role)
-VALUES (uuid_generate_v4(), 'management@twep.com', 'password', 'management');
+
+-- IDK how to insert admin account with the correct hasing algo directly into the db
+-- so I make a normal account using the POST request and then change the role in the db with:
+
+--UPDATE users
+--SET role = 'admin'
+--WHERE id = ' ';
+
 
 -- Insert a new station
 INSERT INTO stations (name, location, operational) 

@@ -1,8 +1,15 @@
 const { Router } = require('express');
 const stationController = require('../controllers/stationController');
+const isAdmin = require('../middleware/isAdmin');
+const verifyToken = require('../middleware/verifyToken');
 const { v4: uuidv4 } = require('uuid');
 
 const router = Router();
+
+// Apply verifyToken middleware to all routes to verify the token
+router.use(verifyToken);
+
+router.use(isAdmin);
 
 router.get('/users', stationController.getUsers);
 

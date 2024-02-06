@@ -1,5 +1,5 @@
-// middleware/verifyToken.js
 const jwt = require('jsonwebtoken');
+const pool = require('../db');
 
 const verifyToken = (req, res, next) => {
     // Extract the token from the Authorization header
@@ -7,7 +7,6 @@ const verifyToken = (req, res, next) => {
 
     // Check if a token is provided
     if (!authHeader) {
-        // If no token is provided, return Unauthorized response
         return res.status(401).json({ message: 'Unauthorized - No token provided' });
     }
 
@@ -16,23 +15,40 @@ const verifyToken = (req, res, next) => {
 
     // Check if a token is present after extraction
     if (!token) {
-        // If no token is provided, return Unauthorized response
         return res.status(401).json({ message: 'Unauthorized - Invalid token format' });
     }
 
     // Verify the token using the provided secret
-    jwt.verify(token, 'your-jwt-secret', (err, user) => {
-        // Check for errors during token verification
+    jwt.verify(token, 'your-jwt-secret', async (err, decodedToken) => {
         if (err) {
-            // If the token is invalid, return Forbidden response
             return res.status(403).json({ message: 'Forbidden - Invalid token' });
         }
 
-        // Attach the user information to the request object for future use
-        req.user = user;
+        // Extract user ID from the decoded token
+        const userId = decodedToken.userId;
 
-        // Call the next middleware function in the stack
-        next();
+        // Fetch additional user data (including roles) from the database
+        try {
+            const user = await pool.query('SELECT * FROM users WHERE id = $1', [userId]);
+
+            if (user.rows.length === 0) {
+                return res.status(404).json({ message: 'User not found' });
+            }
+
+            // Attach user information (including roles) to the request object
+            req.user = {
+                userId: user.rows[0].id,
+                email: user.rows[0].email,
+                role: user.rows[0].role
+                // Add other user properties as needed
+            };
+
+            // Call the next middleware function in the stack
+            next();
+        } catch (error) {
+            console.error(error);
+            res.status(500).json({ message: 'Internal Server Error' });
+        }
     });
 };
 
