@@ -30,10 +30,9 @@ import {AuthService} from '../service/auth.service';
 
 
 @Component({
-  selector: 'app-tickets',
+  selector: 'app-history',
   standalone: true,
-  imports: [ 
-    CommonModule,
+  imports: [ CommonModule,
     FormsModule,
     ReactiveFormsModule,
     MatButtonModule,
@@ -50,19 +49,12 @@ import {AuthService} from '../service/auth.service';
     MatToolbarModule,
     MatCheckboxModule,
     MatDividerModule,
-    MatSelectModule,
-   // TicketService,
-
-    
-
-  ],
-  templateUrl: './tickets.component.html',
-  styleUrls: ['./tickets.component.scss'],
+    MatSelectModule,],
+    templateUrl: './history.component.html',
+  styleUrls: ['./history.component.scss'],
  providers: [TicketService]
-  
 })
-
-export class TicketsComponent implements OnInit {
+export class HistoryComponent implements OnInit  {
   userTickets: any[] = [];
   loggedInUserId: string | null = null;
   userId: string = '';
@@ -99,25 +91,6 @@ export class TicketsComponent implements OnInit {
 
   
 
-  createTicket(): void {
-    const ticketDetails = {
-      bikeType: 'Mountain Bike',
-      station: 'Station A',
-      purchaseDate: '2024-01-10T08:00:00Z',
-      immediateRenting: true,
-      reservedStation: 'Station B'
-    };
 
-    this.ticketService.createUserTicket(this.userId, ticketDetails)
-      .subscribe({
-        next: response => {
-          console.log('Ticket created successfully:', response);
-          
-        },
-        error: error => {
-          console.error('Error creating ticket:', error);
-         
-        }
-      });
-  }
+ 
 }

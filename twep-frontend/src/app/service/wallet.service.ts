@@ -13,7 +13,7 @@ export class WalletService {
 
   public addMoneyToWallet(userId: number, amount: number): Observable<any> {
     const requestBody = { amount: amount };
-    return this.http.post(`${this.apiUrl}/users/${userId}/account`, requestBody);
+    return this.http.post(`${this.apiUrl}/users/${userId}/account/add-money`, requestBody);
   }
 
   public removeMoneyFromWallet(userId: number, amount: number): Observable<any> {

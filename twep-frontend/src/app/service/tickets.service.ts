@@ -14,4 +14,13 @@ export class TicketService {
   public getUserTickets(userId: number): Observable<any> {
     return this.http.get(`${this.apiUrl}/users/${userId}/tickets`);
   }
+
+  public createUserTicket(userId: string, ticketDetails: any): Observable<any> {
+    const url = `${this.apiUrl}/users/${userId}/tickets`;
+    return this.http.post(url, ticketDetails);
+  }
+
+
+
+
 }
