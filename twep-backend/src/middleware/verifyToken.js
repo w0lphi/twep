@@ -27,7 +27,7 @@ const verifyToken = (req, res, next) => {
         // Extract user ID from the decoded token
         const userId = decodedToken.userId;
 
-        // Fetch additional user data (including roles) from the database
+        // Fetch additional user data from the database
         try {
             const user = await pool.query('SELECT * FROM users WHERE id = $1', [userId]);
 
@@ -35,12 +35,11 @@ const verifyToken = (req, res, next) => {
                 return res.status(404).json({ message: 'User not found' });
             }
 
-            // Attach user information (including roles) to the request object
+            // Attach user information to request object
             req.user = {
                 userId: user.rows[0].id,
                 email: user.rows[0].email,
                 role: user.rows[0].role
-                // Add other user properties as needed
             };
 
             // Call the next middleware function in the stack
