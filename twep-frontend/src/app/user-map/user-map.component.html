@@ -4,6 +4,10 @@
         'detail-open': displayedBikeStation !== null
     }"
 >
+@if(runningAction){
+    <app-loading-overlay />
+}
+@else {
     <div
         leaflet
         class="twep-user-map"
@@ -35,4 +39,5 @@
             <app-station-card [stationId]="displayedBikeStation.id" />
         </mat-card-content>
     </mat-card>
+}
 </div>

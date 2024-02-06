@@ -11,6 +11,8 @@
 
     .twep-open-station-detail {
         grid-area: detail;
+        max-height: 100%;
+        overflow-y: scroll;
 
         .mat-mdc-card-content {
             padding: 16px;

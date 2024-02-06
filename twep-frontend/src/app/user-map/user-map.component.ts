@@ -13,6 +13,7 @@ import { BikeStation } from '../model/bikeStation';
 import { Location } from '../model/location';
 
 import { StationCardComponent } from '../station-card/station-card.component';
+import { LoadingOverlayComponent } from '../common/loading-overlay/loading-overlay.component';
 import { NotificationService } from '../service/notification.service';
 
 @Component({
@@ -24,7 +25,8 @@ import { NotificationService } from '../service/notification.service';
     MatIconModule,
     MatCardModule,
     LeafletModule,
-    StationCardComponent
+    StationCardComponent,
+    LoadingOverlayComponent
   ],
   templateUrl: './user-map.component.html',
   styleUrl: './user-map.component.scss'
@@ -36,32 +38,39 @@ export class UserMapComponent {
   showDetail: boolean = false;
   map?: Leaflet.Map;
   mapOptions: Leaflet.MapOptions = LeafletUtil.mapOptions;
+  runningAction: boolean = false;
+  userLocation?: Location;
 
   constructor(
     private bikeStationService: BikeStationService,
     private changeDetector: ChangeDetectorRef,
     private notificationService: NotificationService
   ) {
+    this.runningAction = true;
     this.displayedBikeStation = null;
     this.loadStations();
-    this.getUserPosition();
+    navigator.geolocation.getCurrentPosition((position) => {
+      const latitude: number = position.coords.latitude;
+      const longitude: number = position.coords.longitude;
+      this.userLocation = new Location(latitude, longitude);
+      this.runningAction = false;
+    }, () => {
+      this.runningAction = false;
+      this.notificationService.showClientError("Could not get user position");
+    });
   }
 
   onMapReady(map: Leaflet.Map): void {
     this.map = map;
-  }
-
-  getUserPosition() {
-    navigator.geolocation.getCurrentPosition((position) => {
-      const latitude: number = position.coords.latitude;
-      const longitude: number = position.coords.longitude;
+    setTimeout(() => map.invalidateSize(), 0);
+    if (this.userLocation !== undefined) {
+      const latitude: number = this.userLocation.latitude;
+      const longitude: number = this.userLocation.longitude;
       const userMarker: Leaflet.Marker<any> = LeafletUtil.getUserMarker(latitude, longitude);
       userMarker.bindPopup("You are here");
       this.layers.push(userMarker);
-      this.map?.setView(new Leaflet.LatLng(latitude, longitude), 14);
-    }, () => {
-      this.notificationService.showClientError("Could not get user position");
-    });
+      map.setView(new Leaflet.LatLng(latitude, longitude), 14);
+    }
   }
 
   loadStations(): void {

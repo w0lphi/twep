@@ -36,7 +36,8 @@ export class AuthService{
         //exp gives times in seconds since unix epoch
         const exp: number | undefined = this.decodedToken?.exp;
         if (exp === undefined || (exp * 1000) < new Date().getTime()) {
-            return false
+            this.logout();
+            return false;
         }
         return true;
     }

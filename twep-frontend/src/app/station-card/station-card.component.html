@@ -6,7 +6,13 @@
         <app-loading-overlay />
     }
     @else if(bikeStation !== undefined){
-        TODO: Display bike station details
+        <h3>Available Bikes</h3>
+        <div class="twep-bikes-list">
+                <app-bike-card 
+                    *ngFor=" let bike of displayedBikes"
+                    [bike]="bike"
+                />
+        </div>
     }
     
 </div>
