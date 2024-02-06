@@ -38,6 +38,12 @@ export class LoginComponent {
     private authService: AuthService,
     private router: Router,
   ) {
+
+    if (this.authService.isLoggedIn()) {
+      //Redirect the user if already logged in
+      this.redirectUser();
+    }
+
     //Create form group for input validation
     this.loginForm = new FormGroup({
       email: new FormControl('', Validators.required),
@@ -57,11 +63,7 @@ export class LoginComponent {
         if (token) {
           this.authService.setSession(token);
           //TODO: Route to admin or user home page according to user profile
-          if (this.authService.getLoggedInUserRole() === 'management'){
-            this.router.navigateByUrl("/admin");
-          }else{
-            this.router.navigateByUrl("/user");
-          }
+          this.redirectUser();
         }
         this.runningAction = false;
       },
@@ -70,6 +72,14 @@ export class LoginComponent {
         this.runningAction = false;
       },
     });
+  }
+
+  redirectUser(): void{
+    if (this.authService.getLoggedInUserRole() === 'management'){
+      this.router.navigateByUrl("/admin");
+    }else{
+      this.router.navigateByUrl("/user");
+    }
   }
 
   get email(): AbstractControl<any, any> | null {

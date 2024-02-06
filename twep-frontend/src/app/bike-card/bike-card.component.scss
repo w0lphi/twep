@@ -17,7 +17,7 @@
         align-items: end;
         grid-template-columns: 1fr min-content;
         column-gap: 16px;
-        row-gap: 8px;
+        row-gap: 12px;
         padding: 8px;
         min-height: 46px;
 
@@ -37,6 +37,14 @@
             grid-area: action;
             width: 112px;
         }
+
+        &.show-more{
+            .twep-bike-description{
+                display: block;
+                overflow: visible;
+            }
+        }
+
     }
 
 }
