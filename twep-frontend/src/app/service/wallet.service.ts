@@ -11,13 +11,13 @@ export class WalletService {
 
   constructor(private http: HttpClient) { }
 
-  public addMoneyToWallet(userId: number, amount: number): Observable<any> {
-    const requestBody = { amount: amount };
+  public addMoneyToWallet(userId: string, amountToAdd: number): Observable<any> {
+    const requestBody = { amount: amountToAdd };
     return this.http.post(`${this.apiUrl}/users/${userId}/account/add-money`, requestBody);
   }
 
-  public removeMoneyFromWallet(userId: number, amount: number): Observable<any> {
-    const requestBody = { amount: amount };
+  public removeMoneyFromWallet(userId: string, amountToRemove: number): Observable<any> {
+    const requestBody = { amount: amountToRemove };
     return this.http.post(`${this.apiUrl}/users/${userId}/account`, requestBody);
   }
 

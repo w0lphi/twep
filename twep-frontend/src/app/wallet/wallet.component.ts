@@ -24,7 +24,7 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatSelectModule, MatSelectChange } from '@angular/material/select';
 
 import { WalletService } from '../service/wallet.service';
-
+import {AuthService} from '../service/auth.service';
 
 
 
@@ -54,48 +54,62 @@ import { WalletService } from '../service/wallet.service';
     MatCheckboxModule,
     MatDividerModule,
     MatSelectModule,
+    
   
   
   ],
   templateUrl: './wallet.component.html',
-  styleUrl: './wallet.component.scss'
+  styleUrl: './wallet.component.scss',
+  providers: [AuthService]
 })
 export class WalletComponent {
   addMoneyFormControl = new FormControl('', [Validators.required]);
   removeMoneyFormControl = new FormControl('', [Validators.required]);
 
+  userId: string | null = null;
 
+  constructor(
+    private walletService: WalletService,
+    private authService: AuthService,
+    
+    ) {this.getUserId();}
 
-  constructor(private walletService: WalletService) {}
+    getUserId(): void {
+      this.userId = this.authService.getLoggedInUserId(); 
+    }
 
+    saveAdding(): void {
+      const amountToAdd: number = parseFloat(this.addMoneyFormControl.value!);
 
-  saveAdding(): void {
-    const userId: number = 123; 
-    const amountToAdd: number = 50; 
-
-    this.walletService.addMoneyToWallet(userId, amountToAdd)
-      .subscribe({
-        next: response => {
-          console.log('Money got added to wallet: ', response);
+      
+      if (!isNaN(amountToAdd)) {
+        this.walletService.addMoneyToWallet(this.userId!, amountToAdd)
+          .subscribe({
+          next: response => {
+            console.log('Money got added to wallet: ', response);
+          },
+          error: error => {
+            console.error('Error while adding money', error);
+          }
+        });
   
-        },
-        error: error => {
-          console.error('Error while adding money', error);
-        }
-      });
-
-
-      // ToDo: userid is just for testing, amount is fixed.
+       // Todo: money is just set, it needs to be CurrentWalletAmount + addMoneyToWallet
   }
-  
+}
+
+
+
 
 
   saveRemoving(): void {
-    const userId: number = 123; 
-    const amountToRemove: number = 50; 
+    
+    const amountToRemove: number = parseFloat(this.removeMoneyFormControl.value!);
+    
+    
   
-    this.walletService.removeMoneyFromWallet(userId, amountToRemove)
-      .subscribe({
+    if (!isNaN(amountToRemove)) {
+      this.walletService.removeMoneyFromWallet(this.userId!, amountToRemove)
+        .subscribe({
         next: response => {
           console.log('Money removed from wallet: ', response);
       
@@ -106,12 +120,11 @@ export class WalletComponent {
         }
       });
 
-       // ToDo: userid is just for testing, amount is fixed.
+        // Todo: money is just set, it needs to be CurrentWalletAmount + addMoneyToWallet
   }
   
-
-
-
-
-
+  }
 }
+
+
+
