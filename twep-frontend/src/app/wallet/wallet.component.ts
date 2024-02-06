@@ -93,7 +93,7 @@ export class WalletComponent {
           }
         });
   
-       // Todo: money is just set, it needs to be CurrentWalletAmount + addMoneyToWallet
+       
   }
 }
 
@@ -120,7 +120,7 @@ export class WalletComponent {
         }
       });
 
-        // Todo: money is just set, it needs to be CurrentWalletAmount + addMoneyToWallet
+        
   }
   
   }
