@@ -3,7 +3,7 @@
     class="twep-bike-card"
 >
     <mat-card-header class="twep-bike-card-header">
-        <mat-card-title>
+        <mat-card-title [title]="title">
             {{title}}
         </mat-card-title>
         <mat-card-subtitle *ngIf="category !== null">

@@ -29,6 +29,33 @@ class UserModel {
         }
     }
 
+    static async getAllStations() {
+        try {
+            const { rows } = await pool.query(userQueries.getStations);
+            return rows;
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    static async getStationById(stationId) {
+        try {
+            const { rows } = await pool.query(userQueries.getStationById, [stationId]);
+            return rows;
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    static async getBikesAtStation(stationId) {
+        try {
+            const bikes = await pool.query(userQueries.getBikesAtStation, [stationId]);
+            return bikes.rows;
+        } catch (error) {
+            throw error;
+        }
+    }
+
     static async purchaseTicket(userId, { bikeType, station, purchaseDate, immediateRenting, reservedStation }) {
         try {
             const { rows } = await pool.query(userQueries.purchaseTicket, [

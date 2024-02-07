@@ -1,0 +1,29 @@
+<div class="twep-bike-rent-dialog">
+    <h1 mat-dialog-title>{{ title }}</h1>
+    <div mat-dialog-content>
+        <div>Booking start:</div>
+        <app-date-time-picker [(datetime)]="bookingStart"/>
+        <div>Booking end:</div>
+        <app-date-time-picker [(datetime)]="bookingEnd"/>
+    </div>
+    <div
+        mat-dialog-actions
+        [align]="'end'"
+    >
+        <button
+            mat-button
+            color
+            [mat-dialog-close]="false"
+        >
+            CANCEL
+        </button>
+        <button
+            mat-button
+            color="primary"
+            [mat-dialog-close]="true"
+        >
+            RENT
+        </button>
+    </div>
+
+</div>

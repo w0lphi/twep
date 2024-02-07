@@ -61,6 +61,70 @@ const purchaseTicket = `
         reserved_station;
 `;
 
+const getStations = `
+    SELECT
+    s.id AS id,
+    s.name AS name,
+    s.location AS location,
+    s.operational AS operational,
+    json_agg(jsonb_build_object(
+        'id', pp.id,
+        'bikeCategories', pp.bike_categories,
+        'occupied', pp.occupied
+    )) AS parking_places
+    FROM
+    stations s
+    LEFT JOIN
+    parking_places pp ON s.id = pp.station_id
+    GROUP BY
+    s.id, s.name, s.location, s.operational;
+`;
+
+const getStationById = `
+    SELECT
+        s.id AS id,
+        s.name AS name,
+        s.location AS location,
+        s.operational AS operational,
+        json_agg(jsonb_build_object(
+            'id', pp.id,
+            'bikeCategories', pp.bike_categories,
+            'occupied', pp.occupied
+        )) AS parking_places
+    FROM
+        stations s
+    LEFT JOIN
+        parking_places pp ON s.id = pp.station_id
+    WHERE
+        s.id = $1
+    GROUP BY
+        s.id, s.name, s.location, s.operational;
+`;
+
+const getBikesAtStation = `
+    SELECT
+    ib.id AS id,
+    ib.status AS status,
+    bc.name AS category,
+    bm.name AS model,
+    bm.description AS description,
+    bm.wheel_size AS wheel_size,
+    bm.extra_features AS extra_features,
+    pp.id AS parking_place_id
+    FROM
+    individual_bikes ib
+    JOIN
+    bike_models bm ON ib.bike_model_id = bm.id
+    JOIN
+    bike_categories bc ON bm.category_id = bc.id
+    JOIN
+    parking_places pp ON ib.parking_place_id = pp.id
+    JOIN
+    stations s ON pp.station_id = s.id
+    WHERE
+    pp.station_id = $1;
+`;
+
 
 module.exports = {
     registerUser,
@@ -70,4 +134,7 @@ module.exports = {
     addMoneyToWallet,
     purchaseTicket,
     deductMoneyFromWallet,
+    getStations,
+    getStationById,
+    getBikesAtStation,
 };

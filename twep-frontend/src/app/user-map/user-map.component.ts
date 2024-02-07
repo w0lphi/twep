@@ -103,4 +103,16 @@ export class UserMapComponent {
     this.changeDetector.detectChanges();
   }
 
+  get stationDetailTitle(): string {
+    return this.displayedBikeStation?.name ?? "";
+  }
+
+  get stationDetailSubtitle(): string{
+    const information: string[] = ["Bike Station"];
+    if (this.userLocation !== undefined && this.displayedBikeStation?.location !== undefined) {
+      const distanceToStation: string = LeafletUtil.getDistance(this.userLocation, this.displayedBikeStation.location);
+      information.push(`${distanceToStation} km away`);
+    }
+    return information.join(", ");
+  }
 }

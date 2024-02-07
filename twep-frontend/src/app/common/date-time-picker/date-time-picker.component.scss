@@ -1,0 +1,11 @@
+.twep-date-time-picker{
+    display: flex;
+    flex-direction: row;
+    gap: 8px;
+    flex: 1 1 100%;
+    flex-wrap: wrap;
+
+    .mat-mdc-input-element::-webkit-calendar-picker-indicator {
+        display: block;
+    }
+}
