@@ -32,7 +32,8 @@ import {AuthService} from '../service/auth.service';
 import { AccountService } from '../service/account.service';
 import { UserAccount } from '../model/user-account';
 
-
+import { ViewChild, ElementRef } from '@angular/core';
+import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 
 
 @Component({
@@ -68,11 +69,14 @@ export class AccountComponent implements OnInit {
   loggedInUserId: string | null = null;
   userId: string = '';
 
-  
+  uploadedImage: SafeUrl | undefined;
+
+  @ViewChild('fileInput') fileInput!: ElementRef<HTMLInputElement>;
 
   constructor(
     private accountService: AccountService,
     private authService: AuthService,
+    private sanitizer: DomSanitizer,
     
     ) { }
 
@@ -110,4 +114,19 @@ export class AccountComponent implements OnInit {
       );
     }
   }
+
+
+
+  onFileSelected(event: any) {
+    const file: File = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => {
+        this.uploadedImage = this.sanitizer.bypassSecurityTrustUrl(reader.result as string);
+        console.log('Uploaded image:', this.uploadedImage); // Add this line
+      };
+    }
+  }
+  
 }
