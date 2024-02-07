@@ -72,30 +72,30 @@ export class TicketsComponent implements OnInit {
     private ticketService: TicketService
   ) {}
 
-  fetchUserTickets(userId: number): void {
-    this.ticketService.getUserTickets(userId)
-      .subscribe({
-        next: response => {
-          this.userTickets = response.tickets;
-        },
-        error: error => {
-          console.error('Error fetching user tickets:', error);
-        }
-      });
+fetchUserTickets(): void { 
+    const userIdNumber = parseInt(this.userId, 10);
+    if (!isNaN(userIdNumber)) {
+      this.ticketService.getUserTickets(userIdNumber)
+        .subscribe({
+          next: response => {
+            this.userTickets = response.tickets;
+          },
+          error: error => {
+            console.error('Error fetching user tickets:', error);
+          }
+        });
+    } else {
+      console.error('Invalid userId:', this.userId);
+    }
   }
 
   ngOnInit(): void {
     this.loggedInUserId = this.authService.getLoggedInUserId();
     if (this.loggedInUserId) {
-      
-      const userId = parseInt(this.loggedInUserId);
-      this.fetchUserTickets(userId);
-
+      this.userId = this.loggedInUserId; 
+      this.fetchUserTickets();
     }
-    this.userId = this.authService.getLoggedInUserId() || '';
-    
   }
-
 
   
 

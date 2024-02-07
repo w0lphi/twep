@@ -124,7 +124,7 @@ export class AccountComponent implements OnInit {
       reader.readAsDataURL(file);
       reader.onload = () => {
         this.uploadedImage = this.sanitizer.bypassSecurityTrustUrl(reader.result as string);
-        console.log('Uploaded image:', this.uploadedImage); // Add this line
+        console.log('Uploaded image:', this.uploadedImage); 
       };
     }
   }
