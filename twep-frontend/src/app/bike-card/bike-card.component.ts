@@ -1,4 +1,4 @@
-import { Component, Input, ViewChild, ChangeDetectorRef, ElementRef } from '@angular/core';
+import { Component, Input, ViewChild, ChangeDetectorRef, ElementRef, NgZone } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
@@ -6,6 +6,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { Bike } from '../model/bike';
 import { BikeModel } from '../model/bikeModel';
+import { MatDialog } from '@angular/material/dialog';
+import { BikeRentDialogComponent } from '../bike-rent-dialog/bike-rent-dialog.component';
 
 @Component({
   selector: 'app-bike-card',
@@ -27,7 +29,9 @@ export class BikeCardComponent {
   hasMoreDescription: boolean = false;
 
   constructor(
-    private changeDetector: ChangeDetectorRef
+    private changeDetector: ChangeDetectorRef,
+    private zone: NgZone,
+    private dialog: MatDialog,
   ) { }
   
   ngAfterViewInit() {
@@ -38,7 +42,6 @@ export class BikeCardComponent {
         const clientHeight: number = nativeElement.clientHeight;
         const scrollHeight: number = nativeElement.scrollHeight;
         this.hasMoreDescription = clientHeight < scrollHeight;
-        console.log(clientHeight, scrollHeight);
         this.changeDetector.detectChanges();
       });
 
@@ -55,7 +58,16 @@ export class BikeCardComponent {
   }
 
   rentBike() {
-    alert(`Rent ${this.bike?.id}`);
+    this.zone.run(() => {
+        this.dialog.open(BikeRentDialogComponent, {
+          data: {
+              bike: this.bike,
+          },
+          width: "600px",
+          disableClose: true,
+          hasBackdrop: true,
+      })
+    });
   }
 
   get model(): BikeModel | null {
@@ -63,7 +75,9 @@ export class BikeCardComponent {
   }
 
   get title(): string {
-    return this.model?.name ?? this.bike?.id ?? "";
+    const wheelSize: string = `${this.model?.wheelSize}"`;
+    const name: string = this.model?.name ?? this.bike?.id ?? "";
+    return `${wheelSize} ${name}`;
   }
 
   get category(): string | null {

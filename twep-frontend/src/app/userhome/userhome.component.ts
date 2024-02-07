@@ -53,7 +53,7 @@ export class UserhomeComponent {
     private router: Router,
     private breakpointObserver: BreakpointObserver,
     private authService: AuthService,
-  ) { 
+  ) {
     this.breakpointObserver.observe(Breakpoints.XSmall).subscribe(result => {
       this.isMobile = result.matches;
       if(!this.isMobile) this.drawer?.close();
@@ -74,5 +74,10 @@ export class UserhomeComponent {
   logout() {
     this.authService.logout();
     this.router.navigateByUrl("/login");
+  }
+
+  openAccount() {
+    this.router.navigateByUrl("/user/account");
+    if(this.isMobile) this.drawer?.close();
   }
 }
