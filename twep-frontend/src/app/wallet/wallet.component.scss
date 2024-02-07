@@ -76,9 +76,7 @@ mat-toolbar {
     height: 100vh;
 }
 
-
 #addmoney, #removemoney {
-
     width: 100%;
     max-width: 30%; 
     padding: 20px; 
@@ -90,8 +88,7 @@ mat-toolbar {
     flex-direction: column;
     align-items: center; 
     justify-content: center; 
-
-
+    margin: auto; 
 
 }
 
@@ -99,9 +96,21 @@ mat-toolbar {
     font-size: 20px;
     
 
-
-
 }
+
+
+.input-field {
+    display: flex;
+    align-items: center;
+    justify-content: space-between; /* Align items horizontally */
+}
+
+.input-field input {
+    flex: 1; /* Take remaining space */
+    margin-right: 10px; /* Add some space between input field and button */
+}
+
+
 
 
 @media (max-width: 599px) {

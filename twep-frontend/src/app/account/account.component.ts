@@ -3,18 +3,14 @@ import { CommonModule} from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FormControl, Validators } from '@angular/forms';
 
-
 import { MatButtonModule } from '@angular/material/button';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatIconModule } from '@angular/material/icon';
 import { MatCardModule } from '@angular/material/card';
 
-import { LeafletModule } from '@asymmetrik/ngx-leaflet';
-
 import { BikeStationService } from '../service/bikeStation.service';
 import { BikeStation } from '../model/bikeStation';
 import { Location } from '../model/location';
-
 
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -24,16 +20,25 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatSelectModule, MatSelectChange } from '@angular/material/select';
 
 import { WalletService } from '../service/wallet.service';
+import { OnInit } from '@angular/core';
+import { TicketService } from '../service/tickets.service'; 
+import { NgModule } from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser';
+import { HttpClientModule } from '@angular/common/http';
+
 import {AuthService} from '../service/auth.service';
 
+
+import { AccountService } from '../service/account.service';
+import { UserAccount } from '../model/user-account';
 
 
 
 
 @Component({
-  selector: 'app-wallet',
+  selector: 'app-account',
   standalone: true,
-  imports: [    
+  imports: [ 
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
@@ -41,7 +46,6 @@ import {AuthService} from '../service/auth.service';
     MatToolbarModule,
     MatIconModule,
     MatCardModule,
-    LeafletModule,
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
@@ -50,82 +54,60 @@ import {AuthService} from '../service/auth.service';
     MatInputModule,
     MatIconModule,
     MatToolbarModule,
-    LeafletModule,
     MatCheckboxModule,
     MatDividerModule,
     MatSelectModule,
-    
-  
   
   ],
-  templateUrl: './wallet.component.html',
-  styleUrl: './wallet.component.scss',
-  providers: [AuthService]
+  templateUrl: './account.component.html',
+  styleUrls: ['./account.component.scss'],
+  providers: [AccountService]
 })
-export class WalletComponent {
-  addMoneyFormControl = new FormControl('', [Validators.required]);
-  removeMoneyFormControl = new FormControl('', [Validators.required]);
+export class AccountComponent implements OnInit {
+  userAccount!: UserAccount;
+  loggedInUserId: string | null = null;
+  userId: string = '';
 
-  userId: string | null = null;
-  walletAmount: number | null = null;
+  
 
   constructor(
-    private walletService: WalletService,
+    private accountService: AccountService,
     private authService: AuthService,
     
-    ) {this.getUserId();}
+    ) { }
 
-    getUserId(): void {
-      this.userId = this.authService.getLoggedInUserId(); 
+  ngOnInit(): void {
+    this.loggedInUserId = this.authService.getLoggedInUserId();
+    if (this.loggedInUserId) {
+      
+      const userId = parseInt(this.loggedInUserId);
+
     }
-
-    saveAdding(): void {
-      const amountToAdd: number = parseFloat(this.addMoneyFormControl.value!);
-
-      
-      if (!isNaN(amountToAdd)) {
-        this.walletService.addMoneyToWallet(this.userId!, amountToAdd)
-          .subscribe({
-          next: response => {
-            console.log('Money got added to wallet: ', response);
-          },
-          error: error => {
-            console.error('Error while adding money', error);
-          }
-        });
-  
-       
+    this.userId = this.authService.getLoggedInUserId() || '';
+    this.loadUserAccount();
   }
-}
 
-
-
-
-
-  saveRemoving(): void {
-    
-    const amountToRemove: number = parseFloat(this.removeMoneyFormControl.value!);
-    
-    
   
-    if (!isNaN(amountToRemove)) {
-      this.walletService.removeMoneyFromWallet(this.userId!, amountToRemove)
-        .subscribe({
-        next: response => {
-          console.log('Money removed from wallet: ', response);
-      
+
+  loadUserAccount() {
+   
+    let userId: string | null = null;
+  
+    
+    if (this.loggedInUserId) {
+      userId = this.loggedInUserId;
+    }
+  
+    
+    if (userId) {
+      this.accountService.getUserAccount(userId).subscribe(
+        (data: UserAccount) => {
+          this.userAccount = data;
         },
-        error: error => {
-          console.error('Error while removing money', error);
-         
+        (error) => {
+          console.error('Error fetching user account:', error);
         }
-      });
-
-        
-  }
-  
+      );
+    }
   }
 }
-
-
-

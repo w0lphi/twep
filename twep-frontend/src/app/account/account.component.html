@@ -1,0 +1,27 @@
+<div class="container">
+    <mat-card class="left-panel mobile-stack">
+        <mat-card-header>
+            <div mat-card-avatar class="profile-picture"></div>
+            <div class="profile-info">
+                <mat-card-title>Hello, User!</mat-card-title>
+                <mat-card-subtitle>User ID: {{ userAccount?.id }}</mat-card-subtitle>
+                <mat-card-subtitle>Email Address: {{ userAccount?.email }}</mat-card-subtitle>
+            </div>
+        </mat-card-header>
+
+
+
+        <mat-card-content>
+           <h3>Content, idk</h3>
+        </mat-card-content>
+    </mat-card>
+
+
+
+    <mat-card class="right-panel mobile-stack">
+        <mat-card-content>
+            <h2>Statistics:</h2>
+            <p>Wallet Amount: {{ userAccount?.wallet }}€</p>
+        </mat-card-content>
+    </mat-card>
+</div>

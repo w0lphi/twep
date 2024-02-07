@@ -19,6 +19,8 @@ import { authenticationGuard } from './auth.guard';
 import { TicketsComponent } from './tickets/tickets.component';
 import { HistoryComponent } from './history/history.component';
 
+import {AccountComponent} from './account/account.component';
+
 export const routes: Routes = [
     {
         path: '',
@@ -104,6 +106,10 @@ export const routes: Routes = [
             {
                 path: 'history',
                 component: HistoryComponent
+            },
+            {
+                path: 'account',
+                component: AccountComponent
             },
            
         ]
