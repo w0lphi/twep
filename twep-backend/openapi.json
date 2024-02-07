@@ -953,13 +953,16 @@
                   "bikes": [
                     {
                       "id": "uuid",
-                      "bikeType": "mountain_bike",
-                      "status": "available"
-                    },
-                    {
-                      "id": "uuid",
-                      "bikeType": "city_bike",
-                      "status": "available"
+                      "status": "available",
+                      "category": "Electric Bike",
+                      "model": "Model X",
+                      "description": "Electric Bike, powerful motor",
+                      "wheelSize": 26.5,
+                      "extraFeatures": [
+                        "Front suspension",
+                        "GPS device"
+                      ],
+                      "parkingPlaceId": "c2c6b68e-759c-496a-a860-ee27c8874884"
                     }
                   ]
                 }
