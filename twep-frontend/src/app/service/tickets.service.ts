@@ -11,7 +11,7 @@ export class TicketService {
 
   constructor(private http: HttpClient) { }
 
-  public getUserTickets(userId: number): Observable<any> {
+  public getUserTickets(userId: string): Observable<any> {
     return this.http.get(`${this.apiUrl}/users/${userId}/tickets`);
   }
 

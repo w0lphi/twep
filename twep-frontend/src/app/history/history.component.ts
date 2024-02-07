@@ -64,8 +64,9 @@ export class HistoryComponent implements OnInit  {
     private ticketService: TicketService
   ) {}
 
-  fetchUserTickets(userId: number): void {
-    this.ticketService.getUserTickets(userId)
+  fetchUserTickets(): void { 
+    
+    this.ticketService.getUserTickets(this.userId)
       .subscribe({
         next: response => {
           this.userTickets = response.tickets;
@@ -74,20 +75,20 @@ export class HistoryComponent implements OnInit  {
           console.error('Error fetching user tickets:', error);
         }
       });
+  } 
+ 
+  
+
+
+
+
+ngOnInit(): void {
+  this.loggedInUserId = this.authService.getLoggedInUserId();
+  if (this.loggedInUserId) {
+    this.userId = this.loggedInUserId; 
+    this.fetchUserTickets();
   }
-
-  ngOnInit(): void {
-    this.loggedInUserId = this.authService.getLoggedInUserId();
-    if (this.loggedInUserId) {
-      
-      const userId = parseInt(this.loggedInUserId);
-      this.fetchUserTickets(userId);
-
-    }
-    this.userId = this.authService.getLoggedInUserId() || '';
-    
-  }
-
+}
 
   
 

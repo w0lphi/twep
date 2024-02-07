@@ -22,7 +22,7 @@ export class WalletService {
   }
 
 
-  public getWalletStatus(userId: number): Observable<any> {
+  public getWalletStatus(userId: string): Observable<any> {
     return this.http.get(`${this.apiUrl}/users/${userId}/account`);
   }
 }

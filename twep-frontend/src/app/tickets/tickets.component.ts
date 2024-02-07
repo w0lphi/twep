@@ -73,9 +73,8 @@ export class TicketsComponent implements OnInit {
   ) {}
 
 fetchUserTickets(): void { 
-    const userIdNumber = parseInt(this.userId, 10);
-    if (!isNaN(userIdNumber)) {
-      this.ticketService.getUserTickets(userIdNumber)
+    
+      this.ticketService.getUserTickets(this.userId)
         .subscribe({
           next: response => {
             this.userTickets = response.tickets;
@@ -84,10 +83,12 @@ fetchUserTickets(): void {
             console.error('Error fetching user tickets:', error);
           }
         });
-    } else {
-      console.error('Invalid userId:', this.userId);
-    }
-  }
+    } 
+   
+    
+  
+  
+  
 
   ngOnInit(): void {
     this.loggedInUserId = this.authService.getLoggedInUserId();
