@@ -49,12 +49,18 @@ CREATE TABLE bike_models (
     extra_features TEXT[]
 );
 
+ALTER TABLE bike_models
+ADD COLUMN category_id UUID REFERENCES bike_categories(id);
+
 CREATE TABLE individual_bikes (
     id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
     bike_category VARCHAR(50) NOT NULL,
     status VARCHAR(50) NOT NULL,
     bike_model_id UUID REFERENCES bike_models(id) ON DELETE CASCADE
 );
+
+ALTER TABLE individual_bikes ADD COLUMN parking_place_id UUID REFERENCES parking_places(id) ON DELETE CASCADE;
+
 
 CREATE TABLE tickets (
     id UUID PRIMARY KEY,
@@ -87,3 +93,26 @@ VALUES
   ('cd323b6a-7647-4423-b0ee-5c611b5e794d', true, ARRAY['{"name": "City Bike"}', '{"name": "Electric Bike"}']::jsonb[]),
   ('cd323b6a-7647-4423-b0ee-5c611b5e794d', false, ARRAY['{"name": "Hybrid Bike"}', '{"name": "Tandem Bike"}']::jsonb[]),
   ('cd323b6a-7647-4423-b0ee-5c611b5e794d', true, ARRAY['{"name": "Folding Bike"}', '{"name": "Cargo Bike"}']::jsonb[]);
+
+
+INSERT INTO bike_categories (name)
+VALUES
+    ('Mountain Bikes'),
+    ('Road Bikes'),
+    ('City Bikes');
+
+
+INSERT INTO bike_models (name, description, wheel_size, extra_features, category_id)
+VALUES
+    ('Model X', 'Electric bike with powerful motor', 26.5, ARRAY['LCD display', 'Front suspension'], '27721359-8545-4572-907c-8933b9f22900'),
+    ('Model Y', 'Mountain bike for off-road adventures', 29, ARRAY['Hydraulic disc brakes', 'Aluminum frame'], 'f6bfb12c-1e6b-4ed0-a8cf-bf771534e6d0'),
+    ('Model Z', 'High-performance road bike', 28, ARRAY['Carbon fiber frame', 'Shimano Ultegra components'], 'ff14359e-3e91-449d-b7bb-c0c7ab451a63'),
+    ('Model A', 'Comfortable city bike for urban commuting', 26, ARRAY['Rear rack', 'Fenders'], 'd8ddcfcd-20a9-4a60-88d0-f11d6b7c874c');
+
+INSERT INTO individual_bikes (bike_category, status, bike_model_id, parking_place_id)
+VALUES
+    ('27721359-8545-4572-907c-8933b9f22900', 'available', '3e95689b-1aaf-4369-8ef5-d5849a4dcda9', 'c2c6b68e-759c-496a-a860-ee27c8874884'),
+    ('27721359-8545-4572-907c-8933b9f22900', 'available', '81b33045-c559-4ec0-93ad-c7499152c3c1', '6715d329-8ceb-4ccb-9b05-48b73ecfaa77');
+
+
+

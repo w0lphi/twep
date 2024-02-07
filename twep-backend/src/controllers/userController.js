@@ -90,6 +90,56 @@ const getUserAccount = async (userId) => {
     }
 };
 
+const getStations = async (req, res) => {
+    try {
+
+        const stations = await UserModel.getAllStations();
+        const camelCaseStations = stations.map(station => convertKeysToCamelCase(station));
+        const responseObject = {
+            stations: camelCaseStations
+        };
+
+        res.json(responseObject);
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Internal Server Error');
+        throw error;
+    }
+
+}
+
+const getStationById = async (req, res) => {
+    const { id } = req.params;
+
+    try {
+        const station = await UserModel.getStationById(id);
+
+        if (!station) {
+            // Return 404 if the station with the specified ID is not found
+            return res.status(404).json({ error: 'Station not found' });
+        }
+
+        const camelCaseStation = convertKeysToCamelCase(station);
+
+        res.json(camelCaseStation);
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Internal Server Error');
+    }
+};
+
+const getBikesAtStation = async (req, res) => {
+    try {
+        const { stationId } = req.params;
+
+        const bikes = convertKeysToCamelCase(await UserModel.getBikesAtStation(stationId));
+        const response = { bikes }
+        res.json(response);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+};
 
 
 
@@ -147,5 +197,8 @@ module.exports = {
     loginUser,
     getUserAccount,
     addMoneyToWallet,
-    purchaseTicket
+    purchaseTicket,
+    getStations,
+    getStationById,
+    getBikesAtStation,
 };
