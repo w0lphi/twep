@@ -4,7 +4,6 @@
 >
     <mat-card-header class="twep-bike-card-header">
         <mat-card-title>
-            <mat-icon>pedal_bike</mat-icon>
             {{title}}
         </mat-card-title>
         <mat-card-subtitle *ngIf="category !== null">
@@ -14,13 +13,14 @@
     <mat-card-content 
         [ngClass]="{
             'twep-bike-card-content': true,
-            'show-features': displayFeatures
+            'show-more': showMore
         }"
     >
         <div 
             *ngIf="description !== null" 
             class="twep-bike-description"
             [title]="description"
+            #descriptionContainer
         >
             {{description}}
         </div>
@@ -33,18 +33,21 @@
             Rent Bike
         </button>
         <div class="twep-bike-features">
-            <ul *ngIf="displayFeatures">
-                <li *ngFor="let feature of features">
-                    {{ feature }}
-                </li>
-            </ul>
+            @if(showMore && features.length > 0){
+                <strong>Features</strong>
+                <ul>
+                    <li *ngFor="let feature of features">
+                        {{ feature }}
+                    </li>
+                </ul>
+            }
             <a
-                *ngIf="features.length > 0"
+                *ngIf="features.length > 0 || hasMoreDescription"
                 class="twep-bike-detail-toggle"
                 href="javascript:void(0)"
                 (click)="toggleFeatures()"
             >
-                {{ featuresBtnText }}
+                {{ hasMoreBtnText }}
             </a>
         </div>
     </mat-card-content>

@@ -1,4 +1,4 @@
-import { Component, Input, EventEmitter, Output, ChangeDetectorRef } from '@angular/core';
+import { Component, Input, ViewChild, ChangeDetectorRef, ElementRef } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
@@ -22,14 +22,35 @@ import { BikeModel } from '../model/bikeModel';
 })
 export class BikeCardComponent {
   @Input("bike") bike?: Bike;
-  displayFeatures: boolean = false;
+  @ViewChild("descriptionContainer") descriptionContainer?: ElementRef;
+  showMore: boolean = false;
+  hasMoreDescription: boolean = false;
 
   constructor(
     private changeDetector: ChangeDetectorRef
-  ){}
+  ) { }
+  
+  ngAfterViewInit() {
+
+    const nativeElement: HTMLDivElement | undefined = this.descriptionContainer?.nativeElement;
+    if (nativeElement !== undefined) {
+      const observer: MutationObserver = new MutationObserver(() => {
+        const clientHeight: number = nativeElement.clientHeight;
+        const scrollHeight: number = nativeElement.scrollHeight;
+        this.hasMoreDescription = clientHeight < scrollHeight;
+        console.log(clientHeight, scrollHeight);
+        this.changeDetector.detectChanges();
+      });
+
+      observer.observe(nativeElement, {
+        attributes: true,
+        characterData: true,
+      });
+    }
+  }
 
   toggleFeatures(): void {
-    this.displayFeatures = !this.displayFeatures;
+    this.showMore = !this.showMore;
     this.changeDetector.detectChanges();
   }
 
@@ -53,8 +74,8 @@ export class BikeCardComponent {
     return this.model?.description ?? null;
   }
 
-  get featuresBtnText(): string {
-    return `${this.displayFeatures ? 'Hide' : 'Show' } features`
+  get hasMoreBtnText(): string {
+    return ` Show ${this.showMore ? 'less' : 'more' }`
   }
 
   get features(): string[] {

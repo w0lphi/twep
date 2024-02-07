@@ -103,7 +103,6 @@ export class StationCardComponent {
     return this.bikes?.map(bike => {
       const bikeModel: BikeModel | undefined = this.bikeModels?.find(model => model.id === bike.bikeModelId);
       bike.bikeModel = bikeModel;
-      console.log(bikeModel);
       return bike;
     })
   }

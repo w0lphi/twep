@@ -42,6 +42,12 @@ export class ServerErrorInterceptor implements HttpInterceptor {
       this.router.navigateByUrl("/login");
       return throwError(() => new Error("Session expired"));
     }
+
+    if (error.status === 403) {
+      //Forbidden, redirect to 404
+      this.router.navigateByUrl("/notfound");
+      return throwError(() => new Error("Forbidden"));
+    }
     
     //Default error notification handling
     const body: any = error.error;
