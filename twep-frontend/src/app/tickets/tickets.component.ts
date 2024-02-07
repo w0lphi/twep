@@ -29,6 +29,9 @@ import { HttpClientModule } from '@angular/common/http';
 import {AuthService} from '../service/auth.service';
 
 
+
+
+
 @Component({
   selector: 'app-tickets',
   standalone: true,
@@ -51,6 +54,8 @@ import {AuthService} from '../service/auth.service';
     MatCheckboxModule,
     MatDividerModule,
     MatSelectModule,
+    
+    
    // TicketService,
 
     
@@ -58,7 +63,7 @@ import {AuthService} from '../service/auth.service';
   ],
   templateUrl: './tickets.component.html',
   styleUrls: ['./tickets.component.scss'],
- providers: [TicketService]
+ providers: [TicketService,]
   
 })
 
@@ -69,7 +74,8 @@ export class TicketsComponent implements OnInit {
 
   constructor(
     private authService: AuthService,
-    private ticketService: TicketService
+    private ticketService: TicketService,
+  
   ) {}
 
 fetchUserTickets(): void { 
@@ -121,4 +127,46 @@ fetchUserTickets(): void {
         }
       });
   }
+
+
+  returnTicket(ticketId: string): void {
+    /*
+    this.ticketService.returnUserTicket(this.userId, ticketId)
+      .subscribe({
+        next: response => {
+          console.log('Ticket returned successfully:', response);
+          // refresh tickets after returning
+          this.fetchUserTickets();
+        },
+        error: error => {
+          console.error('Error returning ticket:', error);
+        }
+      });
+      
+  }
+  
+
+  returnQRCode(ticket: any): void {
+    
+    const qrData = JSON.stringify(ticket); 
+    const qrCodeValue = this.qrcodeService.generateQRCode(qrData);
+    
+    console.log('QR Code Value:', qrCodeValue);
+  }
+
+
+  generateQRCode(data: string): void {
+    const qrCodeValue = this.qrcodeService.generateQRCode(data);
+    console.log('QR Code Value:', qrCodeValue);
+
+
+
+   */
+
+
+  }
+
+
 }
+
+

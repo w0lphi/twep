@@ -1,8 +1,17 @@
-h1 {
-    margin-left: 24px;
+#all {
+  padding: 16px;
+
 
 }
 
+
+
+
+button {
+padding: 12px;
+margin: 8px;
+
+}
 
 .ticket-list {
     border: 1px solid #ccc;
@@ -27,6 +36,16 @@ h1 {
     margin-bottom: 8px;
   }
   
+
+
+#redbutton {
+background-color: red;
+color: white;
+
+}
+
+
+
 
   @media (max-width: 768px) {
     .ticket-list {

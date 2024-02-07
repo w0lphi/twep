@@ -1,3 +1,4 @@
+<div id="all">
 <div *ngIf="userTickets">
     <h1>Active User Tickets</h1>
     <ng-container *ngFor="let ticket of userTickets">
@@ -8,10 +9,23 @@
           <li>Station: {{ ticket.station }}</li>
           <li>Purchase Date: {{ ticket.purchaseDate }}</li>
         </ul>
+        <button mat-raised-button color="red" (click)="returnTicket(ticket.id)">Return Ticket</button>
+          <!--
+        <button mat-raised-button color="primary" (click)="returnQRCode(ticket)">Get QR Code</button>
+        -->
       </div>
+
     </ng-container>
   </div>
   
+<p>Only for testing from here on</p>
+<!-- from here on just for testing -->
+
+  <button mat-raised-button color="red" id="redbutton">Return Ticket</button>
+
+
+
+  <button mat-raised-button color="primary" >Generate QR Code</button>
 
 
   <br><br><br><br><br><br><br><br>
@@ -21,5 +35,5 @@
     <h1>User ID: {{ loggedInUserId }}</h1>
   </div>
   
-
+</div>
 
