@@ -82,12 +82,7 @@ export class AccountComponent implements OnInit {
 
   ngOnInit(): void {
     this.loggedInUserId = this.authService.getLoggedInUserId();
-    if (this.loggedInUserId) {
-      
-      const userId = parseInt(this.loggedInUserId);
-
-    }
-    this.userId = this.authService.getLoggedInUserId() || '';
+    this.userId = this.loggedInUserId || '';
     this.loadUserAccount();
   }
 
@@ -95,16 +90,8 @@ export class AccountComponent implements OnInit {
 
   loadUserAccount() {
    
-    let userId: string | null = null;
-  
-    
     if (this.loggedInUserId) {
-      userId = this.loggedInUserId;
-    }
-  
-    
-    if (userId) {
-      this.accountService.getUserAccount(userId).subscribe(
+      this.accountService.getUserAccount(this.loggedInUserId).subscribe(
         (data: UserAccount) => {
           this.userAccount = data;
         },
@@ -128,5 +115,9 @@ export class AccountComponent implements OnInit {
       };
     }
   }
+  
+
+
+
   
 }

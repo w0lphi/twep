@@ -6,10 +6,10 @@
 
 
             <div class="profile-info">
-                <mat-card-title>Hello, {{ userAccount.role }}!</mat-card-title>
-                <mat-card-subtitle>User ID: {{ userAccount.id }}</mat-card-subtitle>
-                <mat-card-subtitle>Email Address: {{ userAccount.email }}</mat-card-subtitle>
-                <mat-card-subtitle>Role: {{ userAccount.role }}</mat-card-subtitle>
+                <mat-card-title>Hello, {{ userAccount?.role }}!</mat-card-title>
+                <mat-card-subtitle>User ID: {{ userAccount?.id }}</mat-card-subtitle>
+                <mat-card-subtitle>Email Address: {{ userAccount?.email }}</mat-card-subtitle>
+                <mat-card-subtitle>Role: {{ userAccount?.role }}</mat-card-subtitle>
             </div>
         </mat-card-header>
 
@@ -29,7 +29,10 @@
     <mat-card class="right-panel mobile-stack">
         <mat-card-content>
             <h2>Statistics:</h2>
-            <p>Wallet Amount: {{ userAccount.wallet }}€</p>
+            <mat-card-subtitle>Wallet Amount: {{ userAccount?.wallet }}€</mat-card-subtitle>
+            <mat-card-subtitle>Number of Tickets purchased: {{ userAccount?.tickets?.length }}</mat-card-subtitle>
+            <mat-card-subtitle>Number of Tickets overdue: not implemented yet</mat-card-subtitle>
+
         </mat-card-content>
     </mat-card>
 </div>
