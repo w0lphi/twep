@@ -12,7 +12,7 @@ export class TicketService {
   constructor(private http: HttpClient) { }
 
   public getUserTickets(userId: string): Observable<any> {
-    return this.http.get(`${this.apiUrl}/users/${userId}/tickets`);
+    return this.http.get(`${this.apiUrl}/users/${userId}/account/tickets`);
   }
 
   public createUserTicket(userId: string, ticketDetails: any): Observable<any> {

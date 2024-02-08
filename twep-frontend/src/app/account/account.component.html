@@ -44,6 +44,8 @@
                 </mat-form-field>
             
                 <button mat-raised-button class="twep-save-btn" (click)="saveAdding()">SAVE</button>
+
+                <div *ngIf="saveSuccessMessage" class="success-message">{{ saveSuccessMessage }}</div>
             </div>
             
             

@@ -75,6 +75,8 @@ export class AccountComponent implements OnInit {
 
   uploadedImage: SafeUrl | undefined;
 
+  saveSuccessMessage: string | null = null;
+
   @ViewChild('fileInput') fileInput!: ElementRef<HTMLInputElement>;
 
   constructor(
@@ -126,27 +128,30 @@ export class AccountComponent implements OnInit {
   }
   
 
-  saveAdding(): void {
+
+
+
+saveAdding(): void {
     const amountToAdd: number = parseFloat(this.addMoneyFormControl.value!);
 
-    
     if (!isNaN(amountToAdd)) {
-      this.walletService.addMoneyToWallet(this.userId!, amountToAdd)
-        .subscribe({
-        next: response => {
-          console.log('Money got added to wallet: ', response);
-          this.addMoneyFormControl.reset();
-          this.loadUserAccount();
-        },
-        error: error => {
-          console.error('Error while adding money', error);
-        }
-      });
-
-     
-      
+        this.walletService.addMoneyToWallet(this.userId!, amountToAdd)
+            .subscribe({
+                next: response => {
+                    console.log('Money got added to wallet: ', response);
+                    this.addMoneyFormControl.reset();
+                    this.loadUserAccount();
+                    this.saveSuccessMessage = "Money successfully added to wallet.";
+                    setTimeout(() => {
+                        this.saveSuccessMessage = null; 
+                    }, 2000); 
+                },
+                error: error => {
+                    console.error('Error while adding money', error);
+                }
+            });
+    }
 }
 }
 
   
-}
