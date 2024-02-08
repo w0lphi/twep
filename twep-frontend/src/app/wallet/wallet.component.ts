@@ -88,6 +88,7 @@ export class WalletComponent {
           .subscribe({
           next: response => {
             console.log('Money got added to wallet: ', response);
+            this.addMoneyFormControl.reset();
           },
           error: error => {
             console.error('Error while adding money', error);
