@@ -73,7 +73,6 @@ export class UserhomeComponent {
   }
 
   navigate(index: number): void {
-    if (index === 0) return;
     const link: NavigationLink = this.navigationLinks[index];
     this.router.navigateByUrl(link.route);
     if(this.isMobile) this.drawer?.close();

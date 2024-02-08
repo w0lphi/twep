@@ -19,10 +19,6 @@
             --mdc-tab-indicator-active-indicator-height: 0px;
             max-width: calc(100% - 212px);
 
-            ::ng-deep .mat-mdc-tab-labels>.mdc-tab:first-child {
-                display: none;
-            }
-
             .nav-tab-icon{
                 margin-right: 8px;
             }
