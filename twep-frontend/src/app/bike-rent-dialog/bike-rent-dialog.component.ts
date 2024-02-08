@@ -20,6 +20,8 @@ import { DateTimePickerComponent } from '../common/date-time-picker/date-time-pi
 import { LoadingOverlayComponent } from '../common/loading-overlay/loading-overlay.component';
 import { Bike } from '../model/bike';
 import { Router } from '@angular/router';
+import { TicketService } from '../service/tickets.service';
+import { AuthService } from '../service/auth.service';
 
 export interface BikeRentDialogData{
   bike: Bike;
@@ -59,7 +61,9 @@ export class BikeRentDialogComponent {
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: BikeRentDialogData,
     private dialogRef: MatDialogRef<BikeRentDialogComponent>,
-    private router: Router
+    private router: Router,
+    private ticketService: TicketService,
+    private authService: AuthService,
   ) {
     this.bike = this.data.bike;
     this.bookingStart = new Date(Date.now());
@@ -68,13 +72,18 @@ export class BikeRentDialogComponent {
 
   confirmRent(): void {
     this.runningAction = true;
-    new Promise((resolve) => {
-      setTimeout(() => {
-        resolve(true);
+    const userId: string | null = this.authService.getLoggedInUserId();
+    if (userId !== null) {
+      this.ticketService.createUserTicket(userId, {}).subscribe({
+      next: () => {
         this.runningAction = false;
         this.bookingSuccessful = true;
-      }, 2000)
-    });
+      },
+      error: () => {
+        this.runningAction = false;
+      }
+    })
+    }
   }
 
   navigateToTicket(): void {

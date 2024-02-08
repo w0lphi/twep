@@ -51,11 +51,21 @@ export class PromptDialogComponent {
   get valueInput() {
     return this.promptForm.get("value");
   }
+
+  get inputType(): string {
+    return this.data.inputType ?? "text";
+  }
+
+  get errorText(): string {
+    return this.data.errorText ?? "Please enter value";
+  }
 }
 
-class PromptDialogData {
-  title?: string
-  text?: string
-  label?: string
-  initialValue?: string
+export interface PromptDialogData {
+  title: string;
+  text: string;
+  label: string;
+  initialValue?: string | number;
+  inputType?: string;
+  errorText?: string;
 }
