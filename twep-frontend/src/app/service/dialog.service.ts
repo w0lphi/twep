@@ -44,7 +44,7 @@ export class DialogService {
         data: {
             bike,
         },
-        width: "600px",
+        width: "800px",
         disableClose: true,
         hasBackdrop: true,
     })
