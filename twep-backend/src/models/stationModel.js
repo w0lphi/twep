@@ -59,7 +59,7 @@ class StationModel {
                 const parkingPlaceId = uuidv4();
 
                 // Convert bike categories array to an array of stringified JSON objects
-                const bikeCategoriesArray = parkingPlaceData.bike_categories.map(category => JSON.stringify(category));
+                const bikeCategoriesArray = parkingPlaceData.bikeCategories.map(category => JSON.stringify(category));
 
                 await pool.query(stationQueries.createParkingPlace, [
                     parkingPlaceId,
@@ -78,8 +78,8 @@ class StationModel {
             const response = {
                 ...detailedStation,
                 parkingPlaces: parkingPlacesData.map(place => ({
-                    id: uuidv4(), // You may want to generate a new ID for each parking place
-                    bikeCategories: place.bike_categories.map(category => category.name),
+                    id: uuidv4(),
+                    bikeCategories: place.bikeCategories.map(category => category.name),
                 })),
             };
 

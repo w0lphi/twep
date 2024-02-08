@@ -73,6 +73,9 @@ CREATE TABLE tickets (
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
+insert into users (id, email, password, wallet, role)
+values ('3d577f6d-f4a3-4c25-a43c-05e7e06298a4','admin@twep.com', '$2b$10$X23DxyLKrGz/.NOUVVmsZ.d1z3diI2OrHvuEvnvl/wM2ly6Jr28KO', 0, 'admin' );
+
 
 -- IDK how to insert admin account with the correct hasing algo directly into the db
 -- so I make a normal account using the POST request and then change the role in the db with:

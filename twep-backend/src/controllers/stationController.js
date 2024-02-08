@@ -70,7 +70,7 @@ const stationController = {
 
             // Convert bike categories array to an array of objects with 'name' property
             const parkingPlacesData = parkingPlaces.map(place => ({
-                bike_categories: place.bike_categories.map(category => ({ name: category.name })),
+                bikeCategories: place.bikeCategories.map(category => ({ name: category.name })),
                 occupied: place.occupied,
             }));
 
