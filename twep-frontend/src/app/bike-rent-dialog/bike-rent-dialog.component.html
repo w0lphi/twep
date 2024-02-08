@@ -1,29 +1,81 @@
 <div class="twep-bike-rent-dialog">
     <h1 mat-dialog-title>{{ title }}</h1>
-    <div mat-dialog-content>
-        <div>Booking start:</div>
-        <app-date-time-picker [(datetime)]="bookingStart"/>
-        <div>Booking end:</div>
-        <app-date-time-picker [(datetime)]="bookingEnd"/>
-    </div>
-    <div
-        mat-dialog-actions
-        [align]="'end'"
-    >
-        <button
-            mat-button
-            color
-            [mat-dialog-close]="false"
-        >
-            CANCEL
-        </button>
-        <button
-            mat-button
-            color="primary"
-            [mat-dialog-close]="true"
-        >
-            RENT
-        </button>
-    </div>
-
+        @if(runningAction){
+            <div mat-dialog-content>
+                <app-loading-overlay />
+            </div>
+        }
+        @else if(bookingSuccessful){
+            <div mat-dialog-content>
+                <div class="twep-rent-success-container">
+                    <mat-icon>check_circle</mat-icon>
+                </div>
+                <div>Booking start: {{this.bookingStart?.toISOString()}}</div>
+                <div>Booking end: {{this.bookingEnd?.toISOString()}}</div>
+            </div>
+            <div
+                mat-dialog-actions
+                [align]="'end'"
+            >
+                <button
+                    mat-button
+                    color
+                    [mat-dialog-close]="true"
+                >
+                    CLOSE
+                </button>
+                <button
+                    mat-button
+                    color="primary"
+                    (click)="navigateToTicket()"
+                >
+                    VIEW TICKETS
+                </button>
+            </div>
+        }
+        @else {
+            <div mat-dialog-content>
+                <div class="twep-rent-selected-bike">
+                    <div>Selected bike:</div>
+                    <app-bike-card
+                        [bike]="bike"
+                        [showRentBtn]="false"
+                    />
+                </div>
+                <mat-divider />
+                <div>
+                    <div>Booking start:</div>
+                    <app-date-time-picker [(datetime)]="bookingStart" [disabled]="immediateRenting" />
+                    <mat-checkbox [(ngModel)]="immediateRenting">
+                        Immediate renting
+                    </mat-checkbox>
+                </div>
+                <div>
+                    <div>Booking end:</div>
+                    <app-date-time-picker [(datetime)]="bookingEnd" />
+                </div>
+            </div>
+            <div
+                mat-dialog-actions
+            >
+                <div class="twep-rent-price">
+                    <div>Price:</div>
+                    <div>{{ formattedPrice }}</div>
+                </div>
+                <mat-divider [vertical]="true" />
+                <button
+                    mat-button
+                    [mat-dialog-close]="false"
+                >
+                    CANCEL
+                </button>
+                <button
+                    mat-button
+                    color="primary"
+                    (click)="confirmRent()"
+                >
+                    RENT
+                </button>
+            </div>
+        }
 </div>

@@ -21,6 +21,7 @@ import { formatISO, format } from "date-fns";
 })
 export class DateTimePickerComponent {
   @Input() datetime: Date | null = new Date(Date.now());
+  @Input() disabled: boolean = false;
   @Output() datetimeChange = new EventEmitter<Date | null>();
 
   date: string;

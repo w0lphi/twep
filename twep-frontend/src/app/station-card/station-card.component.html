@@ -6,20 +6,60 @@
         <app-loading-overlay />
     }
     @else if(bikeStation !== undefined){
-        <h3>Available Bikes</h3>
-        <div class="twep-bikes-list">
-            @if(displayedBikes.length > 0){
-                <app-bike-card
-                    *ngFor=" let bike of bikes"
-                    [bike]="bike"
-                />
-            }
-            @else {
-                <div class="twep-no-items-message">
-                    No bikes available at this station
+        <mat-accordion [multi]="true">
+            <mat-expansion-panel
+                [expanded]="ratingsPanelExpanded"
+                class="mat-elevation-z0"
+                (click)="handleExpansionPanel()"
+            >
+                <mat-expansion-panel-header>
+                    <mat-panel-title>
+                        Rating
+                    </mat-panel-title>
+                    <mat-panel-description>
+                        <div class="twep-spacer"></div>
+                        <mat-icon 
+                            *ngFor="let star of ratingStars"
+                            class="twep-station-rating-star"
+                        >
+                            star_rate
+                        </mat-icon>
+                    </mat-panel-description>
+                </mat-expansion-panel-header>
+                <div class="twep-rating-list">
+                    <div class="twep-no-items-message">
+                        Station not rated yet
+                    </div>
                 </div>
-            }
-        </div>
+            </mat-expansion-panel>
+            <mat-expansion-panel
+                class="mat-elevation-z0"
+                [expanded]="bikePanelExpanded"
+                (click)="handleExpansionPanel()"
+            >
+                <mat-expansion-panel-header>
+                    <mat-panel-title>Available Bikes</mat-panel-title>
+                    <mat-panel-description>
+                        <div class="twep-spacer"></div>
+                        <div class="twep-bike-amount">({{ bikes?.length ?? 0}})</div>
+                        <mat-icon>pedal_bike</mat-icon>
+                    </mat-panel-description>
+                </mat-expansion-panel-header>
+                <div class="twep-bikes-list">
+                    @if(displayedBikes.length > 0){
+                    <app-bike-card
+                        *ngFor=" let bike of bikes;"
+                        [bike]="bike"
+                    />
+                    }
+                    @else {
+                    <div class="twep-no-items-message">
+                        No bikes available at this station
+                    </div>
+                    }
+                </div>
+            </mat-expansion-panel>
+        </mat-accordion>
     }
     
 </div>

@@ -5,9 +5,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { Bike } from '../model/bike';
-import { BikeModel } from '../model/bikeModel';
-import { MatDialog } from '@angular/material/dialog';
-import { BikeRentDialogComponent } from '../bike-rent-dialog/bike-rent-dialog.component';
+import { DialogService } from '../service/dialog.service';
 
 @Component({
   selector: 'app-bike-card',
@@ -24,6 +22,7 @@ import { BikeRentDialogComponent } from '../bike-rent-dialog/bike-rent-dialog.co
 })
 export class BikeCardComponent {
   @Input("bike") bike?: Bike;
+  @Input("showRentBtn") showRentBtn = true;
   @ViewChild("descriptionContainer") descriptionContainer?: ElementRef;
   showMore: boolean = false;
   hasMoreDescription: boolean = false;
@@ -31,7 +30,7 @@ export class BikeCardComponent {
   constructor(
     private changeDetector: ChangeDetectorRef,
     private zone: NgZone,
-    private dialog: MatDialog,
+    private dialogService: DialogService
   ) { }
   
   ngAfterViewInit() {
@@ -59,14 +58,8 @@ export class BikeCardComponent {
 
   rentBike() {
     this.zone.run(() => {
-        this.dialog.open(BikeRentDialogComponent, {
-          data: {
-              bike: this.bike,
-          },
-          width: "600px",
-          disableClose: true,
-          hasBackdrop: true,
-      })
+      if(this.bike == undefined) return 
+      this.dialogService.openBikeRentDialog(this.bike);
     });
   }
 
@@ -77,7 +70,7 @@ export class BikeCardComponent {
   }
 
   get category(): string | null {
-    return this.bike?.bikeCategory ?? "";
+    return this.bike?.category ?? "";
   }
 
   get description(): string | null{

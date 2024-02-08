@@ -1,17 +1,19 @@
 <div class="twep-date-time-picker">
-    <mat-form-field>
+    <mat-form-field class="twep-date-input">
         <input
             [(ngModel)]="date"
             matInput
             type="date"
+            [disabled]="disabled"
             (input)="updateDate()"
         >
     </mat-form-field>
-    <mat-form-field>
+    <mat-form-field class="twep-time-input">
         <input
             [(ngModel)]="time"
             matInput
             type="time"
+            [disabled]="disabled"
             (input)="updateDate()"
         >
     </mat-form-field>

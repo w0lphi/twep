@@ -5,7 +5,14 @@
     flex: 1 1 100%;
     flex-wrap: wrap;
 
-    .mat-mdc-input-element::-webkit-calendar-picker-indicator {
-        display: block;
+    .mat-mdc-form-field{
+        
+        &.twep-date-input, &.twep-time-input{
+            flex-grow: 1;
+        }
+
+        .mat-mdc-input-element::-webkit-calendar-picker-indicator {
+            display: block;
+        }
     }
 }

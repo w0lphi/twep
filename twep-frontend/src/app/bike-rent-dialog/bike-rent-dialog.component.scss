@@ -1,0 +1,52 @@
+.twep-bike-rent-dialog{
+    position: relative;
+
+    .mat-mdc-dialog-content{
+        padding: 16px;
+        min-height: 200px;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+
+        .twep-rent-success-container{
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            flex-grow: 1;
+
+            .mat-icon{
+                width: 120px;
+                height: 120px;
+                font-size: 120px;
+                color: var(--green);
+            }
+        }
+
+        .mat-divider{
+            margin: 8px 0px;
+        }
+    }
+
+    .mat-mdc-dialog-title{
+        border-bottom: 1px solid var(--mat-divider-color);
+    }
+
+    .mat-mdc-dialog-actions{
+        border-top: 1px solid var(--mat-divider-color);
+    }
+
+
+
+    .twep-rent-price{
+        display: flex;
+        flex-direction: row;
+        gap: 8px;
+        justify-content: space-between;
+        flex-grow: 1;
+        font-size: 20px;
+        font-weight: 500;
+        margin-right: 16px;
+    }
+
+}

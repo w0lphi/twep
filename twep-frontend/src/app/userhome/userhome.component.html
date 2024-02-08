@@ -20,11 +20,9 @@
             *ngIf="!isMobile"
             class="twep-user-nav-bar" 
             [selectedIndex]="activeLinkIndex"
-            (selectedTabChange)="navigate($event.index)"
+            (selectedIndexChange)="navigate($event)"
         >
-            <mat-tab
-                *ngFor="let tab of navigationLinks"
-            >
+            <mat-tab *ngFor="let tab of navigationLinks">
                 <ng-template mat-tab-label>
                     <mat-icon class="nav-tab-icon">{{tab.icon}}</mat-icon>
                     {{tab.title}}

@@ -43,6 +43,7 @@ export class UserhomeComponent {
   activeLinkIndex?: number;
   isMobile: boolean = true;
   navigationLinks: NavigationLink[] = [
+    new NavigationLink("", "", ""),
     new NavigationLink("Map", "map", "/user/home"),
     new NavigationLink("Wallet", "account_balance_wallet", "/user/wallet"),
     new NavigationLink("Tickets", "confirmation_number", "/user/tickets"),
@@ -58,6 +59,13 @@ export class UserhomeComponent {
       this.isMobile = result.matches;
       if(!this.isMobile) this.drawer?.close();
     })
+
+    this.router.events.subscribe(() => {
+      const index: number = this.navigationLinks.findIndex(tab => tab.route === this.router.url);
+      if (index > -1) {
+        this.activeLinkIndex = index;
+      }
+    })
   }
   
   ngOnInit(): void {
@@ -65,8 +73,8 @@ export class UserhomeComponent {
   }
 
   navigate(index: number): void {
+    if (index === 0) return;
     const link: NavigationLink = this.navigationLinks[index];
-    this.activeLinkIndex = index;
     this.router.navigateByUrl(link.route);
     if(this.isMobile) this.drawer?.close();
   }

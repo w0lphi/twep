@@ -5,13 +5,13 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatIconModule } from '@angular/material/icon';
 import { MatCardModule } from '@angular/material/card';
-import { BikeStation } from '../model/bikeStation';
+import { MatExpansionModule } from '@angular/material/expansion';
 
+import { BikeStation } from '../model/bikeStation';
 import { LoadingOverlayComponent } from '../common/loading-overlay/loading-overlay.component';
 import { BikeStationService } from '../service/bikeStation.service';
 import { Bike } from '../model/bike';
 import { BikeService } from '../service/bike.service';
-import { BikeModelService } from '../service/bikeModel.service';
 import { BikeModel } from '../model/bikeModel';
 
 import { BikeCardComponent } from '../bike-card/bike-card.component';
@@ -25,6 +25,7 @@ import { BikeCardComponent } from '../bike-card/bike-card.component';
     MatToolbarModule,
     MatIconModule,
     MatCardModule,
+    MatExpansionModule,
     LoadingOverlayComponent,
     BikeCardComponent,
   ],
@@ -36,6 +37,9 @@ export class StationCardComponent {
   bikeStation?: BikeStation;
   bikes?: Bike[];
   bikeModels?: BikeModel[];
+  bikePanelExpanded: boolean = true;
+  ratingsPanelExpanded: boolean = false;
+  ratingStars: string[];
 
   @Input("stationId")
   set stationId(stationId: string) {
@@ -48,6 +52,8 @@ export class StationCardComponent {
     private bikeService: BikeService,
     private changeDetector: ChangeDetectorRef
   ) { 
+    const starsAmount: number = Math.floor(Math.random() * (5 - 1 + 1) + 1);
+    this.ratingStars = Array.from('*'.repeat(starsAmount))
   }
   
   getBikeStation(stationId: string): void {
@@ -78,6 +84,10 @@ export class StationCardComponent {
         this.changeDetector.detectChanges();
       }
     })
+  }
+
+  handleExpansionPanel() {
+    this.changeDetector.detectChanges();
   }
 
   get displayedBikes(): Bike[]{

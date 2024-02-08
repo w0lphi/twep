@@ -4,6 +4,18 @@
     flex-direction: column;
     flex-grow: 1;
 
+    .mat-expansion-panel-spacing{
+        margin: 0;
+    }
+
+    .twep-bike-amount{
+        margin-right: 4px;
+    }
+
+    .twep-station-rating-star{
+        color: var(--rating-yellow);
+    }
+
     .twep-bikes-list{
         display: flex;
         flex-direction: column;
