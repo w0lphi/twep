@@ -55,13 +55,12 @@
                     <app-date-time-picker [(datetime)]="bookingEnd" />
                 </div>
             </div>
-            <div
-                mat-dialog-actions
-            >
-                <div class="twep-rent-price">
-                    <div>Price:</div>
-                    <div>{{ formattedPrice }}</div>
-                </div>
+            <div mat-dialog-actions class="twep-rent-price">
+                <div>Total Price:</div>
+                <div>{{ formattedPrice }}</div>
+            </div>
+            <div mat-dialog-actions>
+                <div class="twep-spacer"></div>
                 <mat-divider [vertical]="true" />
                 <button
                     mat-button

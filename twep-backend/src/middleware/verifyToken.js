@@ -19,9 +19,9 @@ const verifyToken = (req, res, next) => {
     }
 
     // Verify the token using the provided secret
-    jwt.verify(token, 'your-jwt-secret', async (err, decodedToken) => {
+    jwt.verify(token, 'twep-jwt-secret', async (err, decodedToken) => {
         if (err) {
-            return res.status(403).json({ message: 'Forbidden - Invalid token' });
+            return res.status(401).json({ message: 'Unauthorized - Invalid token' });
         }
 
         // Extract user ID from the decoded token

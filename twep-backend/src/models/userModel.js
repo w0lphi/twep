@@ -56,6 +56,33 @@ class UserModel {
         }
     }
 
+    static async getAllBikes(){
+        try {
+            const bikes = await pool.query(userQueries.getAllBikes);
+            return bikes.rows;
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    static async getAllBikeModels(){
+        try {
+            const { rows } = await pool.query(userQueries.getAllBikeModels);
+            return rows;
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    static async getAllBikeCategories() {
+        try {
+            const { rows } = await pool.query(userQueries.getAllBikeCategories);
+            return rows;
+        } catch (error) {
+            throw error;
+        }
+    }
+
     static async purchaseTicket(userId, { bikeType, station, purchaseDate, immediateRenting, reservedStation }) {
         try {
             const { rows } = await pool.query(userQueries.purchaseTicket, [

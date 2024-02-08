@@ -1,6 +1,9 @@
 <mat-card
     *ngIf="bike"
-    class="twep-bike-card"
+    [ngClass]="{
+        'twep-bike-card': true,
+        'unavailable': unavailable
+    }"
 >
     <mat-card-header class="twep-bike-card-header">
         <mat-card-title [title]="title">
@@ -24,15 +27,23 @@
         >
             {{description}}
         </div>
-        <button
-            *ngIf="showRentBtn"
-            class="twep-bike-action"
-            mat-flat-button
-            color="primary"
-            (click)="rentBike()"
-        >
-            Rent Bike
-        </button>
+        @if(unavailable){
+            <div class="twep-bike-action unavailable">
+                Not available
+            </div>
+        }
+        @else{
+            <button
+                *ngIf="showRentBtn"
+                class="twep-bike-action"
+                mat-flat-button
+                color="primary"
+                (click)="rentBike()"
+            >
+                Rent Bike
+            </button>
+        }
+        
         <div class="twep-bike-features">
             @if(showMore && features.length > 0){
                 <strong>Features</strong>

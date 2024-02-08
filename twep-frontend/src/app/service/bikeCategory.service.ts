@@ -26,4 +26,9 @@ export class BikeCategoryService{
         return this.http.delete(`${this.apiUrl}/management/bike-categories/${id}`);
     }
 
+    public getAllUserBikeCategories(): Observable<BikeCategory[]>{
+        return this.http.get<BikeCategory[]>(`${this.apiUrl}/users/bike-categories`);
+    }
+
+
 }

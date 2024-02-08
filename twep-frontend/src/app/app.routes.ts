@@ -20,6 +20,7 @@ import { TicketsComponent } from './tickets/tickets.component';
 import { HistoryComponent } from './history/history.component';
 
 import {AccountComponent} from './account/account.component';
+import { BikeFilterListComponent } from './bike-filter-list/bike-filter-list.component';
 
 export const routes: Routes = [
     {
@@ -94,6 +95,10 @@ export const routes: Routes = [
             {
                 path: "home",
                 component: UserMapComponent
+            },
+            {
+                path: 'bikes',
+                component: BikeFilterListComponent
             },
             {
                 path: 'wallet',

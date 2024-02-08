@@ -125,6 +125,42 @@ const getBikesAtStation = `
     pp.station_id = $1;
 `;
 
+const getAllBikes = `
+    SELECT
+    ib.id AS id,
+    ib.status AS status,
+    bc.id AS category_id,
+    bc.name AS category,
+    bm.id AS model_id,
+    bm.name AS model,
+    bm.description AS description,
+    bm.wheel_size AS wheel_size,
+    bm.extra_features AS extra_features,
+    pp.id AS parking_place_id,
+    jsonb_build_object(
+        'id', s.id,
+        'name', s.name,
+        'location', s.location,
+        'operational', s.operational
+    ) AS station
+    FROM
+    individual_bikes ib
+    JOIN
+    bike_models bm ON ib.bike_model_id = bm.id
+    JOIN
+    bike_categories bc ON bm.category_id = bc.id
+    JOIN
+    parking_places pp ON ib.parking_place_id = pp.id
+    JOIN
+    stations s ON pp.station_id = s.id
+    GROUP BY
+    ib.id, ib.status, bc.name, bc.id, bm.id, bm.name, bm.description, bm.wheel_size, bm.extra_features, pp.id, s.id
+`;
+
+const getAllBikeModels = 'SELECT * FROM bike_models';
+const getAllBikeCategories = 'SELECT * FROM bike_categories';
+
+
 
 module.exports = {
     registerUser,
@@ -137,4 +173,7 @@ module.exports = {
     getStations,
     getStationById,
     getBikesAtStation,
+    getAllBikes,
+    getAllBikeModels,
+    getAllBikeCategories
 };

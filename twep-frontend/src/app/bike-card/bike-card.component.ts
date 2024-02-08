@@ -4,7 +4,7 @@ import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { Bike } from '../model/bike';
+import { Bike, BikeStatus } from '../model/bike';
 import { DialogService } from '../service/dialog.service';
 
 @Component({
@@ -26,15 +26,20 @@ export class BikeCardComponent {
   @ViewChild("descriptionContainer") descriptionContainer?: ElementRef;
   showMore: boolean = false;
   hasMoreDescription: boolean = false;
+  unavailable: boolean = false;
 
   constructor(
     private changeDetector: ChangeDetectorRef,
     private zone: NgZone,
     private dialogService: DialogService
-  ) { }
+  ) { 
+  }
+
+  ngOnInit(){
+    this.unavailable = this.bike?.status !== BikeStatus.AVAILABLE;
+  }
   
   ngAfterViewInit() {
-
     const nativeElement: HTMLDivElement | undefined = this.descriptionContainer?.nativeElement;
     if (nativeElement !== undefined) {
       const observer: MutationObserver = new MutationObserver(() => {

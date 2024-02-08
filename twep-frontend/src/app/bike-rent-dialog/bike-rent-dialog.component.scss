@@ -32,21 +32,21 @@
         border-bottom: 1px solid var(--mat-divider-color);
     }
 
-    .mat-mdc-dialog-actions{
-        border-top: 1px solid var(--mat-divider-color);
-    }
-
-
 
     .twep-rent-price{
         display: flex;
         flex-direction: row;
-        gap: 8px;
+        gap: 16px;
         justify-content: space-between;
         flex-grow: 1;
-        font-size: 20px;
+        font-size: 16px;
         font-weight: 500;
-        margin-right: 16px;
+        border-top: 1px solid var(--mat-divider-color);
+
+        .mat-divider{
+            min-height: 24px;
+            margin: 0px 8px;
+        }
     }
 
 }

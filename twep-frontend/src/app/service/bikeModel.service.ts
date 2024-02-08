@@ -29,4 +29,8 @@ export class BikeModelService{
     public deleteBikeModel(id: string): Observable<any>{
         return this.http.delete(`${this.apiUrl}/management/bike-models/${id}`)
     }
+
+    public getAllUserBikeModels(): Observable<BikeModel[]>{
+        return this.http.get<BikeModel[]>(`${this.apiUrl}/users/bike-models`);
+    }
 }

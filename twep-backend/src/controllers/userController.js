@@ -46,7 +46,12 @@ const loginUser = async (req, res) => {
         }
 
         // Generate JWT
-        const token = jwt.sign({ userId: user.rows[0].id, email: user.rows[0].email }, 'your-jwt-secret', { expiresIn: '1h' });
+        const loggedInUser = user.rows[0];
+        const token = jwt.sign({ 
+            userId: loggedInUser.id, 
+            email: loggedInUser.email, 
+            role: loggedInUser.role 
+        }, 'twep-jwt-secret', { expiresIn: '1h' });
 
         res.status(200).json({ token });
     } catch (error) {
@@ -163,7 +168,45 @@ const getBikesAtStation = async (req, res) => {
     }
 };
 
+const getAllBikes = async (req, res) => {
+    try {
 
+      const bikes = convertKeysToCamelCase(
+        await UserModel.getAllBikes()
+      );
+      const response = { bikes };
+      res.json(response);
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: "Internal Server Error" });
+    }
+}
+
+const getAllBikeModels = async (req, res) => {
+    try {
+        const bikeModels = await UserModel.getAllBikeModels();
+
+        const camelCaseBikeModels = bikeModels.map(model => convertKeysToCamelCase(model));
+
+        res.json(camelCaseBikeModels);
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Internal Server Error');
+    }
+}
+
+const getAllBikeCategories = async (req, res) => {
+    try {
+        const bikeCategories = await UserModel.getAllBikeCategories();
+
+        const camelCaseBikeCategories = bikeCategories.map(category => convertKeysToCamelCase(category));
+
+        res.json(camelCaseBikeCategories);
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Internal Server Error');
+    }
+}
 
 const addMoneyToWallet = async (userId, amount) => {
     try {
@@ -223,5 +266,8 @@ module.exports = {
     getStations,
     getStationById,
     getBikesAtStation,
-    getAllTicketsForUser
+    getAllTicketsForUser,
+    getAllBikes,
+    getAllBikeCategories,
+    getAllBikeModels
 };

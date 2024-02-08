@@ -2,6 +2,11 @@
     border: 1px solid var(--twep-main);
     color: rgba(0, 0, 0, 1);
 
+    &.unavailable{
+        color: rgba(0, 0, 0, 0.19);
+        border: 1px solid black;
+    }
+
     .twep-bike-card-header{
         .mat-mdc-card-title{
             display: flex;
@@ -37,6 +42,11 @@
         .twep-bike-action{
             grid-area: action;
             width: 112px;
+
+            &.unavailable{
+                color: var(--red);
+                text-align: end;
+            }
         }
 
         &.show-more{

@@ -1,9 +1,8 @@
 import { Injectable } from "@angular/core";
-import { Observable } from "rxjs";
+import { Observable, map } from "rxjs";
 import { HttpClient } from "@angular/common/http";
 import { environment } from "../environment/environment";
 import { BikeStation } from "../model/bikeStation";
-import { BikeStationResponse } from "../model/bikeStationResponse";
 
 @Injectable({ providedIn: 'root' })
 export class BikeStationService{
@@ -11,8 +10,11 @@ export class BikeStationService{
 
     constructor(private http: HttpClient) { }
 
-    public getBikeStations(): Observable<BikeStationResponse>{
-        return this.http.get<BikeStationResponse>(`${this.apiUrl}/management/stations`);
+    public getBikeStations(): Observable<BikeStation[]>{
+        return this.http.get<BikeStationResponse>(`${this.apiUrl}/management/stations`)
+        .pipe(map((response: BikeStationResponse) => {
+            return response.stations;
+        }));
     }
 
     public getBikeStation(id: string): Observable<BikeStation>{
@@ -31,11 +33,18 @@ export class BikeStationService{
         return this.http.delete(`${this.apiUrl}/management/stations/${id}`)
     }
 
-    public getBikeStationsForUser(): Observable<BikeStationResponse>{
-        return this.http.get<BikeStationResponse>(`${this.apiUrl}/users/stations`);
+    public getBikeStationsForUser(): Observable<BikeStation[]>{
+        return this.http.get<BikeStationResponse>(`${this.apiUrl}/users/stations`)
+        .pipe(map((response: BikeStationResponse) => {
+            return response.stations;
+        }));
     }
 
     public getBikeStationForUser(id: string): Observable<BikeStation>{
         return this.http.get<BikeStation>(`${this.apiUrl}/users/stations/${id}`)
     }
+}
+
+export interface BikeStationResponse{
+    stations: BikeStation[]
 }

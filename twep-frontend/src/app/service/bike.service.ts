@@ -45,6 +45,13 @@ export class BikeService{
                 return response.bikes;
             }));
     }
+
+    public getAllUserBikes(): Observable<Bike[]>{
+        return this.http.get<BikesAtStationResponse>(`${this.apiUrl}/users/bikes`)
+            .pipe(map((response: BikesAtStationResponse) => {
+                return response.bikes;
+            }));
+    }
 }
 
 export interface BikesAtStationResponse {

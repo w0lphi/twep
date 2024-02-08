@@ -186,7 +186,7 @@ export class BikeDetailComponent {
 
   loadStations(): void {
     this.bikeStationService.getBikeStations().subscribe({
-      next: ({ stations }): void => {
+      next: (stations: BikeStation[]): void => {
         this.bikeStations = stations;
         this.layers = stations.map((station) => {
           const latitude: number = station.location.latitude;

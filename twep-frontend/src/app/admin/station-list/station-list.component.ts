@@ -39,7 +39,7 @@ export class StationListComponent {
 
   getBikeStations() {
     this.bikeStationService.getBikeStations().subscribe({
-      next: ({stations}): void => {
+      next: (stations: BikeStation[]): void => {
         this.bikeStations = stations;
         this.runningAction = false;
       },

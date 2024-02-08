@@ -45,6 +45,7 @@ export class UserhomeComponent {
   navigationLinks: NavigationLink[] = [
     new NavigationLink("", "", ""),
     new NavigationLink("Map", "map", "/user/home"),
+    new NavigationLink("All Bikes", "pedal_bike", "/user/bikes"),
     new NavigationLink("Wallet", "account_balance_wallet", "/user/wallet"),
     new NavigationLink("Tickets", "confirmation_number", "/user/tickets"),
     new NavigationLink("History", "history", "/user/history")

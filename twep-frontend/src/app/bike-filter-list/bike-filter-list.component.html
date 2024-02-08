@@ -1,0 +1,87 @@
+<div class="twep-bike-filter-list">
+    
+        <mat-expansion-panel hideToggle [disabled]="runningAction">
+                <mat-expansion-panel-header>
+                    <mat-panel-title>
+                        Filters
+                    </mat-panel-title>
+                    <mat-panel-description>
+                        Narrow down bike list with filters
+                        <div class="twep-spacer"></div>
+                        <mat-icon>filter_list</mat-icon>
+                    </mat-panel-description>
+                </mat-expansion-panel-header>
+                <div class="twep-bike-filter-container">
+                    <div>
+                        <div>Bike Station:</div>
+                        <mat-form-field>
+                            <mat-select
+                                [(ngModel)]="bikeStationFilter"
+                                name="model"
+                                multiple="true"
+                                placeholder="Filter by station"
+                            >
+                                @for (station of bikeStations; track station.id) {
+                                    <mat-option [value]="station.id">{{station.name}}</mat-option>
+                                }
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                    <div>
+                        <div>Wheelsize (in inch):</div>
+                        <mat-slider min="0" max="30" discrete>
+                            <input [(ngModel)]="bikeWheelSizeFilter.from" matSliderStartThumb>
+                            <input [(ngModel)]="bikeWheelSizeFilter.to" matSliderEndThumb>
+                          </mat-slider>
+                    </div>
+                    <div>
+                        <div>Bike Category:</div>
+                        <mat-form-field>
+                            <mat-select
+                                [(ngModel)]="bikeCategoryFilter"
+                                name="model"
+                                multiple="true"
+                                placeholder="Filter by category"
+                            >
+                                @for (category of bikeCategories; track category.id) {
+                                    <mat-option [value]="category.id">{{category.name}}</mat-option>
+                                }
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                    <div>
+                        <div>Bike Model:</div>
+                        <mat-form-field>
+                            <mat-select
+                                [(ngModel)]="bikeModelFilter"
+                                name="model"
+                                multiple="true"
+                                placeholder="Filter by model"
+                            >
+                                @for (model of bikeModels; track model.id) {
+                                    <mat-option [value]="model.id">{{model.name}}</mat-option>
+                                }
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                </div>
+            </mat-expansion-panel>
+    <mat-divider />
+    <div class="twep-filtered-bikes-list">
+        @if(runningAction){
+            <app-loading-overlay />
+        }
+        @else if(filteredBikes.length === 0){
+            <div class="twep-no-items-message">
+                No bikes found, please adjust filter
+            </div>
+        }
+        @else{
+            <app-bike-card
+                *ngFor=" let bike of filteredBikes;"
+                [bike]="bike" 
+            />
+        }
+        
+    </div>
+</div>
