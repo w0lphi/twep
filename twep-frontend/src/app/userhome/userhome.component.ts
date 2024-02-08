@@ -43,7 +43,6 @@ export class UserhomeComponent {
   activeLinkIndex?: number;
   isMobile: boolean = true;
   navigationLinks: NavigationLink[] = [
-    new NavigationLink("", "", ""),
     new NavigationLink("Map", "map", "/user/home"),
     new NavigationLink("All Bikes", "pedal_bike", "/user/bikes"),
     new NavigationLink("Wallet", "account_balance_wallet", "/user/wallet"),

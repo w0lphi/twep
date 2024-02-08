@@ -73,7 +73,7 @@
                         formControlName="category"
                     >
                         @for (category of bikeCategories; track id) {
-                            <mat-option [value]="category">{{category.name}}</mat-option>
+                            <mat-option [value]="category.id">{{category.name}}</mat-option>
                         }
                     </mat-select>
                     <mat-error *ngIf="category?.errors?.['required']">
@@ -87,6 +87,8 @@
                         required="true"
                         type="number"
                         name="wheelSize"
+                        min="1"
+                        max="35"
                         formControlName="wheelSize"
                     >
                     <span matTextSuffix>inches</span>

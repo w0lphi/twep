@@ -6,7 +6,6 @@
                         Filters
                     </mat-panel-title>
                     <mat-panel-description>
-                        Narrow down bike list with filters
                         <div class="twep-spacer"></div>
                         <mat-icon>filter_list</mat-icon>
                     </mat-panel-description>
@@ -29,7 +28,7 @@
                     </div>
                     <div>
                         <div>Wheelsize (in inch):</div>
-                        <mat-slider min="0" max="30" discrete>
+                        <mat-slider [min]="bikeWheelSizeMin" [max]="bikeWheelSizeMax" discrete>
                             <input [(ngModel)]="bikeWheelSizeFilter.from" matSliderStartThumb>
                             <input [(ngModel)]="bikeWheelSizeFilter.to" matSliderEndThumb>
                           </mat-slider>
@@ -71,16 +70,24 @@
         @if(runningAction){
             <app-loading-overlay />
         }
-        @else if(filteredBikes.length === 0){
-            <div class="twep-no-items-message">
-                No bikes found, please adjust filter
-            </div>
-        }
-        @else{
-            <app-bike-card
-                *ngFor=" let bike of filteredBikes;"
-                [bike]="bike" 
-            />
+        @else {
+            <mat-toolbar>
+                <h1>Bikes</h1>
+                <div class="twep-spacer"></div>
+                <div class="twep-bike-amount">({{ filteredBikes.length}})</div>
+                <mat-icon>pedal_bike</mat-icon>
+            </mat-toolbar>
+            @if(filteredBikes.length === 0){
+                <div class="twep-no-items-message">
+                    No bikes found, please adjust filter
+                </div>
+            }
+            @else{
+                <app-bike-card
+                    *ngFor=" let bike of filteredBikes;"
+                    [bike]="bike" 
+                />
+            }
         }
         
     </div>

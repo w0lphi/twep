@@ -8,7 +8,10 @@
         justify-content: center;
         gap: 16px;
 
-        .mat-mdc-slider,
+        .mat-mdc-slider{
+            display: flex;
+        }
+
         .mat-mdc-form-field{
             width: 100%;
             margin-top: 8px;
@@ -21,6 +24,15 @@
         gap: 16px;
         position: relative;
         padding: 16px 0px;
+
+        .twep-bike-amount{
+            margin-right: 4px;
+        }
+
+    }
+
+    .mat-toolbar{
+        background-color: white;
     }
 
     >.mat-divider{

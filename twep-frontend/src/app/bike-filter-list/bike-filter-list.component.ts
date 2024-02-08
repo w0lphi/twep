@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectorRef, Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
@@ -8,6 +8,7 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatSliderModule } from '@angular/material/slider';
 import { MatSelectModule } from '@angular/material/select';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatToolbarModule } from '@angular/material/toolbar';
 
 import { BikeCardComponent } from '../bike-card/bike-card.component';
 import { BikeService } from '../service/bike.service';
@@ -33,7 +34,8 @@ import { BikeStation } from '../model/bikeStation';
     MatDividerModule,
     MatSliderModule,
     MatSelectModule,
-    MatFormFieldModule
+    MatFormFieldModule,
+    MatToolbarModule
   ],
   templateUrl: './bike-filter-list.component.html',
   styleUrl: './bike-filter-list.component.scss'
@@ -49,9 +51,12 @@ export class BikeFilterListComponent {
   bikeCategoryFilter: string[] = [];
   bikeStationFilter: string[] = [];
   bikeWheelSizeFilter: BikeWheelSizeFilter = {
-    from: 0,
-    to: 30,
+    from: 1,
+    to: 35,
   }
+
+  bikeWheelSizeMin: number = 1;
+  bikeWheelSizeMax: number = 35;
 
   constructor(
     private bikeService: BikeService,
@@ -104,14 +109,41 @@ export class BikeFilterListComponent {
 
   get filteredBikes(): Bike[] {
     return this.bikes.filter(bike => {
-      console.log(this.bikeStationFilter);
       const isInBikeStation = this.bikeStationFilter.length === 0 || (bike.station?.id !== undefined && this.bikeStationFilter.includes(bike.station.id));
       const hasBikeCategory = this.bikeCategoryFilter.length === 0 || (bike.categoryId !== undefined && this.bikeCategoryFilter.includes(bike.categoryId));
       const hasBikeModel = this.bikeModelFilter.length === 0 || (bike.modelId !== undefined && this.bikeModelFilter.includes(bike.modelId));
       const hasWheelSize = bike.wheelSize === undefined || (bike.wheelSize >= this.bikeWheelSizeFilter.from && bike.wheelSize <= this.bikeWheelSizeFilter.to);
       return isInBikeStation && hasBikeCategory && hasBikeModel && hasWheelSize;
     });
+    /*
+    .reduce((stations: BikeGroup[], bike: Bike) => {
+      console.log(stations, bike)
+      const stationId: string | undefined = bike.station?.id;
+      if(stationId === undefined) return stations;
+      let station: BikeGroup | undefined = stations.find(({id}) => id === stationId); 
+      if(station !== undefined){
+        if(!Array.isArray(station.bikes)) station.bikes = [];
+        station.bikes.push(bike);
+      }else{
+        station = {
+          id: stationId,
+          name: bike.station?.name ?? stationId,
+          bikes: [bike]
+        };
+        stations.push(station);
+      }
+      return stations;
+    }, []);
+
+    return bikeGroups;
+    */
   }
+}
+
+export interface BikeGroup{
+  id: string;
+  name: string;
+  bikes: Bike[];
 }
 
 export interface BikeWheelSizeFilter{

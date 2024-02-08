@@ -84,7 +84,7 @@ export class ModelDetailComponent {
 
     if (this.isNew) {
       this.bikeModelName = "New bike model"
-      this.bikeModel = new BikeModel("", "", "", 0, "");
+      this.bikeModel = new BikeModel("", "", "", 0, "", "");
     } else {
       this.runningAction = true;
       this.bikeModelService.getBikeModel(this.modelId).subscribe({
@@ -106,7 +106,7 @@ export class ModelDetailComponent {
     this.runningAction = true;
     const bikeModel: BikeModel = this.bikeModel;
     bikeModel.name = this.name?.value;
-    bikeModel.bikeCategory = this.category?.value;
+    bikeModel.categoryId = this.category?.value;
     bikeModel.wheelSize = this.wheelSize?.value;
     bikeModel.description = this.description?.value;
     bikeModel.extraFeatures = this.extraFeatures.filter(({ value }) => {
@@ -167,7 +167,8 @@ export class ModelDetailComponent {
       id: bikeModel.id,
       name: bikeModel.name,
       description: bikeModel.description,
-      wheelSize: bikeModel.wheelSize
+      wheelSize: bikeModel.wheelSize,
+      category: bikeModel.categoryId,
     })
     this.extraFeatures = bikeModel.extraFeatures.map(feature => {
       return { value: feature }
