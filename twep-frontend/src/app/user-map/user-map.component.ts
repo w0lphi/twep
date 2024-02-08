@@ -74,7 +74,7 @@ export class UserMapComponent {
   }
 
   loadStations(): void {
-    this.bikeStationService.getBikeStations().subscribe({
+    this.bikeStationService.getBikeStationsForUser().subscribe({
       next: ({ stations }): void => {
         this.bikeStations = stations.filter(({operational}) => operational);
         this.layers = stations.map((station) => {

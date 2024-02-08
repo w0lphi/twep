@@ -56,7 +56,12 @@ export class AuthService{
         return this.decodeToken(token);
     }
 
-    private decodeToken(token: string): JwtToken {
-        return jwtDecode<JwtToken>(token);
+    private decodeToken(token: string): JwtToken | null {
+        try {
+            return jwtDecode<JwtToken>(token); 
+        } catch (e) {
+            console.error("Decoding token failed");
+            return null;
+        }
     }
 }

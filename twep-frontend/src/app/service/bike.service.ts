@@ -39,4 +39,8 @@ export class BikeService{
         return this.http.post(`${this.apiUrl}/management/reassign-bikes`, body);
     }
 
+    public getBikesForStation(stationId: string): Observable<Bike[]>{
+        return this.http.get<Bike[]>(`${this.apiUrl}/users/stations/${stationId}/bikes`);
+    }
+
 }

@@ -8,10 +8,17 @@
     @else if(bikeStation !== undefined){
         <h3>Available Bikes</h3>
         <div class="twep-bikes-list">
-                <app-bike-card 
-                    *ngFor=" let bike of displayedBikes"
+            @if(displayedBikes.length > 0){
+                <app-bike-card
+                    *ngFor=" let bike of bikes"
                     [bike]="bike"
                 />
+            }
+            @else {
+                <div class="twep-no-items-message">
+                    No bikes available at this station
+                </div>
+            }
         </div>
     }
     

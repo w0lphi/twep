@@ -40,21 +40,19 @@ export class StationCardComponent {
   @Input("stationId")
   set stationId(stationId: string) {
     this.getBikeStation(stationId);
-    this.loadBikeModels();
-    this.loadBikes();
+    this.loadBikes(stationId);
   }
 
   constructor(
     private bikeStationService: BikeStationService,
     private bikeService: BikeService,
-    private bikeModelService: BikeModelService,
     private changeDetector: ChangeDetectorRef
   ) { 
   }
   
   getBikeStation(stationId: string): void {
     this.runningAction = true;
-    this.bikeStationService.getBikeStation(stationId).subscribe({
+    this.bikeStationService.getBikeStationForUser(stationId).subscribe({
       next: (bikeStation: BikeStation): void => {
         this.bikeStation = bikeStation;
         this.runningAction = false;
@@ -67,10 +65,9 @@ export class StationCardComponent {
     })
   }
 
-  loadBikes(): void {
-    //TODO: Load bikes of station
+  loadBikes(stationId: string): void {
     this.runningAction = true;
-    this.bikeService.getBikes().subscribe({
+    this.bikeService.getBikesForStation(stationId).subscribe({
       next: (bikes: Bike[]): void => {
         this.bikes = bikes;
         this.runningAction = false;
@@ -83,27 +80,10 @@ export class StationCardComponent {
     })
   }
 
-  loadBikeModels(): void{
-    this.runningAction = true;
-    this.bikeModelService.getBikeModels().subscribe({
-      next: (bikeModels: BikeModel[]): void => {
-        this.bikeModels = bikeModels;
-        this.runningAction = false;
-        this.changeDetector.detectChanges();
-      },
-      error: (): void => {
-        this.runningAction = false;
-        this.changeDetector.detectChanges();
-      }
-    })
-  }
-
   get displayedBikes(): Bike[]{
-    if (!Array.isArray(this.bikes)) return [];
-    return this.bikes?.map(bike => {
-      const bikeModel: BikeModel | undefined = this.bikeModels?.find(model => model.id === bike.bikeModelId);
-      bike.bikeModel = bikeModel;
-      return bike;
-    })
+    if (this.bikes === undefined || !Array.isArray(this.bikes)) {
+      return [];
+    }
+    return this.bikes;
   }
 }

@@ -18,6 +18,15 @@ body {
         flex-grow: 1;
     }
 
+    .twep-no-items-message{
+        display: flex;
+        flex: 1 1 100%;
+        justify-content: center;
+        font-size: 14px;
+        color: darkgrey;
+        padding: 8px;
+    }
+
     /* TOOLBAR */
     .mat-toolbar,
     .mat-toolbar h1,
