@@ -740,7 +740,7 @@
         }
       }
     },
-    "/users/{userId}/tickets": {
+    "/users/{userId}/account/tickets": {
       "get": {
         "summary": "Get user's ticket history",
         "tags": [

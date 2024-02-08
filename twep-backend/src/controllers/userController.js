@@ -3,7 +3,7 @@ const jwt = require('jsonwebtoken');
 const pool = require('../../src/db');
 const { v4: uuidv4 } = require('uuid');
 const userQueries = require('../queries/userQueries');
-const { convertKeysToCamelCase, snakeCaseToCamelCase } = require('../utility/utility');
+const { convertKeysToCamelCase, snakeCaseToCamelCase, convertSnakeToCamel } = require('../utility/utility');
 const UserModel = require('../models/userModel');
 
 const registerUser = async (req, res) => {
@@ -94,9 +94,18 @@ const getAllTicketsForUser = async (req, res) => {
     try {
         const { userId } = req.params;
 
-        const tickets = convertKeysToCamelCase(await UserModel.getUserTickets(userId));
+        // Call the method from the TicketModel to retrieve tickets for the user
+        const tickets = await UserModel.getUserTickets(userId);
+        // Convert keys to camelCase and handle special case for 'purchase_date'
+        const camelCaseTickets = tickets.map(ticket => convertSnakeToCamel(ticket));
 
-        res.status(200).json({ tickets });
+        // Format the purchase date for each ticket
+        const formattedTickets = camelCaseTickets.map(ticket => ({
+            ...ticket,
+            purchaseDate: ticket.purchaseDate ? new Date(ticket.purchaseDate).toISOString() : null, // Convert to Date object and then format
+        }));
+
+        res.status(200).json({ tickets: formattedTickets });
     } catch (error) {
         console.error(error);
         res.status(500).json({ error: 'Internal Server Error' });
