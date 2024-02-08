@@ -16,7 +16,7 @@ export class TicketService {
   }
 
   public createUserTicket(userId: string, ticketDetails: any): Observable<any> {
-    const url = `${this.apiUrl}/users/${userId}/tickets`;
+    const url = `${this.apiUrl}/users/${userId}/account/tickets`;
     return this.http.post(url, ticketDetails);
   }
 

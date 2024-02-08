@@ -1,6 +1,7 @@
 <div id="all">
-<div *ngIf="userTickets">
-    <h1>Active User Tickets</h1>
+  <h1>Active User Tickets</h1>
+  <div *ngIf="userTickets && userTickets.length > 0">
+    
     <ng-container *ngFor="let ticket of userTickets">
       <div class="ticket-list">
         <h2>Ticket ID: {{ ticket.id }}</h2>
@@ -16,12 +17,18 @@
       </div>
 
     </ng-container>
+
+  </div>
+
+    
+  
+  <div *ngIf="userTickets.length === 0">
+    <p>No active Tickets</p>
   </div>
 
 
 
 
-  
   <br>  <br>  <br>  <br>
 <p>Only for testing from here on</p>
 <!-- from here on just for testing -->

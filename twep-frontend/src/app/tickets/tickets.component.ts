@@ -102,6 +102,7 @@ fetchUserTickets(): void {
       this.userId = this.loggedInUserId; 
       this.fetchUserTickets();
     }
+    
   }
 
   
@@ -119,6 +120,8 @@ fetchUserTickets(): void {
       .subscribe({
         next: response => {
           console.log('Ticket created successfully:', response);
+          this.userTickets = response.tickets; //  that right?
+          
           
         },
         error: error => {
