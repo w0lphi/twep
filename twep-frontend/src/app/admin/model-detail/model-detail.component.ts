@@ -61,6 +61,7 @@ export class ModelDetailComponent {
     private dialogService: DialogService,
   ) {
     this.bikeModelForm = new FormGroup({
+      id: new FormControl({value: null, disabled: true}),
       name: new FormControl('', Validators.required),
       description: new FormControl('', Validators.required),
       category: new FormControl('', Validators.required),

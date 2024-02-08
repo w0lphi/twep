@@ -46,10 +46,7 @@ export class BikeRentDialogComponent {
   }
 
   get title(): string{
-    return `Rent bike ${this.model?.name}`
+    return `Rent bike ${this.bike?.model}`
   }
 
-  get model(): BikeModel | null{
-    return this.bike.bikeModel ?? null;
-  }
 }

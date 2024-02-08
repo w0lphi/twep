@@ -70,22 +70,18 @@ export class BikeCardComponent {
     });
   }
 
-  get model(): BikeModel | null {
-    return this.bike?.bikeModel ?? null;
-  }
-
   get title(): string {
-    const wheelSize: string = `${this.model?.wheelSize}"`;
-    const name: string = this.model?.name ?? this.bike?.id ?? "";
+    const wheelSize: string = `${this.bike?.wheelSize}"`;
+    const name: string = this.bike?.model ?? this.bike?.id ?? "";
     return `${wheelSize} ${name}`;
   }
 
   get category(): string | null {
-    return this.model?.bikeCategory ?? "";
+    return this.bike?.bikeCategory ?? "";
   }
 
   get description(): string | null{
-    return this.model?.description ?? null;
+    return this.bike?.description ?? null;
   }
 
   get hasMoreBtnText(): string {
@@ -93,6 +89,6 @@ export class BikeCardComponent {
   }
 
   get features(): string[] {
-    return this.model?.extraFeatures ?? [];
+    return this.bike?.extraFeatures ?? [];
   }
 }

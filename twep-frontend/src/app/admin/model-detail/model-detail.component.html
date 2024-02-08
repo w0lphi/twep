@@ -20,13 +20,16 @@
                 </button>
                 <h1>{{ bikeModelName }}</h1>
                 <div class="twep-spacer"></div>
+                <!-- TODO: Enable for update once saving of model is implemented -->
                 <button
+                    *ngIf="isNew"
                     mat-raised-button
                     class="twep-save-btn"
                     (click)="updateModel()"
                 >
                     SAVE
                 </button>
+
                 <button
                     *ngIf="modelId !== 'new'"
                     mat-raised-button
@@ -38,13 +41,13 @@
             </mat-toolbar>
             <div class="twep-bike-model-information-container">
                 <h3>General Information</h3>
-                <mat-form-field  *ngIf="bikeModel?.id !== ''">
+                <mat-form-field *ngIf="bikeModel?.id !== ''">
                     <mat-label>Id</mat-label>
                     <input
                         matInput
                         required="true"
                         type="text"
-                        name="email"
+                        name="id"
                         formControlName="id"
                         [readonly]="true"
                     >
@@ -118,7 +121,12 @@
                         Add feature
                     </button>
                 </div>
-
+                <div
+                    *ngIf="extraFeatures.length === 0"
+                    class="twep-no-items-message"
+                >
+                    Model has no extra features
+                </div>
                 <div
                     *ngFor="let feature of extraFeatures; let i = index"
                     class="twep-bike-model-extra-feature"

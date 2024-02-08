@@ -123,6 +123,12 @@
                     </button>
                 </div>
                 <div
+                    *ngIf="parkingPlaces.length === 0"
+                    class="twep-no-items-message"
+                >
+                    Station has no parking places yet
+                </div>
+                <div
                     *ngFor="let parkingPlace of parkingPlaces; let i = index"
                     class="twep-parking-place"
                 >
@@ -137,7 +143,7 @@
                                 (selectionChange)="updateCategories(parkingPlace, $event)"
                             >
                                 @for (category of bikeCategories; track name) {
-                                <mat-option [value]="category.name">{{category.name}}</mat-option>
+                                    <mat-option [value]="category.name">{{category.name}}</mat-option>
                                 }
                             </mat-select>
                         </mat-form-field>

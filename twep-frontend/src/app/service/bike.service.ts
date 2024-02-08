@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { Observable } from "rxjs";
+import { Observable, map, pipe } from "rxjs";
 import { HttpClient } from "@angular/common/http";
 import { environment } from "../environment/environment";
 import { Bike } from "../model/bike";
@@ -40,7 +40,13 @@ export class BikeService{
     }
 
     public getBikesForStation(stationId: string): Observable<Bike[]>{
-        return this.http.get<Bike[]>(`${this.apiUrl}/users/stations/${stationId}/bikes`);
+        return this.http.get<BikesAtStationResponse>(`${this.apiUrl}/users/stations/${stationId}/bikes`)
+            .pipe(map((response: BikesAtStationResponse) => {
+                return response.bikes;
+            }));
     }
+}
 
+export interface BikesAtStationResponse {
+    bikes: Bike[];
 }

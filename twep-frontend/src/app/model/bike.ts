@@ -8,7 +8,14 @@ export class Bike{
     bikeCategory: string;
     bike_category: string;
     status: string;
-    bikeModel?: BikeModel;
+
+    //Only in response
+    category?: string;
+    description?: string;
+    extraFeatures?: string[];
+    model?: string;
+    parkingPlaceId?: string;
+    wheelSize?: number;
 
     constructor(id: string, bikeModel: BikeModel | null, status: string = "available") {
         this.id = id;

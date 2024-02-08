@@ -71,6 +71,13 @@
             mat-header-row
             *matHeaderRowDef="columns"
         ></tr>
+        <tr *matNoDataRow>
+            <td [attr.colspan]="columns.length">
+                <div class="twep-no-items-message">
+                    No stations found
+                </div>
+            </td>
+        </tr>
         <tr
             mat-row
             *matRowDef="let row; columns: columns;"

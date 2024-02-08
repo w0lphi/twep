@@ -228,7 +228,8 @@ export class StationDetailComponent {
 
   updateCategories(parkingPlace: ParkingPlace, event: MatSelectChange): void {
     const categoryNames: string[] = event.value;
-    parkingPlace.bikeCategories = this.bikeCategories.filter(({ name }) => name !== undefined && categoryNames.includes(name));
+    parkingPlace.bikeCategories = this.bikeCategories
+      .filter(({ name }) => name !== undefined && categoryNames.includes(name));
   }
 
   get isNew(): boolean{
