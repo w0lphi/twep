@@ -193,17 +193,17 @@ class StationModel {
     }
 
     static async createBikeModel(bikeModelData) {
+        const { name, description, wheelSize, extraFeatures, categoryId } = bikeModelData;
+        const newBikeModelId = uuidv4();
+
         try {
-
-            const newBikeModel = await pool.query(stationQueries.createBikeModel, [
-                uuidv4(),
-                bikeModelData.name,
-                bikeModelData.description,
-                bikeModelData.wheelSize,
-                bikeModelData.extraFeatures,
-            ]);
-
-            return newBikeModel.rows[0];
+            const queryText = `
+                INSERT INTO bike_models (id, name, description, wheel_size, extra_features, category_id)
+                VALUES ($1, $2, $3, $4, $5, $6)
+                RETURNING *;
+            `;
+            const { rows } = await pool.query(queryText, [newBikeModelId, name, description, wheelSize, extraFeatures, categoryId]);
+            return rows[0];
         } catch (error) {
             throw error;
         }

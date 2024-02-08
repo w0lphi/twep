@@ -220,9 +220,10 @@ const stationController = {
         try {
             const bikeModelData = req.body;
 
-            const newBikeModel = await StationModel.createBikeModel(bikeModelData);
+            const newBikeModel = convertKeysToCamelCase(await StationModel.createBikeModel(bikeModelData));
+            delete newBikeModel.id;
 
-            res.status(201).json({ bikeModel: newBikeModel, message: 'Bike model created successfully.' });
+            res.status(201).json(newBikeModel);
         } catch (error) {
             console.error(error);
             res.status(400).json({ error: 'Invalid input data' });

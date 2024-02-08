@@ -52,7 +52,7 @@ const deleteBikeCategoryById = 'DELETE FROM bike_categories WHERE id = $1';
 const getBikeCategoryById = 'SELECT * FROM bike_categories WHERE id = $1';
 
 const getAllBikeModels = 'SELECT * FROM bike_models';
-const createBikeModel = 'INSERT INTO bike_models(id, name, description, wheel_size, extra_features) VALUES($1, $2, $3, $4, $5)';
+const createBikeModel = 'INSERT INTO bike_models (id, name, description, wheel_size, extra_features, category_id) VALUES ($1, $2, $3, $4, $5, $6)';
 const updateBikeModel = 'UPDATE bike_models SET name = $1, description = $2, wheel_size = $3, extra_features = $4 WHERE name = $5';
 const deleteBikeModel = 'DELETE FROM bike_models WHERE id = $1';
 
