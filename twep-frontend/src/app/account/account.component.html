@@ -24,7 +24,31 @@
         </mat-card-content>
     </mat-card>
 
+    <mat-card class="wallet-panel mobile-stack">
+        <mat-card-content>
+            <h2>Wallet:</h2>
+            <mat-card-subtitle>Wallet Amount: {{ userAccount?.wallet }}€</mat-card-subtitle>
 
+            <div id="addmoney">
+                <mat-form-field class="input-field">
+                    <mat-label>Add Money</mat-label>
+                    <input
+                        matInput
+                        [formControl]="addMoneyFormControl"
+                        type="text"
+                        name="addmoney"
+                    >
+                    <mat-error *ngIf="addMoneyFormControl.hasError('required')">
+                        Please enter amount to add to your wallet
+                    </mat-error>
+                </mat-form-field>
+            
+                <button mat-raised-button class="twep-save-btn" (click)="saveAdding()">SAVE</button>
+            </div>
+            
+            
+        </mat-card-content>
+    </mat-card>
 
     <mat-card class="right-panel mobile-stack">
         <mat-card-content>

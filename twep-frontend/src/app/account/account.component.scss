@@ -16,6 +16,11 @@
     margin-right: 24px;
 }
 
+.wallet-panel {
+    flex: 0 0 20%;
+   
+}
+
 .profile-picture {
     display: block; 
     width: 100px;
@@ -40,6 +45,25 @@ mat-card-content {
 
 
 }
+
+.input-field {
+    padding: 16px;
+    padding-left: 0px;
+    justify-content: space-between; 
+}
+
+.input-field input {
+   
+    margin-right: 12px; 
+}
+
+
+
+#wallettext {
+font-size: 30px;
+size: 30px;
+}
+
 
 
 @media (max-width: 767px) {

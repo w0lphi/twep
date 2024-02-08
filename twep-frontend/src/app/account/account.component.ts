@@ -35,6 +35,7 @@ import { UserAccount } from '../model/user-account';
 import { ViewChild, ElementRef } from '@angular/core';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 
+import { Pipe, PipeTransform } from '@angular/core';
 
 @Component({
   selector: 'app-account',
@@ -65,9 +66,12 @@ import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
   providers: [AccountService]
 })
 export class AccountComponent implements OnInit {
+  addMoneyFormControl = new FormControl('', [Validators.required]);
+
   userAccount!: UserAccount;
   loggedInUserId: string | null = null;
-  userId: string = '';
+  userId: string | null = null;
+  walletAmount: number | null = null;
 
   uploadedImage: SafeUrl | undefined;
 
@@ -77,8 +81,13 @@ export class AccountComponent implements OnInit {
     private accountService: AccountService,
     private authService: AuthService,
     private sanitizer: DomSanitizer,
+    private walletService: WalletService,
     
-    ) { }
+    ) { this.getUserId();}
+
+    getUserId(): void {
+      this.userId = this.authService.getLoggedInUserId(); 
+    }
 
   ngOnInit(): void {
     this.loggedInUserId = this.authService.getLoggedInUserId();
@@ -117,7 +126,27 @@ export class AccountComponent implements OnInit {
   }
   
 
+  saveAdding(): void {
+    const amountToAdd: number = parseFloat(this.addMoneyFormControl.value!);
 
+    
+    if (!isNaN(amountToAdd)) {
+      this.walletService.addMoneyToWallet(this.userId!, amountToAdd)
+        .subscribe({
+        next: response => {
+          console.log('Money got added to wallet: ', response);
+          this.addMoneyFormControl.reset();
+          this.loadUserAccount();
+        },
+        error: error => {
+          console.error('Error while adding money', error);
+        }
+      });
+
+     
+      
+}
+}
 
   
 }
