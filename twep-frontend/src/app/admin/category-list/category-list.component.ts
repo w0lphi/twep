@@ -9,6 +9,7 @@ import { AdminTableComponent } from '../admin-table/admin-table.component';
 import { BikeCategory } from '../../model/bikeCategory';
 import { BikeCategoryService } from '../../service/bikeCategory.service';
 import { DialogService } from '../../service/dialog.service';
+import { PromptDialogData } from '../../common/prompt-dialog/prompt-dialog.component';
 
 @Component({
   selector: 'app-category-list',
@@ -52,11 +53,13 @@ export class CategoryListComponent {
   }
 
   async createCategory(): Promise<void> {
-    const categoryName: string | null = await this.dialogService.openPromptDialog(
-      "Create category",
-      "Please give a new category name",
-      "Category"
-    );
+    const data: PromptDialogData = {
+      title: "Create category",
+      text: "Please give a new category name",
+      label: "Category",
+      errorText: "Please insert name of new category"
+    }
+    const categoryName: string | null = await this.dialogService.openPromptDialog(data);
 
     if (categoryName === null) return;
     const bikeCategory: BikeCategory = new BikeCategory('', categoryName);
@@ -74,13 +77,13 @@ export class CategoryListComponent {
 
   async editCategory(bikeCategory: BikeCategory): Promise<void>{
     if (bikeCategory.id === undefined) return;
-    const categoryName: string | null = await this.dialogService.openPromptDialog(
-      `Update category "${bikeCategory.name}"`,
-      "Please enter new name",
-      "Category",
-      bikeCategory?.name
-    );
-
+    const data: PromptDialogData = {
+      title: `Update category "${bikeCategory.name}"`,
+      text: "Please enter new name",
+      label: "Category",
+      initialValue: bikeCategory?.name,
+    };
+    const categoryName: string | null = await this.dialogService.openPromptDialog(data);
     if (categoryName === null) return;
     this.bikeCategoryService.updateBikeCategory(new BikeCategory(bikeCategory.id, categoryName)).subscribe({
       next: (): void => {

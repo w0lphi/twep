@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { ConfirmDialogComponent } from '../common/confirm-dialog/confirm-dialog.component';
-import { PromptDialogComponent } from '../common/prompt-dialog/prompt-dialog.component';
+import { PromptDialogComponent, PromptDialogData } from '../common/prompt-dialog/prompt-dialog.component';
 import { BikeRentDialogComponent } from '../bike-rent-dialog/bike-rent-dialog.component';
 import { firstValueFrom } from 'rxjs';
 import { Bike } from '../model/bike';
@@ -27,14 +27,9 @@ export class DialogService {
       return confirmed ?? false;
     }
   
-  async openPromptDialog(title: string, text: string, label: string, initialValue?: string): Promise<string | null> {
+  async openPromptDialog(data: PromptDialogData): Promise<string | null> {
     this.promptDialogRef = this.dialog.open(PromptDialogComponent, {
-          data: {
-              title,
-              text,
-              label,
-              initialValue
-          },
+          data,
           disableClose: true,
           hasBackdrop: true,
           width: '600px',
