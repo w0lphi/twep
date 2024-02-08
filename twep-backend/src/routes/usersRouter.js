@@ -15,6 +15,7 @@ router.use(verifyToken); // Apply the middleware to all routes below this line
 router.get('/stations', userController.getStations);
 router.get('/stations/:id', userController.getStationById);
 router.get('/stations/:stationId/bikes', userController.getBikesAtStation);
+router.get('/:userId/account/tickets', userController.getAllTicketsForUser);
 
 router.post('/:userId/account/add-money', async (req, res) => {
     try {

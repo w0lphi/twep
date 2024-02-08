@@ -90,6 +90,19 @@ const getUserAccount = async (userId) => {
     }
 };
 
+const getAllTicketsForUser = async (req, res) => {
+    try {
+        const { userId } = req.params;
+
+        const tickets = convertKeysToCamelCase(await UserModel.getUserTickets(userId));
+
+        res.status(200).json({ tickets });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+};
+
 const getStations = async (req, res) => {
     try {
 
@@ -201,4 +214,5 @@ module.exports = {
     getStations,
     getStationById,
     getBikesAtStation,
+    getAllTicketsForUser
 };
