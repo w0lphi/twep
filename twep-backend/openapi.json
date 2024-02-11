@@ -2236,29 +2236,23 @@
               "schema": {
                 "type": "object",
                 "properties": {
+                  "bikeId": {
+                    "type": "string",
+                    "format": "uuid",
+                    "items": {
+                      "type": "string",
+                      "format": "uuid"
+                    }
+                  },
                   "stationId": {
                     "type": "string",
                     "format": "uuid",
                     "description": "The ID of the destination station"
-                  },
-                  "parkingPlaceId": {
-                    "type": "string",
-                    "format": "uuid",
-                    "description": "The ID of the destination parking place"
-                  },
-                  "bikeIds": {
-                    "type": "array",
-                    "items": {
-                      "type": "string",
-                      "format": "uuid"
-                    },
-                    "description": "List of individual bike IDs to reassign"
                   }
                 },
                 "required": [
                   "stationId",
-                  "parkingPlaceId",
-                  "bikeIds"
+                  "bikeId"
                 ]
               }
             }
@@ -2270,17 +2264,17 @@
             "content": {
               "application/json": {
                 "example": {
-                  "message": "Individual bikes reassigned to Station A, Parking Place 1"
+                  "message": "Individual bike reassigned successfully"
                 }
               }
             }
           },
           "400": {
-            "description": "Bad request",
+            "description": "Individual bike is currently in use and cannot be reassigned",
             "content": {
               "application/json": {
                 "example": {
-                  "error": "Invalid input data"
+                  "message": "Individual bike is currently in use and cannot be reassigned"
                 }
               }
             }

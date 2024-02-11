@@ -314,20 +314,16 @@ const stationController = {
                 return res.status(404).json({ error: 'Target station not found' });
             }
 
-            console.log("bike category: ", individualBike.bike_category);
-
             const bikeCategoryString = await StationModel.getBikeModelString(individualBike.bike_category);
-            console.log("bike category string: ", bikeCategoryString);
+
 
             // Check if there is an available parking place for the bike category at the target station
             const availableParkingPlace = await StationModel.findAvailableParkingPlace(targetStationId, { name: bikeCategoryString });
 
-            console.log(availableParkingPlace);
             if (!availableParkingPlace) {
                 return res.status(400).json({ error: 'Target station does not have an available parking place for the bike category' });
             }
 
-            console.log(individualBike)
             // Update the status of the old parking place to vacant
             await StationModel.markParkingPlaceAsVacant(individualBike.parking_place_id);
 
