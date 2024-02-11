@@ -256,6 +256,88 @@ class StationModel {
         }
     }
 
+
+
+    static async findById(bikeId) {
+        try {
+            const query = stationQueries.findIndividualBikeById;
+            const values = [bikeId];
+            const result = await pool.query(query, values);
+            return result.rows[0];
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    static async updateParkingPlace(bikeId, parkingPlaceId) {
+        try {
+            const query = stationQueries.updateIndividualBikeParkingPlace;
+            const values = [parkingPlaceId, bikeId];
+            await pool.query(query, values);
+        } catch (error) {
+            throw error;
+        }
+    }
+
+
+    static async findAvailableParkingPlace(stationId, bikeCategory) {
+        try {
+            const query = stationQueries.findAvailableParkingPlace;
+            const values = [stationId, bikeCategory];
+            const result = await pool.query(query, values);
+            return result.rows[0];
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    static async markParkingPlaceAsVacant(parkingPlaceId) {
+        try {
+            const query = stationQueries.markParkingPlaceAsVacant;
+            const values = [parkingPlaceId];
+            await pool.query(query, values);
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    static async markParkingPlaceAsOccupied(parkingPlaceId) {
+        try {
+            const query = stationQueries.markParkingPlaceAsOccupied;
+            const values = [parkingPlaceId];
+            await pool.query(query, values);
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    static async getCategoryNameById(categoryId) {
+        try {
+            const result = await pool.query(queries.getCategoryNameByIdQuery, [categoryId]);
+            if (result.rows.length === 0) {
+                return null;
+            }
+            return result.rows[0].name;
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    static async getBikeModelString(categoryId) {
+        try {
+            const query = 'SELECT name FROM bike_categories WHERE id = $1';
+            const values = [categoryId];
+            const result = await pool.query(query, values);
+            if (result.rows.length > 0) {
+                return result.rows[0].name;
+            } else {
+                return null;
+            }
+        } catch (error) {
+
+        }
+    }
+
 }
 
 module.exports = StationModel;

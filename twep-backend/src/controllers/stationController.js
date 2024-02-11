@@ -291,7 +291,61 @@ const stationController = {
         }
     },
 
-};
+    async reassignBike(req, res) {
+        try {
+            // Extract param from the request
+            const { bikeId, targetStationId } = req.body;
+
+            // Check if the individual bike exists
+            const individualBike = await StationModel.findById(bikeId);
+            if (!individualBike) {
+                return res.status(404).json({ error: 'Individual bike not found' });
+            }
+
+            // Check if the individual bike is currently available
+            if (!individualBike.status) {
+                return res.status(400).json({ error: 'Individual bike is currently in use and cannot be reassigned' });
+            }
+
+
+            // Check if the target station exists
+            const targetStation = await StationModel.getStationById(targetStationId);
+            if (!targetStation) {
+                return res.status(404).json({ error: 'Target station not found' });
+            }
+
+            console.log("bike category: ", individualBike.bike_category);
+
+            const bikeCategoryString = await StationModel.getBikeModelString(individualBike.bike_category);
+            console.log("bike category string: ", bikeCategoryString);
+
+            // Check if there is an available parking place for the bike category at the target station
+            const availableParkingPlace = await StationModel.findAvailableParkingPlace(targetStationId, { name: bikeCategoryString });
+
+            console.log(availableParkingPlace);
+            if (!availableParkingPlace) {
+                return res.status(400).json({ error: 'Target station does not have an available parking place for the bike category' });
+            }
+
+            console.log(individualBike)
+            // Update the status of the old parking place to vacant
+            await StationModel.markParkingPlaceAsVacant(individualBike.parking_place_id);
+
+            // Update the individual bike's parking place ID in the database
+            await StationModel.updateParkingPlace(bikeId, availableParkingPlace.id);
+
+            // Update the status of the new parking place to occupied
+            await StationModel.markParkingPlaceAsOccupied(availableParkingPlace.id);
+
+            // Send a success response
+            res.status(200).json({ message: 'Individual bike reassigned successfully' });
+        } catch (error) {
+            console.error(error);
+            res.status(500).json({ error: 'Internal Server Error' });
+        }
+    },
+}
+
 
 // Utility function to convert keys to CamelCase
 function convertKeysToCamelCase(obj) {

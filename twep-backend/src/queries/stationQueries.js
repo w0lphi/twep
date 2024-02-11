@@ -59,6 +59,27 @@ const deleteBikeModel = 'DELETE FROM bike_models WHERE id = $1';
 const getAllIndividualBikes = 'SELECT * FROM individual_bikes';
 const createIndividualBike = 'INSERT INTO individual_bikes(id, bike_category, status, bike_model_id) VALUES ($1, $2, $3, $4)';
 const deleteIndividualBikeById = 'DELETE FROM individual_bikes WHERE id = $1';
+const findIndividualBikeById = 'SELECT * FROM individual_bikes WHERE id =$1';
+const updateIndividualBikeParkingPlace = 'UPDATE individual_bikes SET parking_place_id = $1 WHERE id = $2;'
+const findAvailableParkingPlace = `
+    SELECT id
+    FROM parking_places
+    WHERE station_id = $1
+    AND occupied = false
+    AND bike_categories @> ARRAY[$2]::jsonb[];
+`;
+
+const markParkingPlaceAsVacant = `
+    UPDATE parking_places
+    SET occupied = false
+    WHERE id = $1;
+`;
+
+const markParkingPlaceAsOccupied = `
+    UPDATE parking_places
+    SET occupied = true
+    WHERE id = $1;
+`;
 
 module.exports = {
     getUsers,
@@ -80,4 +101,9 @@ module.exports = {
     getAllIndividualBikes,
     createIndividualBike,
     deleteIndividualBikeById,
+    findIndividualBikeById,
+    findAvailableParkingPlace,
+    markParkingPlaceAsVacant,
+    updateIndividualBikeParkingPlace,
+    markParkingPlaceAsOccupied,
 };
