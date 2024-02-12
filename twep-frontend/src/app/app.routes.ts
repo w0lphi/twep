@@ -13,7 +13,6 @@ import { BikeDetailComponent } from './admin/bike-detail/bike-detail.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 
 import {UserhomeComponent} from './userhome/userhome.component';
-import { WalletComponent } from './wallet/wallet.component';
 import { UserMapComponent } from './user-map/user-map.component';
 import { authenticationGuard } from './auth.guard';
 import { TicketsComponent } from './tickets/tickets.component';
@@ -99,10 +98,6 @@ export const routes: Routes = [
             {
                 path: 'bikes',
                 component: BikeFilterListComponent
-            },
-            {
-                path: 'wallet',
-                component: WalletComponent
             },
             {
                 path: 'tickets',
