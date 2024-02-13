@@ -45,6 +45,6 @@ export class BikeStationService{
     }
 }
 
-export interface BikeStationResponse{
+export type BikeStationResponse = {
     stations: BikeStation[]
 }

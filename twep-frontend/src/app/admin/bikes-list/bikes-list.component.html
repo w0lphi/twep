@@ -59,14 +59,7 @@
                 *matCellDef="let element"
                 class="bike-station"
             >
-                @if(element.station?.name !== undefined){
-                    <div>
-                        {{ element.station?.name}}
-                    </div>
-                }
-                @else {
-                    <div class="twep-no-items-message">Unassigned</div>
-                }
+                {{ element.station?.name ?? '-'}}
             </td>
         </ng-container>
 

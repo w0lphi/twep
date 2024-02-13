@@ -23,7 +23,7 @@ import { Router } from '@angular/router';
 import { TicketService } from '../service/tickets.service';
 import { AuthService } from '../service/auth.service';
 
-export interface BikeRentDialogData{
+export type BikeRentDialogData = {
   bike: Bike;
 }
 

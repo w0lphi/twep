@@ -80,15 +80,15 @@ const getAllIndividualBikes = `
     bike_models bm ON ib.bike_model_id = bm.id
     JOIN
     bike_categories bc ON bm.category_id = bc.id
-    JOIN
+    LEFT JOIN
     parking_places pp ON ib.parking_place_id = pp.id
-    JOIN
+    LEFT JOIN
     stations s ON pp.station_id = s.id
     GROUP BY
     ib.id, ib.status, bc.name, bc.id, bm.id, bm.name, bm.description, bm.wheel_size, bm.extra_features, pp.id, s.id
 `;
 
-const createIndividualBike = 'INSERT INTO individual_bikes(id, bike_category, status, bike_model_id) VALUES ($1, $2, $3, $4)';
+const createIndividualBike = 'INSERT INTO individual_bikes(id, bike_category, status, bike_model_id) VALUES ($1, $2, $3, $4) RETURNING *';
 const deleteIndividualBikeById = 'DELETE FROM individual_bikes WHERE id = $1';
 const findIndividualBikeById = `
     SELECT
@@ -114,9 +114,9 @@ const findIndividualBikeById = `
         bike_models bm ON ib.bike_model_id = bm.id
     JOIN
         bike_categories bc ON bm.category_id = bc.id
-    JOIN
+    LEFT JOIN
         parking_places pp ON ib.parking_place_id = pp.id
-    JOIN
+    LEFT JOIN
         stations s ON pp.station_id = s.id
     WHERE 
         ib.id = $1

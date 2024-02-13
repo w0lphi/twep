@@ -115,12 +115,13 @@ export class BikeFilterListComponent {
       const hasWheelSize = bike.wheelSize === undefined || (bike.wheelSize >= this.bikeWheelSizeFilter.from && bike.wheelSize <= this.bikeWheelSizeFilter.to);
       return isInBikeStation && hasBikeCategory && hasBikeModel && hasWheelSize;
     });
-    /*
-    .reduce((stations: BikeGroup[], bike: Bike) => {
-      console.log(stations, bike)
+  }
+
+  get filteredBikeStations(): FilteredStation[] {
+    const filteredStations = this.filteredBikes.reduce((stations: FilteredStations, bike: Bike) => {
       const stationId: string | undefined = bike.station?.id;
       if(stationId === undefined) return stations;
-      let station: BikeGroup | undefined = stations.find(({id}) => id === stationId); 
+      let station: FilteredStation | undefined = stations?.[stationId]; 
       if(station !== undefined){
         if(!Array.isArray(station.bikes)) station.bikes = [];
         station.bikes.push(bike);
@@ -130,23 +131,26 @@ export class BikeFilterListComponent {
           name: bike.station?.name ?? stationId,
           bikes: [bike]
         };
-        stations.push(station);
+        stations[stationId] = station;
       }
       return stations;
-    }, []);
-
-    return bikeGroups;
-    */
+    }, {});
+    
+    return Object.values(filteredStations);
   }
 }
 
-export interface BikeGroup{
+export type FilteredStations = {
+  [key: string]: FilteredStation
+}
+
+export type FilteredStation = {
   id: string;
   name: string;
   bikes: Bike[];
 }
 
-export interface BikeWheelSizeFilter{
+export type BikeWheelSizeFilter = {
   from: number;
   to: number;
 }

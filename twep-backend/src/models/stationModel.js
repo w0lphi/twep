@@ -234,9 +234,9 @@ class StationModel {
 
             const newIndividualBike = await pool.query(stationQueries.createIndividualBike, [
                 uuidv4(),
-                individualBikeData.bike_category,
+                individualBikeData.bikeCategory,
                 individualBikeData.status,
-                individualBikeData.bike_model_id,
+                individualBikeData.bikeModelId,
             ]);
 
             return newIndividualBike.rows[0];

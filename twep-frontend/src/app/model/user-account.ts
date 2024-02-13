@@ -1,4 +1,4 @@
-export interface UserAccount {
+export type UserAccount  = {
     id: string;
     email: string;
     role: string;
@@ -6,7 +6,7 @@ export interface UserAccount {
     tickets: Ticket[];
   }
   
-  export interface Ticket {
+  export type Ticket = {
     id: string;
     bikeType: string;
     station: string;

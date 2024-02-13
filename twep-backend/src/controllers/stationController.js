@@ -333,8 +333,6 @@ const stationController = {
             // Check if there is an available parking place for the bike category at the target station
             const availableParkingPlace = await StationModel.findAvailableParkingPlace(targetStationId, { name: bikeCategoryString });
 
-            console.log("Parking places", availableParkingPlace);
-
             if (!availableParkingPlace) {
                 return res.status(400).json({ error: 'Target station does not have an available parking place for the bike category' });
             }

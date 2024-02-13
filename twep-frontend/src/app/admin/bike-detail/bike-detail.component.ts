@@ -72,7 +72,7 @@ export class BikeDetailComponent {
   ) {
     this.bikeForm = new FormGroup({
       id: new FormControl({value: null, disabled: true}),
-      model: new FormControl({value: "", disabled: !this.isNew}, Validators.required),
+      model: new FormControl("", Validators.required),
     });
   }
 
@@ -121,7 +121,7 @@ export class BikeDetailComponent {
     if (this.isNew) {
       this.bikeService.createBike(bike).subscribe({
          next: (response: any): void => {
-          const id: string = response?.id;
+          const id: string = response?.individualBike?.id;
           if(id !== undefined && id !== null && id !== ""){
             this.router.navigateByUrl(`/admin/bikes/${id}`);
           }else{
@@ -243,5 +243,9 @@ export class BikeDetailComponent {
 
   get model(): AbstractControl<any, any> | null{
     return this.bikeForm.get("model");
+  }
+
+  get assignedBikeStation(){
+    return this.bike?.station?.name ?? 'Not assigned to any station yet'
   }
 }

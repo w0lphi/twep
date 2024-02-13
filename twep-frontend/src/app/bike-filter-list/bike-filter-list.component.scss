@@ -18,7 +18,7 @@
         }
     }
 
-    .twep-filtered-bikes-list{
+    .twep-bike-filter-content{
         display: flex;
         flex-direction: column;
         gap: 16px;
@@ -27,6 +27,31 @@
 
         .twep-bike-amount{
             margin-right: 4px;
+        }
+
+        .twep-filtered-bike-station-list{
+            display: flex;
+            flex-direction: column;
+            gap: 32px;
+
+            .twep-filtered-bike-station{
+                display: flex;
+                flex-direction: column;
+                gap: 8px;
+    
+                .twep-filtered-bike-station-title{
+                    display: flex;
+                    flex-direction: row;
+                    align-items: center;
+                    gap: 8px;
+                    color: gray;
+    
+                    .mat-divider{
+                        width: 100%;
+                        border-top-color: gray;
+                    }
+                }
+            }
         }
 
     }

@@ -61,7 +61,7 @@ export class PromptDialogComponent {
   }
 }
 
-export interface PromptDialogData {
+export type PromptDialogData = { 
   title: string;
   text: string;
   label: string;

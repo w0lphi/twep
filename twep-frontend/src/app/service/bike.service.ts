@@ -53,11 +53,11 @@ export class BikeService{
     }
 }
 
-export interface BikesAtStationResponse {
+export type BikesAtStationResponse = {
     bikes: Bike[];
 }
 
-export interface AssignBikeRequest {
+export type AssignBikeRequest = {
     targetStationId: string,
     bikeId: string
 }
