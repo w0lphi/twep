@@ -23,6 +23,7 @@
                 <h1>{{ bikeName }}</h1>
                 <div class="twep-spacer"></div>
                 <button
+                    *ngIf="isNew"
                     mat-raised-button
                     class="twep-save-btn"
                     (click)="upsertBike()"
@@ -39,28 +40,39 @@
                 </button>
             </mat-toolbar>
             <h3>General information</h3>
-            <mat-form-field *ngIf="bike?.id !== ''">
+            <mat-form-field *ngIf="!isNew">
                 <mat-label>Id</mat-label>
                 <input
                     matInput
                     required="true"
                     type="text"
-                    name="email"
+                    name="id"
                     formControlName="id"
                     [readonly]="true"
                 >
             </mat-form-field>
             <mat-form-field>
                 <mat-label>Model</mat-label>
-                <mat-select
-                    [required]="true"
-                    name="model"
-                    formControlName="model"
-                >
-                    @for (model of bikeModels; track id) {
-                    <mat-option [value]="model">{{model.name}}</mat-option>
-                    }
-                </mat-select>
+                @if(isNew){
+                    <mat-select
+                        [required]="true"
+                        name="model"
+                        formControlName="model"
+                    >
+                        @for (model of bikeModels; track id) {
+                            <mat-option [value]="model.id">{{model.name}}</mat-option>
+                        }
+                    </mat-select>
+                }
+                @else{
+                    <input
+                        matInput
+                        type="text"
+                        [readonly]="true"
+                        [value]="bike.model"
+                    >
+                }
+                
                 <mat-error *ngIf="model?.errors?.['required']">
                     Please select the model of the bike
                 </mat-error>
@@ -73,19 +85,36 @@
                         matInput
                         type="text"
                         name="status"
-                        formControlName="status"
                         [readonly]="true"
+                        [value]="bike.status"
                     />
                 </mat-form-field>
-                <h3>Assigned bike station</h3>
-                <div
-                    *ngIf="options"
-                    class="twep-map"
-                    leaflet
-                    [leafletOptions]="options"
-                    [leafletLayers]="layers"
-                    (leafletMapReady)="onMapReady($event)"
-                ></div>
+                <h3>Assigned bike station <small>(Click station marker to reassign)</small></h3>
+                @if(loadAssignBikes){
+                    <div class="twep-map">
+                        <app-loading-overlay />
+                    </div>
+                }
+                @else{
+                    <mat-form-field *ngIf="!isNew">
+                        <mat-label>Currently assigned station</mat-label>
+                        <input
+                            matInput
+                            type="text"
+                            name="station"
+                            [readonly]="true"
+                            [value]="bike.station?.name"
+                        >
+                    </mat-form-field>
+                    <div
+                        *ngIf="options"
+                        class="twep-map"
+                        leaflet
+                        [leafletOptions]="options"
+                        [leafletLayers]="layers"
+                        (leafletMapReady)="onMapReady($event)"
+                    ></div>
+                }
             }
         </form>
     }

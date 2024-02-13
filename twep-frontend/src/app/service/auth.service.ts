@@ -50,6 +50,10 @@ export class AuthService{
         return this.decodedToken?.role ?? null;
     }
 
+    public isAdmin(): boolean {
+        return this.getLoggedInUserRole() === "admin";
+    }
+
     private get decodedToken(): JwtToken | null {
         const token: string | null =  this.getToken();
         if (token === null || token == undefined) return null;

@@ -56,10 +56,73 @@ const createBikeModel = 'INSERT INTO bike_models (id, name, description, wheel_s
 const updateBikeModel = 'UPDATE bike_models SET name = $1, description = $2, wheel_size = $3, extra_features = $4 WHERE name = $5';
 const deleteBikeModel = 'DELETE FROM bike_models WHERE id = $1';
 
-const getAllIndividualBikes = 'SELECT * FROM individual_bikes';
+const getAllIndividualBikes = `
+    SELECT
+    ib.id AS id,
+    ib.status AS status,
+    bc.id AS category_id,
+    bc.name AS category,
+    bm.id AS model_id,
+    bm.name AS model,
+    bm.description AS description,
+    bm.wheel_size AS wheel_size,
+    bm.extra_features AS extra_features,
+    pp.id AS parking_place_id,
+    jsonb_build_object(
+        'id', s.id,
+        'name', s.name,
+        'location', s.location,
+        'operational', s.operational
+    ) AS station
+    FROM
+    individual_bikes ib
+    JOIN
+    bike_models bm ON ib.bike_model_id = bm.id
+    JOIN
+    bike_categories bc ON bm.category_id = bc.id
+    JOIN
+    parking_places pp ON ib.parking_place_id = pp.id
+    JOIN
+    stations s ON pp.station_id = s.id
+    GROUP BY
+    ib.id, ib.status, bc.name, bc.id, bm.id, bm.name, bm.description, bm.wheel_size, bm.extra_features, pp.id, s.id
+`;
+
 const createIndividualBike = 'INSERT INTO individual_bikes(id, bike_category, status, bike_model_id) VALUES ($1, $2, $3, $4)';
 const deleteIndividualBikeById = 'DELETE FROM individual_bikes WHERE id = $1';
-const findIndividualBikeById = 'SELECT * FROM individual_bikes WHERE id =$1';
+const findIndividualBikeById = `
+    SELECT
+        ib.id AS id,
+        ib.status AS status,
+        bc.id AS category_id,
+        bc.name AS category,
+        bm.id AS model_id,
+        bm.name AS model,
+        bm.description AS description,
+        bm.wheel_size AS wheel_size,
+        bm.extra_features AS extra_features,
+        pp.id AS parking_place_id,
+        jsonb_build_object(
+            'id', s.id,
+            'name', s.name,
+            'location', s.location,
+            'operational', s.operational
+        ) AS station
+    FROM
+        individual_bikes ib
+    JOIN
+        bike_models bm ON ib.bike_model_id = bm.id
+    JOIN
+        bike_categories bc ON bm.category_id = bc.id
+    JOIN
+        parking_places pp ON ib.parking_place_id = pp.id
+    JOIN
+        stations s ON pp.station_id = s.id
+    WHERE 
+        ib.id = $1
+    GROUP BY
+        ib.id, ib.status, bc.name, bc.id, bm.id, bm.name, bm.description, bm.wheel_size, bm.extra_features, pp.id, s.id
+`;
 const updateIndividualBikeParkingPlace = 'UPDATE individual_bikes SET parking_place_id = $1 WHERE id = $2;'
 const findAvailableParkingPlace = `
     SELECT id

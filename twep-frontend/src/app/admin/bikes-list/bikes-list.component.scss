@@ -1,0 +1,18 @@
+.twep-bike-admin-table{
+    .mat-mdc-row{
+        cursor: pointer;
+
+        &:hover{
+            background-color: whitesmoke;
+        }
+
+        td {
+            max-width: 1px;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            overflow: hidden;
+        }
+
+    }
+
+}

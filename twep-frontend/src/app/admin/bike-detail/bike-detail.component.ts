@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, NgZone } from '@angular/core';
 import { CommonModule} from '@angular/common';
 import { FormsModule, ReactiveFormsModule, FormGroup, FormControl, Validators, AbstractControl } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -19,9 +19,10 @@ import { BikeStationService } from '../../service/bikeStation.service';
 import { LoadingOverlayComponent } from '../../common/loading-overlay/loading-overlay.component';
 
 import { LeafletModule } from '@asymmetrik/ngx-leaflet';
-import { LeafletUtil } from '../../util/leaflet-util'
+import { LeafletUtil, MarkerOptions } from '../../util/leaflet-util'
 import * as Leaflet from 'leaflet';
 import { DialogService } from '../../service/dialog.service';
+import { ParkingPlace } from '../../model/parkingPlace';
 
 @Component({
   selector: 'app-bike-detail',
@@ -44,6 +45,7 @@ import { DialogService } from '../../service/dialog.service';
 })
 export class BikeDetailComponent {
   runningAction: boolean = false;
+  loadAssignBikes: boolean = false;
   bikeId?: string;
   bike?: Bike;
   bikeName: string = "";
@@ -65,12 +67,12 @@ export class BikeDetailComponent {
     private bikeModelService: BikeModelService,
     private bikeStationService: BikeStationService,
     private router: Router,
-    private dialogService: DialogService
+    private dialogService: DialogService,
+    private zone: NgZone,
   ) {
     this.bikeForm = new FormGroup({
-      model: new FormControl("", Validators.required),
-      status: new FormControl(""),
-      station: new FormControl("", Validators.required)
+      id: new FormControl({value: null, disabled: true}),
+      model: new FormControl({value: "", disabled: !this.isNew}, Validators.required),
     });
   }
 
@@ -82,6 +84,8 @@ export class BikeDetailComponent {
 
   onMapReady(map: Leaflet.Map): void {
     this.map = map;
+    this.updateBikeLocation();
+    this.updateStationMarkers();
   }
 
   loadBike(): void{
@@ -98,7 +102,8 @@ export class BikeDetailComponent {
       this.bikeService.getBike(this.bikeId).subscribe({
         next: (bike: Bike): void => {
           this.bike = bike;
-          this.bikeName = bike.id;
+          this.bikeName = `Bike ${bike.id}`;
+          this.updateForm(bike);
           this.runningAction = false;
         },
         error: (): void => {
@@ -111,7 +116,7 @@ export class BikeDetailComponent {
   upsertBike(): void{
     if (this.bike === undefined) return;
     this.runningAction = true;
-    const bikeModel: BikeModel = this.model?.value;
+    const bikeModel: BikeModel | null = this.bikeModels.find(({id}) => id === this.model?.value) ?? null;
     const bike: Bike = new Bike(this.bike.id, bikeModel);
     if (this.isNew) {
       this.bikeService.createBike(bike).subscribe({
@@ -156,23 +161,26 @@ export class BikeDetailComponent {
   }
 
   async assignToStation(bikeStation: BikeStation): Promise<void> {
-    if (this.bike?.id === undefined) return;
+    this.zone.run(async () => {
+      if (this.bike?.id === undefined) return;
 
-    const confirmed: boolean = await this.dialogService.openConfirmDialog(
-      `Assign bike to station ${bikeStation.name}?`,
-      "The bike will be removed from the previous station"
-    )
+      const confirmed: boolean = await this.dialogService.openConfirmDialog(
+        `Assign bike to station ${bikeStation.name}?`,
+        "The bike will be removed from the previous station"
+      )
 
-    if (!confirmed) return;
+      if (!confirmed) return;
 
-    this.runningAction = true;
-    this.bikeService.assignBikesToStation([this.bike], bikeStation).subscribe({
-      next: (): void => {
-        this.runningAction = false;
-      },
-      error: (): void => {
-        this.runningAction = false;
-      }
+      this.loadAssignBikes = true;
+      this.bikeService.assignBikesToStation(this.bike.id, bikeStation.id).subscribe({
+        next: (): void => {
+          this.loadAssignBikes = false;
+          this.loadBike();
+        },
+        error: (): void => {
+          this.loadAssignBikes = false;
+        }
+      })
     })
   }
 
@@ -188,18 +196,44 @@ export class BikeDetailComponent {
     this.bikeStationService.getBikeStations().subscribe({
       next: (stations: BikeStation[]): void => {
         this.bikeStations = stations;
-        this.layers = stations.map((station) => {
-          const latitude: number = station.location.latitude;
-          const longitude: number = station.location.longitude;
-          const marker: Leaflet.Marker<any> = LeafletUtil.getStationMarker(latitude, longitude)
-          marker.addEventListener('click', () => this.assignToStation(station));
-          return marker;
-        })
+        this.updateStationMarkers();
       }
     })
   }
 
-  goBackToOverview() {
+  updateStationMarkers(): void{
+    this.zone.run(() => {
+      this.layers = this.bikeStations.map((station) => {
+        const latitude: number = station.location.latitude;
+        const longitude: number = station.location.longitude;
+        const isCurrentStation: boolean = station.id === this.bike?.station?.id;
+        const marker: Leaflet.Marker<any> = LeafletUtil.getStationMarker(latitude, longitude, {disabled: isCurrentStation});
+        if(isCurrentStation){
+          marker.bindPopup("Bike is currently assigned to this station");
+        }else{
+          marker.addEventListener('click', () => this.assignToStation(station));
+        }
+        return marker;
+      })
+    })
+  }
+
+  updateForm(bike: Bike): void {
+    this.bikeForm.patchValue({
+      id: bike.id,
+      model: bike.modelId,
+    });
+  }
+
+  updateBikeLocation(): void{
+    const latitude: number | undefined = this.bike?.station?.location.latitude;
+    const longitude: number | undefined = this.bike?.station?.location.longitude;
+    if(this.map !== undefined && latitude !== undefined && longitude !== undefined){
+      this.map.setView(new Leaflet.LatLng(latitude, longitude), 14);
+    }
+  }
+
+  goBackToOverview(): void {
     this.router.navigateByUrl("/admin/bikes");
   }
 

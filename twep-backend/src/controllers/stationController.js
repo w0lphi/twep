@@ -274,6 +274,21 @@ const stationController = {
         }
     },
 
+    async getIndividualBikeById(req, res) {
+        const individualBikeId = req.params.id;
+        try {
+            const individualBike = await StationModel.findById(individualBikeId);
+            if (!individualBike) {
+                return res.status(404).json({ error: 'Bike not found' });
+            }
+            const camelCaseBike = convertKeysToCamelCase(individualBike);
+            res.json(camelCaseBike);
+        } catch (error) {
+            console.error(error);
+            res.status(500).send('Internal Server Error');
+        }
+    },
+
     async deleteIndividualBikeById(req, res) {
         const { id } = req.params;
 
@@ -307,18 +322,18 @@ const stationController = {
                 return res.status(400).json({ error: 'Individual bike is currently in use and cannot be reassigned' });
             }
 
-
             // Check if the target station exists
             const targetStation = await StationModel.getStationById(targetStationId);
             if (!targetStation) {
                 return res.status(404).json({ error: 'Target station not found' });
             }
 
-            const bikeCategoryString = await StationModel.getBikeModelString(individualBike.bike_category);
-
+            const bikeCategoryString = await StationModel.getBikeCategoryString(individualBike.category_id);
 
             // Check if there is an available parking place for the bike category at the target station
             const availableParkingPlace = await StationModel.findAvailableParkingPlace(targetStationId, { name: bikeCategoryString });
+
+            console.log("Parking places", availableParkingPlace);
 
             if (!availableParkingPlace) {
                 return res.status(400).json({ error: 'Target station does not have an available parking place for the bike category' });

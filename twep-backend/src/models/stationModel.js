@@ -323,7 +323,7 @@ class StationModel {
         }
     }
 
-    static async getBikeModelString(categoryId) {
+    static async getBikeCategoryString(categoryId) {
         try {
             const query = 'SELECT name FROM bike_categories WHERE id = $1';
             const values = [categoryId];

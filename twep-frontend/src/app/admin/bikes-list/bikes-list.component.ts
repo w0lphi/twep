@@ -7,8 +7,6 @@ import { MatTableModule } from '@angular/material/table';
 import { AdminTableComponent } from '../admin-table/admin-table.component';
 import { BikeService } from '../../service/bike.service';
 import { Bike } from '../../model/bike';
-import { BikeModelService } from '../../service/bikeModel.service';
-import { BikeModel } from '../../model/bikeModel';
 @Component({
   selector: 'app-bikes-list',
   standalone: true,
@@ -23,14 +21,11 @@ import { BikeModel } from '../../model/bikeModel';
 export class BikesListComponent {
   runningAction: boolean = false;
   bikes: Bike[] = [];
-  bikeModels: BikeModel[] = [];
 
   constructor(
     private bikeService: BikeService,
-    private bikeModelService: BikeModelService,
     private router: Router,
   ) {
-    this.loadBikeModels();
     this.getBikes();
    }
   
@@ -56,23 +51,10 @@ export class BikesListComponent {
     this.router.navigateByUrl(`/admin/bikes/${bike.id}`)
   }
 
-  loadBikeModels(): void {
-    this.bikeModelService.getBikeModels().subscribe({
-      next: (bikeModels: BikeModel[]) => {
-        this.bikeModels = bikeModels;
-      }
-    })
-  }
-
-  getBikeModelName(bike: Bike): string {
-    const model: BikeModel | undefined = this.bikeModels.find(({ id }) => bike.bikeModelId === id);
-    return model?.name ?? "-";
-  }
-
   get columns(): string[] {
     return [
-      "id",
       "model",
+      "station",
       "status"
     ]
   }

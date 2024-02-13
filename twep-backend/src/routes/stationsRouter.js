@@ -31,6 +31,7 @@ router.delete('/bike-models/:id', stationController.deleteBikeModelById);
 
 router.get('/bikes', stationController.getAllIndividualBikes);
 router.post('/bikes', stationController.createIndividualBike);
+router.get('/bikes/:id', stationController.getIndividualBikeById)
 router.delete('/bikes/:id', stationController.deleteIndividualBikeById);
 
 router.post('/reassign-bikes', stationController.reassignBike);

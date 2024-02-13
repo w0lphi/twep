@@ -2013,38 +2013,32 @@
             "description": "OK",
             "content": {
               "application/json": {
-                "example": {
-                  "individualBikes": [
-                    {
-                      "id": "uuid",
-                      "bikeType": "mountain_bike",
-                      "status": "available",
-                      "bikeModel": {
-                        "name": "Mountain Bike XL",
-                        "description": "A robust mountain bike for off-road adventures",
-                        "wheelSize": 29.5,
-                        "extraFeatures": [
-                          "Shimano XT gears",
-                          "Front suspension with 120mm travel"
-                        ]
-                      }
-                    },
-                    {
-                      "id": "uuid",
-                      "bikeType": "road_bike",
-                      "status": "rented",
-                      "bikeModel": {
-                        "name": "Road Bike Pro",
-                        "description": "High-performance road bike for speed enthusiasts",
-                        "wheelSize": 28,
-                        "extraFeatures": [
-                          "Carbon fiber frame",
-                          "Aero handlebars"
-                        ]
-                      }
+                "example": [
+                  {
+                    "id": "48661dea-6625-4376-a593-85ecd8c711ed",
+                    "status": "available",
+                    "categoryId": "3a4dfc98-79da-4a7b-875d-5122008119d5",
+                    "category": "Mountain Bikes",
+                    "modelId": "2e5ae85b-77f2-4d28-bace-fbcd467bcb9a",
+                    "model": "KTM 1.0",
+                    "description": "KTM's finest new addition. Can go up any mountain and down any valley",
+                    "wheelSize": 25,
+                    "extraFeatures": [
+                      "Big wheels",
+                      "Comfortable seat"
+                    ],
+                    "parkingPlaceId": "14891dac-c49e-4dcb-95ef-c994891569af",
+                    "station": {
+                      "id": "6361af2e-25ee-469e-9d8f-2495b63f0270",
+                      "name": "Alpenstraße",
+                      "location": {
+                        "latitude": 47.77,
+                        "longitude": 13.07029
+                      },
+                      "operational": true
                     }
-                  ]
-                }
+                  }
+                ]
               }
             }
           },
@@ -2114,6 +2108,77 @@
       }
     },
     "/management/bikes/{id}": {
+      "get": {
+        "summary": "Get an individual bike by ID",
+        "tags": [
+          "management-individual bikes"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "The ID of the individual bike to retrieve"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Individual bike retrieved successfully",
+            "content": {
+              "application/json": {
+                "example": {
+                  "id": "48661dea-6625-4376-a593-85ecd8c711ed",
+                  "status": "available",
+                  "categoryId": "3a4dfc98-79da-4a7b-875d-5122008119d5",
+                  "category": "Mountain Bikes",
+                  "modelId": "2e5ae85b-77f2-4d28-bace-fbcd467bcb9a",
+                  "model": "KTM 1.0",
+                  "description": "KTM's finest new addition. Can go up any mountain and down any valley",
+                  "wheelSize": 25,
+                  "extraFeatures": [
+                    "Big wheels",
+                    "Comfortable seat"
+                  ],
+                  "parkingPlaceId": "14891dac-c49e-4dcb-95ef-c994891569af",
+                  "station": {
+                    "id": "6361af2e-25ee-469e-9d8f-2495b63f0270",
+                    "name": "Alpenstraße",
+                    "location": {
+                      "latitude": 47.77,
+                      "longitude": 13.07029
+                    },
+                    "operational": true
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "Invalid input data"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Individual bike not found",
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "Individual bike not found"
+                }
+              }
+            }
+          }
+        }
+      },
       "put": {
         "summary": "Update an individual bike",
         "tags": [

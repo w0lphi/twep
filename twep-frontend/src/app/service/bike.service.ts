@@ -3,7 +3,6 @@ import { Observable, map, pipe } from "rxjs";
 import { HttpClient } from "@angular/common/http";
 import { environment } from "../environment/environment";
 import { Bike } from "../model/bike";
-import { BikeStation } from "../model/bikeStation";
 
 @Injectable({ providedIn: 'root' })
 export class BikeService{
@@ -31,10 +30,10 @@ export class BikeService{
         return this.http.delete(`${this.apiUrl}/management/bikes/${id}`);
     }
 
-    public assignBikesToStation(bikes: Bike[], bikeStation: BikeStation): Observable<any>{
-        const body: object = {
-            stationId: bikeStation.id,
-            bikeIds: bikes.map(({ id }) => id)
+    public assignBikesToStation(bikeId: string, targetStationId: string): Observable<any>{
+        const body: AssignBikeRequest = {
+            targetStationId,
+            bikeId,
         }
         return this.http.post(`${this.apiUrl}/management/reassign-bikes`, body);
     }
@@ -56,4 +55,9 @@ export class BikeService{
 
 export interface BikesAtStationResponse {
     bikes: Bike[];
+}
+
+export interface AssignBikeRequest {
+    targetStationId: string,
+    bikeId: string
 }

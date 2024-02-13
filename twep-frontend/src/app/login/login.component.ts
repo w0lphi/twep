@@ -75,11 +75,8 @@ export class LoginComponent {
   }
 
   redirectUser(): void{
-    if (this.authService.getLoggedInUserRole() === 'management'){
-      this.router.navigateByUrl("/admin");
-    }else{
-      this.router.navigateByUrl("/user");
-    }
+    const route: string = this.authService.isAdmin() ? '/admin' : '/user';
+    this.router.navigateByUrl(route);
   }
 
   get email(): AbstractControl<any, any> | null {

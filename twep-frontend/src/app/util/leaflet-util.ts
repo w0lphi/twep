@@ -7,6 +7,7 @@ const osm_common: Leaflet.TileLayer = Leaflet.tileLayer('https://tile.openstreet
 });
 
 const stationIconUrl: string = '../../assets/station_marker.png'
+const stationIconDisabledUrl: string = '../../assets/station_marker_disabled.png'
 const userIconUrl: string = '../../assets/user_marker.png'
 
 const coordinatesKlu = Leaflet.latLng(46.624268, 14.3051051);
@@ -22,17 +23,23 @@ export class LeafletUtil {
         }
     }
 
-    static getStationMarker(latitude: number, longitude: number, iconHeight: number = 50, iconWidth: number = 40): Leaflet.Marker<any> {
+    static getStationMarker(latitude: number, longitude: number, options?: MarkerOptions): Leaflet.Marker<any> {
+        const iconHeight: number = options?.iconHeight ?? 50;
+        const iconWidth: number = options?.iconWidth ?? 40;
+        const disabled: boolean = options?.disabled ?? false;
+        const iconUrl: string = disabled ? stationIconDisabledUrl : stationIconUrl;
         const iconSize: Leaflet.PointExpression = [iconWidth, iconHeight];
         const iconAnchor: Leaflet.PointExpression = [iconWidth / 2, iconHeight];
-        const icon: Leaflet.Icon = Leaflet.icon({iconSize, iconAnchor, iconUrl: stationIconUrl })
+        const icon: Leaflet.Icon = Leaflet.icon({iconSize, iconAnchor, iconUrl, popupAnchor: [0, -iconHeight] });
         return Leaflet.marker([latitude, longitude], { icon })
     }
 
-    static getUserMarker(latitude: number, longitude: number, iconHeight: number = 50, iconWidth: number = 40): Leaflet.Marker<any> {
+    static getUserMarker(latitude: number, longitude: number, options?: MarkerOptions): Leaflet.Marker<any> {
+        const iconHeight: number = options?.iconHeight ?? 50;
+        const iconWidth: number = options?.iconWidth ?? 40;
         const iconSize: Leaflet.PointExpression = [iconWidth, iconHeight];
         const iconAnchor: Leaflet.PointExpression = [iconWidth / 2, iconHeight];
-        const icon: Leaflet.Icon = Leaflet.icon({iconSize, iconAnchor, iconUrl: userIconUrl, popupAnchor: [0, -50] })
+        const icon: Leaflet.Icon = Leaflet.icon({iconSize, iconAnchor, iconUrl: userIconUrl, popupAnchor: [0, -iconHeight] })
         return Leaflet.marker([latitude, longitude], { icon })
     }
 
@@ -60,4 +67,10 @@ export class LeafletUtil {
     private static degToRadian(degree: number): number {
         return degree*Math.PI/180;
     }
+}
+
+export class MarkerOptions{
+    iconHeight?: number;
+    iconWidth?: number;
+    disabled?: boolean;
 }

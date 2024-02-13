@@ -44,7 +44,7 @@ export class UserhomeComponent {
   isMobile: boolean = true;
   navigationLinks: NavigationLink[] = [
     new NavigationLink("Map", "map", "/user/home"),
-    new NavigationLink("All Bikes", "pedal_bike", "/user/bikes"),
+    new NavigationLink("Bike Search", "pedal_bike", "/user/bikes"),
     new NavigationLink("Tickets", "confirmation_number", "/user/tickets"),
     new NavigationLink("History", "history", "/user/history")
   ];

@@ -16,23 +16,6 @@
         mat-table
         [dataSource]="bikes"
     >
-        <ng-container matColumnDef="id">
-            <th
-                mat-header-cell
-                *matHeaderCellDef
-                mat-sort-header
-            >
-                ID
-            </th>
-            <td
-                mat-cell
-                *matCellDef="let element"
-                class="bike-id"
-            >
-                {{element.id}}
-            </td>
-        </ng-container>
-    
         <ng-container matColumnDef="model">
             <th
                 mat-header-cell
@@ -45,7 +28,7 @@
                 mat-cell
                 *matCellDef="let element"
             >
-                {{getBikeModelName(element)}}            
+                {{element.model ?? "-"}}            
             </td>
         </ng-container>
         <ng-container matColumnDef="status">
@@ -62,21 +45,31 @@
                 {{ element.status }}
             </td>
         </ng-container>
+
         <ng-container matColumnDef="station">
             <th
                 mat-header-cell
                 *matHeaderCellDef
+                mat-sort-header
             >
-                Status
+                Assigned Station
             </th>
             <td
                 mat-cell
                 *matCellDef="let element"
+                class="bike-station"
             >
-                <!-- TODO: Display station name -->
+                @if(element.station?.name !== undefined){
+                    <div>
+                        {{ element.station?.name}}
+                    </div>
+                }
+                @else {
+                    <div class="twep-no-items-message">Unassigned</div>
+                }
             </td>
         </ng-container>
-    
+
         <tr
             mat-header-row
             *matHeaderRowDef="columns"

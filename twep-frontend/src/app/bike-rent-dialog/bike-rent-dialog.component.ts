@@ -70,7 +70,7 @@ export class BikeRentDialogComponent {
     this.bookingEnd = new Date(Date.now());
   }
 
-  confirmRent(): void {
+  purchaseTicket(): void {
     this.runningAction = true;
     const userId: string | null = this.authService.getLoggedInUserId();
     if (userId !== null) {
