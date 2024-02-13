@@ -73,7 +73,7 @@ export class AccountComponent implements OnInit {
   userId: string | null = null;
   walletAmount: number | null = null;
 
-  uploadedImage: SafeUrl | undefined;
+
 
   saveSuccessMessage: string | null = null;
 
@@ -115,19 +115,7 @@ export class AccountComponent implements OnInit {
 
 
 
-  onFileSelected(event: any) {
-    const file: File = event.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onload = () => {
-        this.uploadedImage = this.sanitizer.bypassSecurityTrustUrl(reader.result as string);
-        console.log('Uploaded image:', this.uploadedImage); 
-      };
-    }
-  }
-  
-
+ 
 
 
 

@@ -1,7 +1,10 @@
 #all {
   padding: 20px;
   padding-top: 12px;
-
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  flex-direction: row
 }
 
 
@@ -20,6 +23,12 @@ margin: 8px;
     margin-bottom: 20px;
     background-color: #f9f9f9;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    filter: drop-shadow(5px 5px 5px rgba(0, 0, 0, 0.288));
+
+    flex: 0 0 400px; 
+    margin-right: 20px;
+    box-sizing: border-box;
+    transition: flex 0.3s ease;
   }
   
   .ticket-list h2 {
@@ -44,18 +53,17 @@ color: white;
 
 }
 
+h1, p {
+  flex-basis: 100%;
+}
 
 
 
   @media (max-width: 768px) {
     .ticket-list {
       padding: 12px;
-    }
-  }
-  
-  @media (max-width: 576px) {
-    .ticket-list {
-      padding: 8px;
+      flex: 0 1 calc(100% - 20px); 
+    margin-right: 0;
     }
   }
   

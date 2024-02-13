@@ -9,6 +9,8 @@
           <li>Bike Type: {{ ticket.bikeType }}</li>
           <li>Station: {{ ticket.station }}</li>
           <li>Purchase Date: {{ ticket.purchaseDate }}</li>
+          <li>Overdue: {{ ticket.isOverdue }}</li>
+          <li>Price: {{ ticket.price }}€</li>
         </ul>
         <button mat-raised-button color="red" (click)="returnTicket(ticket.id)">Return Ticket</button>
           <!--
@@ -27,25 +29,89 @@
   </div>
 
 
+  <h1>Past User Tickets</h1>
+  <div *ngIf="userTickets && userTickets.length > 0">
+    
+    <ng-container *ngFor="let ticket of userTickets">
+      <div class="ticket-list">
+        <h2>Ticket ID: {{ ticket.id }}</h2>
+        <ul>
+          <li>Bike Type: {{ ticket.bikeType }}</li>
+          <li>Station: {{ ticket.station }}</li>
+          <li>Purchase Date: {{ ticket.purchaseDate }}</li>
+          <li>Overdue: {{ ticket.isOverdue }}</li>
+          <li>Price: {{ ticket.price }}€</li>
+        </ul>
+       
+      </div>
+
+    </ng-container>
+
+  </div>
+
+  <div *ngIf="userTickets.length === 0">
+    <p>No past Tickets</p>
+  </div>
+
+
 
 
   <br>  <br>  <br>  <br>
-<p>Only for testing from here on</p>
-<!-- from here on just for testing -->
+  <p>Only for testing from here on. this is how the tickets should look:</p>
+  <!-- from here on just for testing -->
 
+
+<div class="ticket-list">
+  <h2>Ticket ID:  ticket.id </h2>
+  <ul>
+    <li>Bike Type:  ticket.bikeType </li>
+    <li>Station:  ticket.station </li>
+    <li>Purchase Date:  ticket.purchaseDate </li>
+  </ul>
   <button mat-raised-button color="red" id="redbutton">Return Ticket</button>
+   
+  <button mat-raised-button color="primary">Get QR Code</button>
+
+</div>
 
 
 
-  <button mat-raised-button color="primary" >Generate QR Code</button>
+<div class="ticket-list">
+  <h2>Ticket ID:  ticket.id </h2>
+  <ul>
+    <li>Bike Type:  ticket.bikeType </li>
+    <li>Station:  ticket.station </li>
+    <li>Purchase Date:  ticket.purchaseDate </li>
+  </ul>
+  <button mat-raised-button color="red" id="redbutton">Return Ticket</button>
+   
+  <button mat-raised-button color="primary">Get QR Code</button>
+
+</div>
+
+
+
+<div class="ticket-list">
+  <h2>Ticket ID:  ticket.id </h2>
+  <ul>
+    <li>Bike Type:  ticket.bikeType </li>
+    <li>Station:  ticket.station </li>
+    <li>Purchase Date:  ticket.purchaseDate </li>
+  </ul>
+  <button mat-raised-button color="red" id="redbutton">Return Ticket</button>
+   
+  <button mat-raised-button color="primary">Get QR Code</button>
+
+</div>
+
+
 
 
   <br><br><br><br><br>
 
-  <button (click)="createTicket()">Create Ticket</button>
-  <div *ngIf="loggedInUserId">
-    <h1>User ID: {{ loggedInUserId }}</h1>
-  </div>
+
+
   
 </div>
 
+<button (click)="createTicket()">Create Ticket</button>

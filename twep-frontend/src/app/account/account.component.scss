@@ -2,6 +2,7 @@
     display: flex;
     flex-wrap: wrap; 
     padding: 16px;
+    filter: drop-shadow(5px 5px 5px rgba(0, 0, 0, 0.118));
 }
 
 .left-panel {
@@ -59,10 +60,6 @@ mat-card-content {
 
 
 
-#wallettext {
-font-size: 30px;
-size: 30px;
-}
 
 
 

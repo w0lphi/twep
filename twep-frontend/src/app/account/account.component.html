@@ -1,8 +1,7 @@
 <div class="container">
     <mat-card class="left-panel mobile-stack">
         <mat-card-header>
-            <div mat-card-avatar class="profile-picture" [style.background-image]="'url(' + (uploadedImage ? uploadedImage : 'path/to/default/image') + ')'"></div>
-
+            <div mat-card-avatar class="profile-picture"></div>
 
 
             <div class="profile-info">
@@ -15,13 +14,7 @@
 
 
 
-        <mat-card-content>
-           <h3>Content, idk</h3>
-           <input type="file" (change)="onFileSelected($event)" accept="image/*" style="display: none" #fileInput />
-           <button mat-raised-button color="primary" (click)="fileInput.click()">Upload Profile Picture</button>
-           
-
-        </mat-card-content>
+       
     </mat-card>
 
     <mat-card class="wallet-panel mobile-stack">
