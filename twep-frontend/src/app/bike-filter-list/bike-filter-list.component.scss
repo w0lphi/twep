@@ -37,7 +37,6 @@
             .twep-filtered-bike-station{
                 display: flex;
                 flex-direction: column;
-                gap: 8px;
     
                 .twep-filtered-bike-station-title{
                     display: flex;
@@ -45,11 +44,20 @@
                     align-items: center;
                     gap: 8px;
                     color: gray;
+                    margin-bottom: 8px;
     
                     .mat-divider{
                         width: 100%;
                         border-top-color: gray;
                     }
+                }
+
+                .twep-filtered-bike-station-bikes{
+                    display: flex;
+                    flex-direction: column;
+                    gap: 16px;
+                    padding: 0px 16px;
+
                 }
             }
         }

@@ -90,10 +90,12 @@
                                 {{station.name}}
                                 <mat-divider />
                             </div>
-                            <app-bike-card
-                                *ngFor=" let bike of station.bikes;"
-                                [bike]="bike" 
-                            />
+                            <div class="twep-filtered-bike-station-bikes">
+                                <app-bike-card
+                                    *ngFor=" let bike of station.bikes;"
+                                    [bike]="bike" 
+                                />
+                            </div>
                         </div>
                     }
                 </div>
