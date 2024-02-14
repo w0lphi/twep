@@ -2,8 +2,6 @@
     <mat-card class="left-panel mobile-stack">
         <mat-card-header>
             <div mat-card-avatar class="profile-picture"></div>
-
-
             <div class="profile-info">
                 <mat-card-title>Hello, {{ userAccount.role }}!</mat-card-title>
                 <mat-card-subtitle>User ID: {{ userAccount.id }}</mat-card-subtitle>
@@ -11,10 +9,6 @@
                 <mat-card-subtitle>Role: {{ userAccount.role }}</mat-card-subtitle>
             </div>
         </mat-card-header>
-
-
-
-       
     </mat-card>
 
     <mat-card class="wallet-panel mobile-stack">
@@ -53,7 +47,6 @@
             <mat-card-subtitle>Wallet Amount: {{ userAccount.wallet }}€</mat-card-subtitle>
             <mat-card-subtitle>Number of Tickets purchased: {{ userAccount.tickets.length }}</mat-card-subtitle>
             <mat-card-subtitle>Number of Tickets overdue: not implemented yet</mat-card-subtitle>
-
         </mat-card-content>
     </mat-card>
 </div>
