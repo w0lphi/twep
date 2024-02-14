@@ -19,10 +19,9 @@ import { BikeStationService } from '../../service/bikeStation.service';
 import { LoadingOverlayComponent } from '../../common/loading-overlay/loading-overlay.component';
 
 import { LeafletModule } from '@asymmetrik/ngx-leaflet';
-import { LeafletUtil, MarkerOptions } from '../../util/leaflet-util'
+import { LeafletUtil } from '../../util/leaflet-util'
 import * as Leaflet from 'leaflet';
 import { DialogService } from '../../service/dialog.service';
-import { ParkingPlace } from '../../model/parkingPlace';
 
 @Component({
   selector: 'app-bike-detail',
