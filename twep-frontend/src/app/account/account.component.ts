@@ -77,7 +77,7 @@ export class AccountComponent implements OnInit {
 
   saveSuccessMessage: string | null = null;
 
-  @ViewChild('fileInput') fileInput!: ElementRef<HTMLInputElement>;
+
 
   constructor(
     private accountService: AccountService,

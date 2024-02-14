@@ -9,7 +9,6 @@
           <li>Bike Type: {{ ticket.bikeType }}</li>
           <li>Station: {{ ticket.station }}</li>
           <li>Purchase Date: {{ ticket.purchaseDate }}</li>
-          <li>Overdue: {{ ticket.isOverdue }}</li>
           <li>Price: {{ ticket.price }}€</li>
         </ul>
         <button mat-raised-button color="red" (click)="returnTicket(ticket.id)">Return Ticket</button>
