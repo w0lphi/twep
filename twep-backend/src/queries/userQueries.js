@@ -16,37 +16,44 @@ const loginUser = `
 `;
 
 const getUserTickets = `
-    SELECT
-    t.*,
-    ib.id AS bike_id,
-    ib.status AS bike_status,
-    bc.id AS category_id,
-    bc.name AS category,
-    bm.id AS model_id,
-    bm.name AS model,
-    bm.description AS description,
-    bm.wheel_size AS wheel_size,
-    bm.extra_features AS extra_features,
-    pp.id AS parking_place_id,
+SELECT
+    t.id AS ticket_id,
+    t.user_id AS user_id,
+    t.from_date,
+    t.until_date,
+    t.immediate_renting,
+    t.qr_code_base64,
     jsonb_build_object(
-        'id', s.id,
-        'name', s.name,
-        'location', s.location,
-        'operational', s.operational
-    ) AS station
-    FROM
+        'id', ib.id,
+        'status', ib.status,
+        'categoryId', bc.id,
+        'category', bc.name,
+        'modelId', bm.id,
+        'model', bm.name,
+        'description', bm.description,
+        'wheelSize', bm.wheel_size,
+        'extraFeatures', bm.extra_features,
+        'parkingPlaceId', pp.id,
+        'station', jsonb_build_object(
+            'id', s.id,
+            'name', s.name,
+            'location', s.location,
+            'operational', s.operational
+        )
+    ) AS bike
+FROM
     tickets t
-    JOIN
+JOIN
     individual_bikes ib ON t.bike_id = ib.id
-    JOIN
+JOIN
     bike_models bm ON ib.bike_model_id = bm.id
-    JOIN
+JOIN
     bike_categories bc ON bm.category_id = bc.id
-    JOIN
+JOIN
     parking_places pp ON ib.parking_place_id = pp.id
-    JOIN
+JOIN
     stations s ON pp.station_id = s.id
-    WHERE
+WHERE
     t.user_id = $1;
 
 `;

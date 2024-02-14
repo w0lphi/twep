@@ -108,7 +108,7 @@ const getAllTicketsForUser = async (req, res) => {
         const camelCaseTickets = tickets.map(ticket => convertSnakeToCamel(ticket));
 
 
-        res.status(200).json({ tickets: camelCaseTickets });
+        res.status(200).json(camelCaseTickets);
     } catch (error) {
         console.error(error);
         res.status(500).json({ error: 'Internal Server Error' });

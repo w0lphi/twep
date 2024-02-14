@@ -66,10 +66,10 @@ CREATE TABLE tickets (
     id UUID PRIMARY KEY,
     user_id UUID REFERENCES users(id) ON DELETE CASCADE,
     bike_id UUID REFERENCES individual_bikes(id) ON DELETE CASCADE,
-    from_date TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    until_date TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    from_date TIMESTAMPTZ NOT NULL,
+    until_date TIMESTAMPTZ NOT NULL,
     immediate_renting BOOLEAN NOT NULL,
-    qr_code_base_64 TEXT
+    qr_code_base64 TEXT NOT NULL
 );
 
 -- insert default admin account into db. Password is "password"
