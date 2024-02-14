@@ -16,9 +16,39 @@ const loginUser = `
 `;
 
 const getUserTickets = `
-    SELECT *
-    FROM tickets
-    WHERE user_id = $1;
+    SELECT
+    t.*,
+    ib.id AS bike_id,
+    ib.status AS bike_status,
+    bc.id AS category_id,
+    bc.name AS category,
+    bm.id AS model_id,
+    bm.name AS model,
+    bm.description AS description,
+    bm.wheel_size AS wheel_size,
+    bm.extra_features AS extra_features,
+    pp.id AS parking_place_id,
+    jsonb_build_object(
+        'id', s.id,
+        'name', s.name,
+        'location', s.location,
+        'operational', s.operational
+    ) AS station
+    FROM
+    tickets t
+    JOIN
+    individual_bikes ib ON t.bike_id = ib.id
+    JOIN
+    bike_models bm ON ib.bike_model_id = bm.id
+    JOIN
+    bike_categories bc ON bm.category_id = bc.id
+    JOIN
+    parking_places pp ON ib.parking_place_id = pp.id
+    JOIN
+    stations s ON pp.station_id = s.id
+    WHERE
+    t.user_id = $1;
+
 `;
 
 const deductMoneyFromWallet = 'UPDATE users SET wallet = wallet - $1 WHERE id = $2 RETURNING *'
