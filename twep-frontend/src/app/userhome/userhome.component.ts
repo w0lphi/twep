@@ -46,7 +46,6 @@ export class UserhomeComponent {
     new NavigationLink("Map", "map", "/user/home"),
     new NavigationLink("Bike Search", "pedal_bike", "/user/bikes"),
     new NavigationLink("Tickets", "confirmation_number", "/user/tickets"),
-    new NavigationLink("History", "history", "/user/history")
   ];
 
   constructor(

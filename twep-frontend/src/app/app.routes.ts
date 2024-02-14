@@ -16,7 +16,6 @@ import {UserhomeComponent} from './userhome/userhome.component';
 import { UserMapComponent } from './user-map/user-map.component';
 import { authenticationGuard } from './auth.guard';
 import { TicketsComponent } from './tickets/tickets.component';
-import { HistoryComponent } from './history/history.component';
 
 import {AccountComponent} from './account/account.component';
 import { BikeFilterListComponent } from './bike-filter-list/bike-filter-list.component';
@@ -102,10 +101,6 @@ export const routes: Routes = [
             {
                 path: 'tickets',
                 component: TicketsComponent
-            },
-            {
-                path: 'history',
-                component: HistoryComponent
             },
             {
                 path: 'account',

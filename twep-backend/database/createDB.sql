@@ -61,7 +61,6 @@ CREATE TABLE individual_bikes (
 
 ALTER TABLE individual_bikes ADD COLUMN parking_place_id UUID REFERENCES parking_places(id) ON DELETE CASCADE;
 
-
 CREATE TABLE tickets (
     id UUID PRIMARY KEY,
     user_id UUID REFERENCES users(id) ON DELETE CASCADE,

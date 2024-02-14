@@ -21,7 +21,7 @@ import { MatSelectModule, MatSelectChange } from '@angular/material/select';
 
 import { WalletService } from '../service/wallet.service';
 import { OnInit } from '@angular/core';
-import { TicketService } from '../service/tickets.service'; 
+import { TicketService, UserTicket } from '../service/tickets.service'; 
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule } from '@angular/common/http';
@@ -79,11 +79,10 @@ export class TicketsComponent implements OnInit {
   ) {}
 
 fetchUserTickets(): void { 
-    
       this.ticketService.getUserTickets(this.userId)
         .subscribe({
-          next: response => {
-            this.userTickets = response.tickets;
+          next: (tickets: UserTicket[]) => {
+            this.userTickets = tickets;
           },
           error: error => {
             console.error('Error fetching user tickets:', error);
@@ -108,25 +107,21 @@ fetchUserTickets(): void {
   
 
   createTicket(): void {
-    const ticketDetails = {
-      bikeType: 'Mountain Bike',
-      station: 'Station A',
-      purchaseDate: '2024-01-10T08:00:00Z',
-      immediateRenting: true,
-      reservedStation: 'Station B'
-    };
+    const ticket = {
+        "bikeId": "b3182d20-32d8-4ee7-93c5-20477f76af14",
+        "fromDate": "2024-02-14T20:37:29.882Z",
+        "untilDate": "2024-02-14T20:37:29.882Z",
+        "immediateRenting": false,
+    }
 
-    this.ticketService.createUserTicket(this.userId, ticketDetails)
+    this.ticketService.createUserTicket(this.userId, ticket)
       .subscribe({
         next: response => {
           console.log('Ticket created successfully:', response);
-          this.userTickets = response.tickets; //  that right?
-          
-          
+          this.fetchUserTickets();
         },
         error: error => {
           console.error('Error creating ticket:', error);
-         
         }
       });
   }

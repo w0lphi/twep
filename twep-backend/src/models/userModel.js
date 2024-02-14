@@ -23,7 +23,13 @@ class UserModel {
     static async getUserTickets(userId) {
         try {
             const { rows } = await pool.query(userQueries.getUserTickets, [userId]);
-            return rows;
+            return rows.map(ticket => {
+                return {
+                    ...ticket,
+                    from_date: ticket.from_date.toISOString(),
+                    until_date: ticket.until_date.toISOString()
+                };
+            });
         } catch (error) {
             throw error;
         }
@@ -83,15 +89,22 @@ class UserModel {
         }
     }
 
-    static async purchaseTicket(userId, { bikeId, immediateRenting, qrCodeBase64 }) {
+    static async purchaseTicket(userId, { bikeId, immediateRenting, fromDate, untilDate, qrCodeBase64 }) {
         try {
             const { rows } = await pool.query(userQueries.purchaseTicket, [
                 userId,
                 bikeId,
+                fromDate, 
+                untilDate,
                 immediateRenting,
                 qrCodeBase64,
             ]);
-            return rows[0];
+            const purchasedTicket = rows[0];
+            return {
+                ...purchasedTicket,
+                from_date: purchasedTicket.from_date.toISOString(),
+                until_date: purchasedTicket.until_date.toISOString()
+            };
         } catch (error) {
             throw error;
         }

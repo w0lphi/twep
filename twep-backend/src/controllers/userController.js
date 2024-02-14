@@ -226,19 +226,14 @@ const addMoneyToWallet = async (userId, amount) => {
 const ticketCost = 10;
 const purchaseTicket = async (userId, { bikeId, fromDate, untilDate, immediateRenting }) => {
     try {
-        // Check user's wallet balance
-        const userAccount = await UserModel.getUserAccount(userId);
-
-        if (userAccount.wallet < 10) {
-            throw { status: 400, message: 'Insufficient funds in the wallet for ticket purchase' };
-        }
-
         // Generate QR code for the purchased ticket
         const qrCodeBase64 = await generateQRCode({ bikeId, fromDate, untilDate });
 
         // Proceed with ticket purchase if wallet balance is sufficient, passing the generated QR code
         const purchasedTicket = await UserModel.purchaseTicket(userId, {
             bikeId,
+            fromDate,
+            untilDate,
             immediateRenting,
             qrCodeBase64,
         });

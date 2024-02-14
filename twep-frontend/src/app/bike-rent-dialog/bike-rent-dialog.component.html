@@ -10,8 +10,6 @@
                 <div class="twep-rent-success-container">
                     <mat-icon>check_circle</mat-icon>
                 </div>
-                <div>Booking start: {{this.bookingStart?.toISOString()}}</div>
-                <div>Booking end: {{this.bookingEnd?.toISOString()}}</div>
             </div>
             <div
                 mat-dialog-actions
@@ -45,19 +43,32 @@
                 <mat-divider />
                 <div>
                     <div>Booking start:</div>
-                    <app-date-time-picker [(datetime)]="bookingStart" [disabled]="immediateRenting" />
-                    <mat-checkbox [(ngModel)]="immediateRenting">
+                    <app-date-time-picker 
+                        [(datetime)]="bookingStart" 
+                        [disabled]="immediateRenting" 
+                        (datetimeChange)="calculatePrice()" 
+                    />
+                    <mat-checkbox [(ngModel)]="immediateRenting" (change)="calculatePrice()">
                         Immediate renting
                     </mat-checkbox>
                 </div>
                 <div>
                     <div>Booking end:</div>
-                    <app-date-time-picker [(datetime)]="bookingEnd" />
+                    <app-date-time-picker [(datetime)]="bookingEnd" 
+                        (datetimeChange)="calculatePrice()"  
+                    />
                 </div>
             </div>
             <div mat-dialog-actions class="twep-rent-price">
                 <div>Total Price:</div>
-                <div>{{ formattedPrice }}</div>
+                <div>
+                    @if(calculatingPrice){
+                        <mat-spinner color="primary" diameter="32"/>
+                    }
+                    @else {
+                        {{ formattedPrice }}
+                    }
+                </div>
             </div>
             <div mat-dialog-actions>
                 <div class="twep-spacer"></div>
