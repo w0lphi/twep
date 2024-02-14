@@ -68,20 +68,14 @@ CREATE TABLE tickets (
     bike_id UUID REFERENCES individual_bikes(id) ON DELETE CASCADE,
     from_date TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP NOT NULL,
     until_date TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    immediate_renting BOOLEAN NOT NULL
+    immediate_renting BOOLEAN NOT NULL,
+    qr_code_base_64 TEXT
 );
 
 
 insert into users (id, email, password, wallet, role)
 values ('3d577f6d-f4a3-4c25-a43c-05e7e06298a4','admin@twep.com', '$2b$10$X23DxyLKrGz/.NOUVVmsZ.d1z3diI2OrHvuEvnvl/wM2ly6Jr28KO', 0, 'admin' );
-
-
--- IDK how to insert admin account with the correct hasing algo directly into the db
--- so I make a normal account using the POST request and then change the role in the db with:
-
---UPDATE users
---SET role = 'admin'
---WHERE id = ' ';
+--password is password
 
 
 -- Insert a new station

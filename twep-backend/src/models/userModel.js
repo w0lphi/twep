@@ -83,12 +83,13 @@ class UserModel {
         }
     }
 
-    static async purchaseTicket(userId, { bikeId, immediateRenting }) {
+    static async purchaseTicket(userId, { bikeId, immediateRenting, qrCodeBase64 }) {
         try {
             const { rows } = await pool.query(userQueries.purchaseTicket, [
                 userId,
                 bikeId,
                 immediateRenting,
+                qrCodeBase64,
             ]);
             return rows[0];
         } catch (error) {

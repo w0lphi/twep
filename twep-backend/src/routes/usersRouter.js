@@ -114,7 +114,10 @@ router.post("/:userId/tickets", verifyToken, async (req, res) => {
       immediateRenting,
     });
 
-    res.status(201).json(purchasedTicket);
+    res.status(201).json({
+      ticket: purchasedTicket,
+      qrCodePath: purchasedTicket.qrCodePath // Return the QR code path in the response
+    });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Internal Server Error" });

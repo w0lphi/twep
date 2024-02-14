@@ -5,6 +5,10 @@ const { v4: uuidv4 } = require('uuid');
 const userQueries = require('../queries/userQueries');
 const { convertKeysToCamelCase, snakeCaseToCamelCase, convertSnakeToCamel } = require('../utility/utility');
 const UserModel = require('../models/userModel');
+const path = require('path');
+
+const qr = require('qrcode');
+const fs = require('fs');
 
 const registerUser = async (req, res) => {
     try {
@@ -229,24 +233,59 @@ const purchaseTicket = async (userId, { bikeId, fromDate, untilDate, immediateRe
             throw { status: 400, message: 'Insufficient funds in the wallet for ticket purchase' };
         }
 
-        // Proceed with ticket purchase if wallet balance is sufficient
+        // Generate QR code for the purchased ticket
+        const qrCodeBase64 = await generateQRCode({ bikeId, fromDate, untilDate });
+
+        // Proceed with ticket purchase if wallet balance is sufficient, passing the generated QR code
         const purchasedTicket = await UserModel.purchaseTicket(userId, {
             bikeId,
-            fromDate,
-            untilDate,
             immediateRenting,
+            qrCodeBase64,
         });
 
         // Deduct ticket cost from the user's wallet
         await UserModel.deductMoneyFromWallet(userId, ticketCost);
 
-        const camelCasePurchasedTicket = convertKeysToCamelCase(purchasedTicket);
+        const purchasedTicketCamel = convertKeysToCamelCase(purchasedTicket);
 
-        return camelCasePurchasedTicket;
+        return purchasedTicketCamel;
     } catch (error) {
         throw error;
     }
 };
+
+
+
+// Function to generate QR code for ticket data
+async function generateQRCode(ticketData) {
+    try {
+        const qrData = JSON.stringify(ticketData);
+        const qrCodeDir = path.join(__dirname, 'qr_codes'); // Path to save QR code image
+        const qrCodePath = path.join(qrCodeDir, 'ticket_qr.png'); // Full path to save QR code image
+
+        // Create the directory if it doesn't exist
+        if (!fs.existsSync(qrCodeDir)) {
+            fs.mkdirSync(qrCodeDir);
+        }
+
+        // Generate QR code and save it to file
+        await qr.toFile(qrCodePath, qrData);
+
+        // Read the generated PNG image file
+        const pngData = fs.readFileSync(qrCodePath);
+
+        // Convert the PNG image data to base64
+        const base64Data = Buffer.from(pngData).toString('base64');
+
+        // Remove the PNG image file (optional)
+        fs.unlinkSync(qrCodePath);
+
+        return base64Data;
+    } catch (error) {
+        console.error('Error generating QR code:', error);
+        throw error;
+    }
+}
 
 
 

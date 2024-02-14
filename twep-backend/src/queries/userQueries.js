@@ -51,14 +51,15 @@ const addMoneyToWallet = `
 `;
 
 const purchaseTicket = `
-    INSERT INTO tickets (id, user_id, bike_id, from_date, until_date, immediate_renting)
-    VALUES (uuid_generate_v4(), $1, $2, DEFAULT, DEFAULT, $3)
+    INSERT INTO tickets (id, user_id, bike_id, from_date, until_date, immediate_renting, qr_code_base64)
+    VALUES (uuid_generate_v4(), $1, $2, DEFAULT, DEFAULT, $3, $4)
     RETURNING
         id,
         bike_id,
         to_char(from_date, 'YYYY-MM-DD"T"HH24:MI:SS"Z"') AS from_date,
         to_char(until_date, 'YYYY-MM-DD"T"HH24:MI:SS"Z"') AS until_date,
-        immediate_renting;
+        immediate_renting,
+        qr_code_base64;
 `;
 
 const getStations = `
