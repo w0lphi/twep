@@ -72,43 +72,38 @@ CREATE TABLE tickets (
     qr_code_base_64 TEXT
 );
 
-
+-- insert default admin account into db. Password is "password"
 insert into users (id, email, password, wallet, role)
 values ('3d577f6d-f4a3-4c25-a43c-05e7e06298a4','admin@twep.com', '$2b$10$X23DxyLKrGz/.NOUVVmsZ.d1z3diI2OrHvuEvnvl/wM2ly6Jr28KO', 0, 'admin' );
---password is password
-
 
 -- Insert a new station
-INSERT INTO stations (name, location, operational) 
-VALUES ('Bike Station City Arkaden 2', '{"latitude": 46.62669319613631, "longitude": 14.308627007404851}', true)
-RETURNING id;
+INSERT INTO stations (id, name, location, operational) 
+VALUES ('4f5d7722-c70b-44c8-ac4f-5cabd81d80ae', 'Bike Station City Arkaden 2', '{"latitude": 46.62669319613631, "longitude": 14.308627007404851}', true);
 
-INSERT INTO parking_places (station_id, occupied, bike_categories)
+INSERT INTO parking_places (id, station_id, occupied, bike_categories)
 VALUES
-  ('cd323b6a-7647-4423-b0ee-5c611b5e794d', false, ARRAY['{"name": "Mountain Bike"}', '{"name": "Road Bike"}']::jsonb[]),
-  ('cd323b6a-7647-4423-b0ee-5c611b5e794d', true, ARRAY['{"name": "City Bike"}', '{"name": "Electric Bike"}']::jsonb[]),
-  ('cd323b6a-7647-4423-b0ee-5c611b5e794d', false, ARRAY['{"name": "Hybrid Bike"}', '{"name": "Tandem Bike"}']::jsonb[]),
-  ('cd323b6a-7647-4423-b0ee-5c611b5e794d', true, ARRAY['{"name": "Folding Bike"}', '{"name": "Cargo Bike"}']::jsonb[]);
+  ('7635787f-3f4d-4a1f-93c7-f7efb42f9cfe', '4f5d7722-c70b-44c8-ac4f-5cabd81d80ae', true, ARRAY['{"name": "Mountain Bike"}', '{"name": "Road Bike"}']::jsonb[]),
+  ('91faa446-1bf1-4d84-8a54-2b15e0e8f4ca', '4f5d7722-c70b-44c8-ac4f-5cabd81d80ae', true, ARRAY['{"name": "City Bike"}', '{"name": "Electric Bike"}']::jsonb[]);
 
 
-INSERT INTO bike_categories (name)
+INSERT INTO bike_categories (id, name)
 VALUES
-    ('Mountain Bikes'),
-    ('Road Bikes'),
-    ('City Bikes');
+    ('daf594a3-c350-42d5-9b1f-7f679ae0a30b', 'Mountain Bike'),
+    ('daf594a3-c350-42d5-9b1f-7f679ae0a30c', 'Road Bike'),
+    ('daf594a3-c350-42d5-9b1f-7f679ae0a30d', 'Electric Bike'),
+    ('daf594a3-c350-42d5-9b1f-7f679ae0a30e', 'City Bike');
 
 
-INSERT INTO bike_models (name, description, wheel_size, extra_features, category_id)
+INSERT INTO bike_models (id, name, description, wheel_size, extra_features, category_id) 
+VALUES 
+    ('186760ff-6379-4703-89c2-0844b85b3433', 'KTM Summit Trailblazer', 'Introducing the Summit Trailblazer, a high-performance mountain bike designed for rugged terrains and thrilling adventures. Its lightweight aluminum frame ensures agility, while the precision-engineered suspension system provides a smooth ride. Equipped with responsive disc brakes and versatile gearing, the Summit Trailblazer conquers trails with unmatched reliability and style.', 27.5, '{"Lighweight Aluminium Frame","Improved suspension system","Responsive disc brake"}', 'daf594a3-c350-42d5-9b1f-7f679ae0a30b'),
+    ('20acd6d9-262c-4c2b-b80c-2ca04912295b', 'UrbanCruise 500', 'The UrbanCruise 500 is a sleek and agile city bike designed for urban commuters seeking a perfect blend of style and functionality. With a lightweight aluminum frame, comfortable saddle, and responsive brakes, it offers a smooth and efficient ride through the bustling streets, making commuting a breeze.', 29, '{"Extra comfortable saddle","Responsive breaks"}', 'daf594a3-c350-42d5-9b1f-7f679ae0a30e');
+
+INSERT INTO individual_bikes (id, bike_category, status, bike_model_id, parking_place_id)
 VALUES
-    ('Model X', 'Electric bike with powerful motor', 26.5, ARRAY['LCD display', 'Front suspension'], '27721359-8545-4572-907c-8933b9f22900'),
-    ('Model Y', 'Mountain bike for off-road adventures', 29, ARRAY['Hydraulic disc brakes', 'Aluminum frame'], 'f6bfb12c-1e6b-4ed0-a8cf-bf771534e6d0'),
-    ('Model Z', 'High-performance road bike', 28, ARRAY['Carbon fiber frame', 'Shimano Ultegra components'], 'ff14359e-3e91-449d-b7bb-c0c7ab451a63'),
-    ('Model A', 'Comfortable city bike for urban commuting', 26, ARRAY['Rear rack', 'Fenders'], 'd8ddcfcd-20a9-4a60-88d0-f11d6b7c874c');
+    ('b3182d20-32d8-4ee7-93c5-20477f76af13', 'City Bike', 'available', '20acd6d9-262c-4c2b-b80c-2ca04912295b', '7635787f-3f4d-4a1f-93c7-f7efb42f9cfe'),
+    ('b3182d20-32d8-4ee7-93c5-20477f76af14', 'Mountain Bike', 'available', '186760ff-6379-4703-89c2-0844b85b3433', '91faa446-1bf1-4d84-8a54-2b15e0e8f4ca');
 
-INSERT INTO individual_bikes (bike_category, status, bike_model_id, parking_place_id)
-VALUES
-    ('27721359-8545-4572-907c-8933b9f22900', 'available', '3e95689b-1aaf-4369-8ef5-d5849a4dcda9', 'c2c6b68e-759c-496a-a860-ee27c8874884'),
-    ('27721359-8545-4572-907c-8933b9f22900', 'available', '81b33045-c559-4ec0-93ad-c7499152c3c1', '6715d329-8ceb-4ccb-9b05-48b73ecfaa77');
 
 
 
