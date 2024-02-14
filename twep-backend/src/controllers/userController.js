@@ -47,10 +47,10 @@ const loginUser = async (req, res) => {
 
         // Generate JWT
         const loggedInUser = user.rows[0];
-        const token = jwt.sign({ 
-            userId: loggedInUser.id, 
-            email: loggedInUser.email, 
-            role: loggedInUser.role 
+        const token = jwt.sign({
+            userId: loggedInUser.id,
+            email: loggedInUser.email,
+            role: loggedInUser.role
         }, 'twep-jwt-secret', { expiresIn: '1h' });
 
         res.status(200).json({ token });
@@ -99,7 +99,7 @@ const getAllTicketsForUser = async (req, res) => {
     try {
         const { userId } = req.params;
 
-        // Call the method from the TicketModel to retrieve tickets for the user
+
         const tickets = await UserModel.getUserTickets(userId);
         // Convert keys to camelCase and handle special case for 'purchase_date'
         const camelCaseTickets = tickets.map(ticket => convertSnakeToCamel(ticket));
@@ -171,14 +171,14 @@ const getBikesAtStation = async (req, res) => {
 const getAllBikes = async (req, res) => {
     try {
 
-      const bikes = convertKeysToCamelCase(
-        await UserModel.getAllBikes()
-      );
-      const response = { bikes };
-      res.json(response);
+        const bikes = convertKeysToCamelCase(
+            await UserModel.getAllBikes()
+        );
+        const response = { bikes };
+        res.json(response);
     } catch (error) {
-      console.error(error);
-      res.status(500).json({ error: "Internal Server Error" });
+        console.error(error);
+        res.status(500).json({ error: "Internal Server Error" });
     }
 }
 

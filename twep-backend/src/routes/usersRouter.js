@@ -75,7 +75,7 @@ router.get("/:userId/account", async (req, res) => {
   }
 });
 
-router.post("/:userId/tickets", async (req, res) => {
+router.post("/:userId/tickets", verifyToken, async (req, res) => {
   try {
     const {
       bikeType,
@@ -85,6 +85,12 @@ router.post("/:userId/tickets", async (req, res) => {
       reservedStation,
     } = req.body;
     const userId = req.params.userId;
+    const tokenUserId = req.user.userId;
+
+    // Check if the user ID from the token matches the user ID from the request parameters
+    if (userId !== tokenUserId) {
+      return res.status(403).json({ error: "Forbidden - You can only purchase tickets for yourself" });
+    }
 
     // Purchase the ticket
     const purchasedTicket = await userController.purchaseTicket(userId, {
