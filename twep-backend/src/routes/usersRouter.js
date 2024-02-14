@@ -21,7 +21,15 @@ router.get('/:userId/account/tickets', userController.getAllTicketsForUser);
 
 router.post("/:userId/account/add-money", async (req, res) => {
   try {
+
     const userId = req.params.userId;
+    const tokenUserId = req.user.userId;
+
+    // Check if the user ID from the token matches the user ID from the request parameters
+    if (userId !== tokenUserId) {
+      return res.status(403).json({ error: "Forbidden - No Access" });
+    }
+
     const { amount } = req.body;
 
     const updatedUser = await userController.addMoneyToWallet(userId, amount);
@@ -58,8 +66,15 @@ router.get("/profile", async (req, res) => {
 
 router.get("/:userId/account", async (req, res) => {
   try {
+    const tokenUserId = req.user.userId;
     // Access user details from req.params
     const userId = req.params.userId;
+
+    // Check if the user ID from the token matches the user ID from the request parameters
+    if (userId !== tokenUserId) {
+      return res.status(403).json({ error: "Forbidden - No Access" });
+    }
+
 
     // Retrieve user account details using the method from the controller
     const accountDetails = await userController.getUserAccount(userId);
@@ -78,11 +93,10 @@ router.get("/:userId/account", async (req, res) => {
 router.post("/:userId/tickets", verifyToken, async (req, res) => {
   try {
     const {
-      bikeType,
-      station,
-      purchaseDate,
+      bikeId,
+      fromDate,
+      untilDate,
       immediateRenting,
-      reservedStation,
     } = req.body;
     const userId = req.params.userId;
     const tokenUserId = req.user.userId;
@@ -94,11 +108,10 @@ router.post("/:userId/tickets", verifyToken, async (req, res) => {
 
     // Purchase the ticket
     const purchasedTicket = await userController.purchaseTicket(userId, {
-      bikeType,
-      station,
-      purchaseDate,
+      bikeId,
+      fromDate,
+      untilDate,
       immediateRenting,
-      reservedStation,
     });
 
     res.status(201).json(purchasedTicket);

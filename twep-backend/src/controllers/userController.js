@@ -68,7 +68,7 @@ const getUserAccount = async (userId) => {
             throw { status: 404, message: 'User account not found' };
         }
 
-        const { id, email, role, wallet, ticket_id, bike_type, station, purchase_date, immediate_renting, reserved_station } = accountDetails.rows[0];
+        const { id, email, role, wallet, ticket_id, bike_id, from_date, until_date, immediate_renting } = accountDetails.rows[0];
 
         const response = {
             id,
@@ -81,11 +81,10 @@ const getUserAccount = async (userId) => {
         if (ticket_id) {
             response.tickets.push({
                 id: ticket_id,
-                bikeType: bike_type,
-                station,
-                purchaseDate: purchase_date,
+                bikeId: bike_id,
+                fromDate: from_date,
+                untilDate: until_date,
                 immediateRenting: immediate_renting,
-                reservedStation: reserved_station,
             });
         }
 
@@ -101,16 +100,11 @@ const getAllTicketsForUser = async (req, res) => {
 
 
         const tickets = await UserModel.getUserTickets(userId);
-        // Convert keys to camelCase and handle special case for 'purchase_date'
+
         const camelCaseTickets = tickets.map(ticket => convertSnakeToCamel(ticket));
 
-        // Format the purchase date for each ticket
-        const formattedTickets = camelCaseTickets.map(ticket => ({
-            ...ticket,
-            purchaseDate: ticket.purchaseDate ? new Date(ticket.purchaseDate).toISOString() : null, // Convert to Date object and then format
-        }));
 
-        res.status(200).json({ tickets: formattedTickets });
+        res.status(200).json({ tickets: camelCaseTickets });
     } catch (error) {
         console.error(error);
         res.status(500).json({ error: 'Internal Server Error' });
@@ -226,7 +220,7 @@ const addMoneyToWallet = async (userId, amount) => {
 };
 
 const ticketCost = 10;
-const purchaseTicket = async (userId, { bikeType, station, purchaseDate, immediateRenting, reservedStation }) => {
+const purchaseTicket = async (userId, { bikeId, fromDate, untilDate, immediateRenting }) => {
     try {
         // Check user's wallet balance
         const userAccount = await UserModel.getUserAccount(userId);
@@ -237,11 +231,10 @@ const purchaseTicket = async (userId, { bikeType, station, purchaseDate, immedia
 
         // Proceed with ticket purchase if wallet balance is sufficient
         const purchasedTicket = await UserModel.purchaseTicket(userId, {
-            bikeType,
-            station,
-            purchaseDate,
+            bikeId,
+            fromDate,
+            untilDate,
             immediateRenting,
-            reservedStation,
         });
 
         // Deduct ticket cost from the user's wallet

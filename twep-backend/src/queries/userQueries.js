@@ -4,8 +4,8 @@ const registerUser = `
         VALUES ($1, $2, $3)
         RETURNING id, email, password, role, wallet
     )
-    INSERT INTO tickets (user_id, bike_type, station, purchase_date, immediate_renting, reserved_station)
-    VALUES ( (SELECT id FROM inserted_user), $4, $5, $6, $7, $8)
+    INSERT INTO tickets (id, user_id, bike_id, from_date, until_date, immediate_renting)
+    VALUES (uuid_generate_v4(), $1, $2, DEFAULT, DEFAULT, $3)
     RETURNING *;
 `;
 
@@ -16,7 +16,7 @@ const loginUser = `
 `;
 
 const getUserTickets = `
-    SELECT id, bike_type, station, purchase_date, immediate_renting, reserved_station
+    SELECT *
     FROM tickets
     WHERE user_id = $1;
 `;
@@ -25,22 +25,23 @@ const deductMoneyFromWallet = 'UPDATE users SET wallet = wallet - $1 WHERE id = 
 
 const getUserAccount = `
     SELECT
-    u.id,
-    u.email,
-    u.role,
-    u.wallet,
-    t.id AS ticket_id,
-    t.bike_type AS bike_type,
-    t.station,
-    to_char(t.purchase_date, 'YYYY-MM-DD"T"HH24:MI:SS"Z"') AS purchase_date,
-    t.immediate_renting AS immediate_renting,
-    t.reserved_station AS reserved_Station
+        u.id,
+        u.email,
+        u.role,
+        u.wallet,
+        t.id AS ticket_id,
+        t.bike_id,
+        to_char(t.from_date, 'YYYY-MM-DD"T"HH24:MI:SS"Z"') AS from_date,
+        to_char(t.until_date, 'YYYY-MM-DD"T"HH24:MI:SS"Z"') AS until_date,
+        t.immediate_renting AS immediate_renting
     FROM
-    users u
+        users u
     LEFT JOIN
-    tickets t ON u.id = t.user_id
-    WHERE u.id = $1; 
+        tickets t ON u.id = t.user_id
+    WHERE
+        u.id = $1; 
 `;
+
 
 const addMoneyToWallet = `
     UPDATE users
@@ -50,15 +51,14 @@ const addMoneyToWallet = `
 `;
 
 const purchaseTicket = `
-    INSERT INTO tickets (id, user_id, bike_type, station, purchase_date, immediate_renting, reserved_station)
-    VALUES (uuid_generate_v4(), $1, $2, $3, $4, $5, $6)
+    INSERT INTO tickets (id, user_id, bike_id, from_date, until_date, immediate_renting)
+    VALUES (uuid_generate_v4(), $1, $2, DEFAULT, DEFAULT, $3)
     RETURNING
         id,
-        bike_type,
-        station,
-        to_char(purchase_date, 'YYYY-MM-DD"T"HH24:MI:SS"Z"') AS purchase_date,
-        immediate_renting,
-        reserved_station;
+        bike_id,
+        to_char(from_date, 'YYYY-MM-DD"T"HH24:MI:SS"Z"') AS from_date,
+        to_char(until_date, 'YYYY-MM-DD"T"HH24:MI:SS"Z"') AS until_date,
+        immediate_renting;
 `;
 
 const getStations = `

@@ -65,13 +65,12 @@ ALTER TABLE individual_bikes ADD COLUMN parking_place_id UUID REFERENCES parking
 CREATE TABLE tickets (
     id UUID PRIMARY KEY,
     user_id UUID REFERENCES users(id) ON DELETE CASCADE,
-    bike_type VARCHAR(255) NOT NULL,
-    station VARCHAR(255) NOT NULL,
-    purchase_date TIMESTAMPTZ NOT NULL,
-    immediate_renting BOOLEAN NOT NULL,
-    reserved_station VARCHAR(255),
-    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+    bike_id UUID REFERENCES individual_bikes(id) ON DELETE CASCADE,
+    from_date TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    until_date TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    immediate_renting BOOLEAN NOT NULL
 );
+
 
 insert into users (id, email, password, wallet, role)
 values ('3d577f6d-f4a3-4c25-a43c-05e7e06298a4','admin@twep.com', '$2b$10$X23DxyLKrGz/.NOUVVmsZ.d1z3diI2OrHvuEvnvl/wM2ly6Jr28KO', 0, 'admin' );

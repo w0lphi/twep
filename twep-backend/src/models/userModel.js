@@ -56,7 +56,7 @@ class UserModel {
         }
     }
 
-    static async getAllBikes(){
+    static async getAllBikes() {
         try {
             const bikes = await pool.query(userQueries.getAllBikes);
             return bikes.rows;
@@ -65,7 +65,7 @@ class UserModel {
         }
     }
 
-    static async getAllBikeModels(){
+    static async getAllBikeModels() {
         try {
             const { rows } = await pool.query(userQueries.getAllBikeModels);
             return rows;
@@ -83,15 +83,12 @@ class UserModel {
         }
     }
 
-    static async purchaseTicket(userId, { bikeType, station, purchaseDate, immediateRenting, reservedStation }) {
+    static async purchaseTicket(userId, { bikeId, immediateRenting }) {
         try {
             const { rows } = await pool.query(userQueries.purchaseTicket, [
                 userId,
-                bikeType,
-                station,
-                purchaseDate,
+                bikeId,
                 immediateRenting,
-                reservedStation,
             ]);
             return rows[0];
         } catch (error) {
@@ -115,12 +112,11 @@ class UserModel {
                 role: rows[0].role,
                 wallet: rows[0].wallet,
                 tickets: rows.map(ticket => ({
-                    id: ticket.ticketId,
-                    bikeType: ticket.bikeType,
-                    station: ticket.station,
-                    purchaseDate: ticket.purchaseDate,
-                    immediateRenting: ticket.immediateRenting,
-                    reservedStation: ticket.reservedStation,
+                    id: ticket.id,
+                    bikeId: ticket.bike_id,
+                    fromDate: ticket.from_date,
+                    untilDate: ticket.until_date,
+                    immediateRenting: ticket.immediate_renting,
                 })),
             };
 
@@ -160,21 +156,6 @@ class UserModel {
         }
     }
 
-    static async purchaseTicket(userId, { bikeType, station, purchaseDate, immediateRenting, reservedStation }) {
-        try {
-            const { rows } = await pool.query(userQueries.purchaseTicket, [
-                userId,
-                bikeType,
-                station,
-                purchaseDate,
-                immediateRenting,
-                reservedStation,
-            ]);
-            return rows[0];
-        } catch (error) {
-            throw error;
-        }
-    }
 
 }
 
