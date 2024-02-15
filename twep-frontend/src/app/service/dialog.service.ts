@@ -7,11 +7,13 @@ import { firstValueFrom } from 'rxjs';
 import { Bike } from '../model/bike';
 import { Ticket } from '../model/ticket';
 import { QrCodeDialogComponent } from '../qr-code-dialog/qr-code-dialog.component';
+import { CreateCategoryDialogComponent } from '../create-category-dialog/create-category-dialog.component';
 
 @Injectable({ providedIn: 'root' })
 export class DialogService {
   private confirmDialogRef!: MatDialogRef<ConfirmDialogComponent, boolean>;
-  private promptDialogRef!: MatDialogRef<PromptDialogComponent, string | null>; 
+  private promptDialogRef!: MatDialogRef<PromptDialogComponent, string | null>;
+  private createCategoryDialogRef!: MatDialogRef<CreateCategoryDialogComponent, boolean>;
 
   constructor(private dialog: MatDialog) {}
 
@@ -61,5 +63,16 @@ export class DialogService {
       disableClose: true,
       hasBackdrop: true,
     })
+  }
+
+  async openBikeCategoryCreateDialog(): Promise<boolean>{
+    this.createCategoryDialogRef = this.dialog.open(CreateCategoryDialogComponent, {
+      width: "600px",
+      disableClose: true,
+      hasBackdrop: true
+    });
+
+    const reload: boolean | undefined = await firstValueFrom(this.createCategoryDialogRef.afterClosed());
+    return reload ?? false;
   }
 }
