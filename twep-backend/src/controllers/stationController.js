@@ -182,7 +182,7 @@ const stationController = {
 
     async createBikeCategory(req, res) {
         try {
-            const { name } = req.body;
+            const { name, hourPrice } = req.body;
 
             // Check if the bike category already exists
             const existingCategory = await StationModel.getBikeCategoryByName(name);
@@ -191,9 +191,29 @@ const stationController = {
                 return res.status(400).json({ error: 'Bike category already exists in the database.' });
             }
 
-            const newCategoryId = await StationModel.createBikeCategory({ name });
+            const newCategoryId = await StationModel.createBikeCategory({ name, hourPrice });
 
             res.json({ id: newCategoryId, message: 'Bike category created successfully.' });
+        } catch (error) {
+            console.error(error);
+            res.status(500).send('Internal Server Error');
+        }
+    },
+
+    async updateBikeCategoryPrice(req, res){
+        try{
+            const id = req.params.id;
+
+            const existingCategory = await StationModel.getBikeCategoryById(id);
+            if(existingCategory === null){
+                return res.status(404).json({error: 'Bike category not found'});
+            }
+            const hourPrice = Number(req.body.hourPrice);
+            if(Number.isNaN(hourPrice) || hourPrice < 0){
+                return res.status(400).json({error: 'Price of bike category must be a positive number'});
+            }
+            const updatedCategory = await StationModel.updateBikeCategoryPrice(id, hourPrice);
+            return res.json(convertKeysToCamelCase(updatedCategory));
         } catch (error) {
             console.error(error);
             res.status(500).send('Internal Server Error');

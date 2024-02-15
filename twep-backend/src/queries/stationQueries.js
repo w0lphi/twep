@@ -42,7 +42,8 @@ const getStationById = `
 
 const createStation = 'INSERT INTO stations(id, name, location, operational) VALUES($1, $2, $3, $4) RETURNING id';
 const createParkingPlace = 'INSERT INTO parking_places(id, station_id, occupied, bike_categories) VALUES($1, $2, $3, $4)';
-const createBikeCategory = 'INSERT INTO bike_categories(id, name) VALUES($1, $2)';
+const createBikeCategory = 'INSERT INTO bike_categories(id, name, hour_price) VALUES($1, $2, $3)';
+const updateBikeCategoryHourPrice = 'UPDATE bike_categories SET hour_price = $2 WHERE id = $1 RETURNING *'
 const createParkingPlaceBikeCategory = 'INSERT INTO parking_place_bike_categories(parking_place_id, bike_category_id) VALUES($1, $2)';
 
 const updateStation = `
@@ -179,6 +180,7 @@ module.exports = {
     getBikeCategoryByName,
     deleteBikeCategoryById,
     getBikeCategoryById,
+    updateBikeCategoryHourPrice,
     getAllBikeModels,
     createBikeModel,
     updateBikeModel,

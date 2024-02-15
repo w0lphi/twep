@@ -33,7 +33,7 @@ CREATE TABLE parking_places (
 CREATE TABLE bike_categories (
     id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
     name VARCHAR(255),
-    hour_price NUMERIC DEFAULT 0,
+    hour_price NUMERIC DEFAULT 0
 );
 
 CREATE TABLE parking_place_bike_categories (
@@ -88,12 +88,12 @@ VALUES
   ('91faa446-1bf1-4d84-8a54-2b15e0e8f4ca', '4f5d7722-c70b-44c8-ac4f-5cabd81d80ae', true, ARRAY['{"name": "City Bike"}', '{"name": "Electric Bike"}']::jsonb[]);
 
 
-INSERT INTO bike_categories (id, name)
+INSERT INTO bike_categories (id, name, hour_price)
 VALUES
-    ('daf594a3-c350-42d5-9b1f-7f679ae0a30b', 'Mountain Bike'),
-    ('daf594a3-c350-42d5-9b1f-7f679ae0a30c', 'Road Bike'),
-    ('daf594a3-c350-42d5-9b1f-7f679ae0a30d', 'Electric Bike'),
-    ('daf594a3-c350-42d5-9b1f-7f679ae0a30e', 'City Bike');
+    ('daf594a3-c350-42d5-9b1f-7f679ae0a30b', 'Mountain Bike', 15),
+    ('daf594a3-c350-42d5-9b1f-7f679ae0a30c', 'Road Bike', 10),
+    ('daf594a3-c350-42d5-9b1f-7f679ae0a30d', 'Electric Bike', 40),
+    ('daf594a3-c350-42d5-9b1f-7f679ae0a30e', 'City Bike', 20);
 
 
 INSERT INTO bike_models (id, name, description, wheel_size, extra_features, category_id) 

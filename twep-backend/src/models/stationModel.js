@@ -162,7 +162,8 @@ class StationModel {
     static async createBikeCategory(bikeCategoryData) {
         try {
             // Check if the bike category already exists
-            const existingCategory = await pool.query(stationQueries.getBikeCategoryByName, [bikeCategoryData.name]);
+            const { name, hourPrice } = bikeCategoryData;
+            const existingCategory = await pool.query(stationQueries.getBikeCategoryByName, [name]);
 
             if (existingCategory.rows.length > 0) {
                 // If it exists, return the existing category
@@ -171,7 +172,8 @@ class StationModel {
                 // If it doesn't exist, create a new bike category
                 const newCategory = await pool.query(stationQueries.createBikeCategory, [
                     uuidv4(),
-                    bikeCategoryData.name,
+                    name,
+                    hourPrice
                 ]);
 
                 return newCategory.rows[0];
@@ -181,9 +183,22 @@ class StationModel {
         }
     }
 
-    static async getBikeCategoryByName(categoryId) {
+    static async updateBikeCategoryPrice(categoryId, hourPrice){
         try {
-            const { rows } = await pool.query(stationQueries.getBikeCategoryById, [categoryId]);
+            // Check if the bike category already exists
+            const { rows } = await pool.query(stationQueries.updateBikeCategoryHourPrice, [
+                categoryId,
+                hourPrice
+            ]);
+            return rows[0];
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    static async getBikeCategoryByName(name) {
+        try {
+            const { rows } = await pool.query(stationQueries.getBikeCategoryByName, [name]);
 
             if (rows.length === 0) {
                 return null; // Bike category not found
