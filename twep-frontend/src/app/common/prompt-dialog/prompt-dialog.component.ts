@@ -13,7 +13,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { ReactiveFormsModule, FormGroup, FormControl, Validators } from '@angular/forms';
+import { ReactiveFormsModule, FormGroup, FormControl, Validators, AbstractControl } from '@angular/forms';
 
 @Component({
   selector: 'app-prompt-dialog',
@@ -50,7 +50,7 @@ export class PromptDialogComponent {
     this.dialog.close(cancel ? null : this.valueInput?.value)
   }
   
-  get valueInput() {
+  get valueInput(): AbstractControl<any, any> | null {
     return this.promptForm.get("value");
   }
 

@@ -53,26 +53,8 @@ export class CategoryListComponent {
   }
 
   async createCategory(): Promise<void> {
-    const data: PromptDialogData = {
-      title: "Create category",
-      text: "Please give a new category name",
-      label: "Category",
-      errorText: "Please insert name of new category"
-    }
-    const categoryName: string | null = await this.dialogService.openPromptDialog(data);
-
-    if (categoryName === null) return;
-    const bikeCategory: BikeCategory = new BikeCategory('', categoryName);
-    this.bikeCategoryService.createBikeCategory(bikeCategory).subscribe({
-      next: (): void => {
-        this.runningAction = false;
-        this.getCategories();
-      },
-      error: (): void => {
-        this.runningAction = false;
-        this.createCategory();
-      }
-    })
+    const reload = await this.dialogService.openBikeCategoryCreateDialog();
+    if(reload) this.getCategories();
   }
 
   async updateCategoryPrice(bikeCategory: BikeCategory): Promise<void>{

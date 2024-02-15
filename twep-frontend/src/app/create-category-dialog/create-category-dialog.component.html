@@ -1,0 +1,60 @@
+<div class="twep-create-category-dialog">
+    @if(runningAction){
+        <app-loading-overlay />
+    }
+    @else {
+        <form [formGroup]="categoryForm">
+            <h1 mat-dialog-title>Create new bike category</h1>
+            <div mat-dialog-content>
+                <mat-form-field>
+                    <mat-label>Name</mat-label>
+                    <input
+                        matInput
+                        type="text"
+                        name="name"
+                        formControlName="name"
+                    >
+                    <mat-error *ngIf="name?.errors?.['required']">
+                        Name is required
+                    </mat-error>
+                </mat-form-field>
+                <mat-form-field>
+                    <mat-label>Hourly rate (in Euros)</mat-label>
+                    <input
+                        matInput
+                        type="number"
+                        name="hourPrice"
+                        formControlName="hourPrice"
+                    >
+                    <mat-icon matSuffix>euro</mat-icon>
+                    <mat-error *ngIf="hourPrice?.errors?.['required']">
+                        Hourly rate is required
+                    </mat-error>
+                    <mat-error *ngIf="!hourPrice?.errors?.['required'] && hourPrice?.errors?.['min']">
+                        Hourly rate must be a positive value
+                    </mat-error>
+                </mat-form-field>
+            </div>
+            <div
+                mat-dialog-actions
+                [align]="'end'"
+            >
+                <button
+                    mat-button
+                    color
+                    [mat-dialog-close]="false"
+                >
+                    CANCEL
+                </button>
+                <button
+                    mat-flat-button
+                    type="submit"
+                    class="twep-save-btn"
+                    (click)="createCategory()"
+                >
+                    CREATE
+                </button>
+            </div>
+        </form>
+    }
+</div>
