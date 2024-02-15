@@ -22,6 +22,10 @@ export class BikeCategoryService{
         return this.http.put(`${this.apiUrl}/management/bike-categories/${bikeCategory.id}`, bikeCategory);
     }
 
+    public updateBikeCategoryPrice(id: string, hourPrice: number): Observable<BikeCategory>{
+        return this.http.patch<BikeCategory>(`${this.apiUrl}/management/bike-categories/${id}`, { hourPrice });
+    }
+
     public deleteBikeCategory(id: string): Observable<any>{
         return this.http.delete(`${this.apiUrl}/management/bike-categories/${id}`);
     }

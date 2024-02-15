@@ -28,7 +28,7 @@ import { PromptDialogData } from '../../common/prompt-dialog/prompt-dialog.compo
 export class CategoryListComponent {
   runningAction: boolean = false
   bikeCategories: BikeCategory[] = [];
-
+  numberFormatter: Intl.NumberFormat = new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' });
 
   constructor(
     private bikeCategoryService: BikeCategoryService,
@@ -75,17 +75,21 @@ export class CategoryListComponent {
     })
   }
 
-  async editCategory(bikeCategory: BikeCategory): Promise<void>{
+  async updateCategoryPrice(bikeCategory: BikeCategory): Promise<void>{
     if (bikeCategory.id === undefined) return;
     const data: PromptDialogData = {
-      title: `Update category "${bikeCategory.name}"`,
-      text: "Please enter new name",
-      label: "Category",
-      initialValue: bikeCategory?.name,
+      title: `Update price of category "${bikeCategory.name}"`,
+      text: "Please enter new hourly rate. Must be a positive number",
+      label: "Houry rate (in euros)",
+      initialValue: bikeCategory.hourPrice,
+      inputType: "number",
+      appendIcon: "euro",
     };
-    const categoryName: string | null = await this.dialogService.openPromptDialog(data);
-    if (categoryName === null) return;
-    this.bikeCategoryService.updateBikeCategory(new BikeCategory(bikeCategory.id, categoryName)).subscribe({
+    const value: string | null = await this.dialogService.openPromptDialog(data);
+    if(value === null) return;
+    const hourPrice: number = Number(value);
+    if (Number.isNaN(hourPrice)) return;
+    this.bikeCategoryService.updateBikeCategoryPrice(bikeCategory.id, hourPrice).subscribe({
       next: (): void => {
         this.runningAction = false;
         this.getCategories();
@@ -121,6 +125,7 @@ export class CategoryListComponent {
   get columns(): string[] {
     return [
       "name",
+      "price",
       "actions"
     ]
   }
