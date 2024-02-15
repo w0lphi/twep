@@ -19,6 +19,7 @@ import { TicketsComponent } from './tickets/tickets.component';
 
 import {AccountComponent} from './account/account.component';
 import { BikeFilterListComponent } from './bike-filter-list/bike-filter-list.component';
+import { OverdueRentalsListComponent } from './admin/overdue-rentals-list/overdue-rentals-list.component';
 
 export const routes: Routes = [
     {
@@ -75,6 +76,10 @@ export const routes: Routes = [
                 path: 'bikes/:id',
                 component: BikeDetailComponent
             },
+            {
+                path: 'overdue',
+                component: OverdueRentalsListComponent
+            }
         ]
     },
 

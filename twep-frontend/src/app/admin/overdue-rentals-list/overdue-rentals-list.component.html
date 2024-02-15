@@ -1,0 +1,61 @@
+<app-admin-table 
+    [loading]="runningAction"
+    (reload)="getOverdueRentals()"
+>
+<table
+table
+class="twep-ovedue-rentals-table"
+mat-table
+[dataSource]="overdueRentals"
+>
+<ng-container matColumnDef="user">
+    <th
+        mat-header-cell
+        *matHeaderCellDef
+        mat-sort-header
+    >
+        User
+    </th>
+    <td
+        mat-cell
+        *matCellDef="let element"
+        class="overdue-rental-user"
+    >
+        {{element.user}}
+    </td>
+</ng-container>
+
+<ng-container matColumnDef="ticket">
+    <th
+        mat-header-cell
+        *matHeaderCellDef
+        mat-sort-header
+    >
+        Ticket
+    </th>
+    <td
+        mat-cell
+        *matCellDef="let element"
+        class="overdue-rental-user"
+    >
+        {{element.ticket}}
+    </td>
+</ng-container>
+
+<tr
+    mat-header-row
+    *matHeaderRowDef="columns"
+></tr>
+<tr *matNoDataRow>
+    <td [attr.colspan]="columns.length">
+        <div class="twep-no-items-message">
+            No overdue rentals found
+        </div>
+    </td>
+</tr>
+<tr
+    mat-row
+    *matRowDef="let row; columns: columns;"
+></tr>
+</table>
+</app-admin-table>

@@ -59,6 +59,7 @@ export class AdminHubComponent {
       new NavigationLink("Categories", "category", "categories"),
       new NavigationLink("Models", "bike_scooter", "models"),
       new NavigationLink("Bikes", "pedal_bike", "bikes"),
+      new NavigationLink("Overdue rentals", "schedule", "overdue"),
     ]
   }
 
