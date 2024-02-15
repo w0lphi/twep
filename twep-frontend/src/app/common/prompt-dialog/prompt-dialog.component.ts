@@ -12,6 +12,7 @@ import {
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
 import { ReactiveFormsModule, FormGroup, FormControl, Validators } from '@angular/forms';
 
 @Component({
@@ -25,6 +26,7 @@ import { ReactiveFormsModule, FormGroup, FormControl, Validators } from '@angula
     MatDialogClose,
     MatButtonModule,
     MatInputModule,
+    MatIconModule,
     MatFormFieldModule,
     ReactiveFormsModule
   ],
@@ -68,4 +70,5 @@ export type PromptDialogData = {
   initialValue?: string | number;
   inputType?: string;
   errorText?: string;
+  appendIcon?: string
 }

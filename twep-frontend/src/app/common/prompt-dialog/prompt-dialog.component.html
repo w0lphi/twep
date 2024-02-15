@@ -11,6 +11,12 @@
                     name="value"
                     formControlName="value"
                 >
+                <mat-icon 
+                    *ngIf="data.appendIcon !== undefined && data.appendIcon !== null" 
+                    matSuffix 
+                >
+                   {{ data.appendIcon }}
+                </mat-icon>
                 <mat-error *ngIf="valueInput?.errors?.['required']">
                     {{errorText}}
                 </mat-error>
