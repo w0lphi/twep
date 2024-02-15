@@ -69,6 +69,8 @@ CREATE TABLE tickets (
     from_date TIMESTAMPTZ NOT NULL,
     until_date TIMESTAMPTZ NOT NULL,
     immediate_renting BOOLEAN NOT NULL,
+    price NUMERIC(10, 2) DEFAULT 0, 
+    status TEXT SET DEFAULT 'unused'; 
     qr_code_base64 TEXT NOT NULL
 );
 

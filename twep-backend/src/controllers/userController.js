@@ -72,7 +72,7 @@ const getUserAccount = async (userId) => {
             throw { status: 404, message: 'User account not found' };
         }
 
-        const { id, email, role, wallet, ticket_id, bike_id, from_date, until_date, immediate_renting } = accountDetails.rows[0];
+        const { id, email, role, wallet, ticket_id, bike_id, from_date, until_date, immediate_renting, status, price } = accountDetails.rows[0];
 
         const response = {
             id,
@@ -89,6 +89,8 @@ const getUserAccount = async (userId) => {
                 fromDate: from_date,
                 untilDate: until_date,
                 immediateRenting: immediate_renting,
+                status: status,
+                price: price,
             });
         }
 
@@ -234,39 +236,39 @@ const purchaseTicket = async (req, res) => {
         } = req.body;
         const userId = req.params.userId;
         const tokenUserId = req.user.userId;
-      
+
         // Check if the user ID from the token matches the user ID from the request parameters
         if (userId !== tokenUserId) {
-        return res.status(403).json({ error: "Forbidden - You can only purchase tickets for yourself" });
+            return res.status(403).json({ error: "Forbidden - You can only purchase tickets for yourself" });
         }
-    
+
         // Check user's wallet balance
         const { wallet } = await getUserAccount(userId)
         if (wallet < 10) {
             return res.status(400).json({ error: 'Insufficient funds in the wallet for ticket purchase' });
         }
-    
-        try{
+
+        try {
             const fromDateMs = new Date(fromDate).getTime();
             const untilDateMs = new Date(untilDate).getTime();
-            if(untilDateMs <= fromDateMs){
+            if (untilDateMs <= fromDateMs) {
                 return res.status(400).json({ error: "Ticket end date must after start date" });
             }
-        
-            if(fromDateMs < Date.now()){
+
+            if (fromDateMs < Date.now()) {
                 return res.status(400).json({ error: "Ticket start date must be in the future" });
             }
-        
-            if(untilDateMs < Date.now()){
+
+            if (untilDateMs < Date.now()) {
                 return res.status(400).json({ error: "Ticket end date must be in the future" });
             }
-        }catch(error){
+        } catch (error) {
             console.error(error);
             return res.status(400).json({ error: "Malformed date input" });
         }
 
         const isAlreadyBooked = await UserModel.checkIfBikeIsBooked(bikeId, fromDate, untilDate);
-        if(isAlreadyBooked){
+        if (isAlreadyBooked) {
             return res.status(400).json({ error: "Bike is already booked in the given time interval" });
         }
 
@@ -290,7 +292,7 @@ const purchaseTicket = async (req, res) => {
         return res.status(201).json({
             ticket: purchasedTicketCamel,
             qrCodePath: purchasedTicketCamel.qrCodePath // Return the QR code path in the response
-          });;
+        });;
     } catch (error) {
         console.error(error);
         res.status(500).json({ error: "Internal Server Error" });

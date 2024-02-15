@@ -94,7 +94,7 @@ class UserModel {
             const { rows } = await pool.query(userQueries.purchaseTicket, [
                 userId,
                 bikeId,
-                fromDate, 
+                fromDate,
                 untilDate,
                 immediateRenting,
                 qrCodeBase64,
@@ -110,11 +110,11 @@ class UserModel {
         }
     }
 
-    static async checkIfBikeIsBooked(bikeId, fromDate, untilDate){
+    static async checkIfBikeIsBooked(bikeId, fromDate, untilDate) {
         try {
             const { rows } = await pool.query(userQueries.checkIfBikeIsBooked, [
                 bikeId,
-                fromDate, 
+                fromDate,
                 untilDate,
             ]);
             return rows.length > 0;
@@ -144,6 +144,8 @@ class UserModel {
                     fromDate: ticket.from_date,
                     untilDate: ticket.until_date,
                     immediateRenting: ticket.immediate_renting,
+                    status: status,
+                    price: price,
                 })),
             };
 

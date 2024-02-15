@@ -23,6 +23,8 @@ SELECT
     t.until_date,
     t.immediate_renting,
     t.qr_code_base64,
+    t.status,
+    t.price,
     jsonb_build_object(
         'id', ib.id,
         'status', ib.status,
@@ -69,7 +71,9 @@ const getUserAccount = `
         t.bike_id,
         to_char(t.from_date, 'YYYY-MM-DD"T"HH24:MI:SS"Z"') AS from_date,
         to_char(t.until_date, 'YYYY-MM-DD"T"HH24:MI:SS"Z"') AS until_date,
-        t.immediate_renting AS immediate_renting
+        t.immediate_renting AS immediate_renting,
+        t.status,
+        t.price
     FROM
         users u
     LEFT JOIN
@@ -95,7 +99,9 @@ const purchaseTicket = `
         from_date,
         until_date,
         immediate_renting,
-        qr_code_base64;
+        qr_code_base64,
+        status,
+        price;
 `;
 
 const checkIfBikeIsBooked = `
