@@ -255,10 +255,7 @@ const stationController = {
     async createBikeModel(req, res) {
         try {
             const bikeModelData = req.body;
-
             const newBikeModel = convertKeysToCamelCase(await StationModel.createBikeModel(bikeModelData));
-            delete newBikeModel.id;
-
             res.status(201).json(newBikeModel);
         } catch (error) {
             console.error(error);
@@ -266,10 +263,30 @@ const stationController = {
         }
     },
 
-    async deleteBikeModelById(req, res) {
-        const { id } = req.params;
-
+    async updateBikeModel(req, res) {
         try {
+            const id = req.params.id;
+            const bikes =  await StationModel.getBikesByModelId(id);
+            if(bikes.length > 0){
+                return res.status(400).send({error: 'Cannot update bike model while there are still bikes associated with it'});
+            }
+            const bikeModelData = req.body;
+            const updatedBikeModel = convertKeysToCamelCase(await StationModel.updateBikeModel(id, bikeModelData));
+            res.status(200).json(updatedBikeModel);
+        } catch (error) {
+            console.error(error);
+            res.status(500).send('Internal Server Error');
+        }
+    },
+
+    async deleteBikeModelById(req, res) {
+        try {
+            const { id } = req.params;
+            const bikes =  await StationModel.getBikesByModelId(id);
+            if(bikes.length > 0){
+                return res.status(400).send({error: 'Cannot delete bike model while there are still bikes associated with it'});
+            }
+
             const deleteResult = await StationModel.deleteBikeModel(id);
 
             if (!deleteResult) {

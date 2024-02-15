@@ -472,8 +472,8 @@
               "type": "string"
             }
           },
-          "bikeCategory": {
-            "$ref": "#/components/schemas/BikeCategory"
+          "categoryId": {
+            "type": "string"
           }
         },
         "required": [
@@ -481,13 +481,15 @@
           "wheelSize"
         ],
         "example": {
-          "name": "Mountain Bike XL",
-          "description": "A robust mountain bike for off-road adventures",
-          "wheelSize": 29.5,
+          "name": "KTM Summit Trailblazer",
+          "description": "Test description",
+          "wheelSize": 27.5,
           "extraFeatures": [
-            "Shimano XT gears",
-            "Front suspension with 120mm travel"
-          ]
+            "Lighweight Aluminium Frame",
+            "Improved suspension system",
+            "Responsive disc brake"
+          ],
+          "categoryId": "daf594a3-c350-42d5-9b1f-7f679ae0a30b"
         }
       }
     }
@@ -1897,9 +1899,7 @@
             }
           }
         }
-      }
-    },
-    "/management/bike-models/{name}": {
+      },
       "put": {
         "summary": "Update a bike model",
         "tags": [
@@ -1907,13 +1907,13 @@
         ],
         "parameters": [
           {
-            "name": "name",
+            "name": "id",
             "in": "path",
             "required": true,
             "schema": {
               "type": "string"
             },
-            "description": "The name of the bike model to update"
+            "description": "The id of the bike model to update"
           }
         ],
         "requestBody": {
@@ -1933,15 +1933,16 @@
             "content": {
               "application/json": {
                 "example": {
-                  "bikeModel": {
-                    "name": "Mountain Bike XL",
-                    "description": "An updated description",
-                    "wheelSize": 29.5,
+                    "id": "186760ff-6379-4703-89c2-0844b85b3433",
+                    "name": "KTM Summit Trailblazer",
+                    "description": "Test description",
+                    "wheelSize": 27.5,
                     "extraFeatures": [
-                      "Shimano XT gears",
-                      "Front suspension with 120mm travel"
-                    ]
-                  }
+                        "Lighweight Aluminium Frame",
+                        "Improved suspension system",
+                        "Responsive disc brake"
+                    ],
+                    "categoryId": "daf594a3-c350-42d5-9b1f-7f679ae0a30b"
                 }
               }
             }
@@ -1975,13 +1976,13 @@
         ],
         "parameters": [
           {
-            "name": "name",
+            "name": "id",
             "in": "path",
             "required": true,
             "schema": {
               "type": "string"
             },
-            "description": "The name of the bike model to delete"
+            "description": "The id of the bike model to delete"
           }
         ],
         "responses": {

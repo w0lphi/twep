@@ -64,8 +64,12 @@ const deleteBikeCategoryById = 'DELETE FROM bike_categories WHERE id = $1';
 const getBikeCategoryById = 'SELECT * FROM bike_categories WHERE id = $1';
 
 const getAllBikeModels = 'SELECT * FROM bike_models';
-const createBikeModel = 'INSERT INTO bike_models (id, name, description, wheel_size, extra_features, category_id) VALUES ($1, $2, $3, $4, $5, $6)';
-const updateBikeModel = 'UPDATE bike_models SET name = $1, description = $2, wheel_size = $3, extra_features = $4 WHERE name = $5';
+const createBikeModel = `
+    INSERT INTO bike_models (id, name, description, wheel_size, extra_features, category_id)
+    VALUES ($1, $2, $3, $4, $5, $6)
+    RETURNING *;
+`;
+const updateBikeModel = 'UPDATE bike_models SET name = $2, description = $3, wheel_size = $4, extra_features = $5, category_id = $6 WHERE id = $1 RETURNING *';
 const deleteBikeModel = 'DELETE FROM bike_models WHERE id = $1';
 
 const getAllIndividualBikes = `
@@ -156,6 +160,8 @@ const markParkingPlaceAsOccupied = `
     WHERE id = $1;
 `;
 
+const getBikesByModelId = `SELECT * FROM individual_bikes WHERE bike_model_id = $1`
+
 module.exports = {
     getUsers,
     getStations,
@@ -183,4 +189,5 @@ module.exports = {
     markParkingPlaceAsVacant,
     updateIndividualBikeParkingPlace,
     markParkingPlaceAsOccupied,
+    getBikesByModelId
 };

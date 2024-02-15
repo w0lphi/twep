@@ -29,6 +29,7 @@ router.get('/bike-models', stationController.getAllBikeModels);
 router.get('/bike-models/:id', stationController.getBikeModelById);
 router.post('/bike-models', stationController.createBikeModel);
 router.delete('/bike-models/:id', stationController.deleteBikeModelById);
+router.put('/bike-models/:id', stationController.updateBikeModel);
 
 router.get('/bikes', stationController.getAllIndividualBikes);
 router.post('/bikes', stationController.createIndividualBike);

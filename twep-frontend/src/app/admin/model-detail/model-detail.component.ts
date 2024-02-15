@@ -17,8 +17,8 @@ import { BikeCategory } from '../../model/bikeCategory';
 import { BikeCategoryService } from '../../service/bikeCategory.service';
 import { DialogService } from '../../service/dialog.service';
 
-class BikeFeature {
-  value: string = "";
+export type BikeFeature = {
+  value: string;
 }
 
 @Component({
@@ -131,6 +131,7 @@ export class ModelDetailComponent {
       this.bikeModelService.updateBikeModel(bikeModel).subscribe({
         next: (): void => {
           this.runningAction = false;
+          this.loadModel();
         },
         error: (): void => {
           this.runningAction = false;
@@ -184,7 +185,7 @@ export class ModelDetailComponent {
   }
 
   addFeature(): void {
-    this.extraFeatures.push(new BikeFeature());
+    this.extraFeatures.push({value: ""});
   }
 
   updateFeature(feature: BikeFeature, event: Event): void {

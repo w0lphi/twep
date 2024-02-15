@@ -20,9 +20,7 @@
                 </button>
                 <h1>{{ bikeModelName }}</h1>
                 <div class="twep-spacer"></div>
-                <!-- TODO: Enable for update once saving of model is implemented -->
                 <button
-                    *ngIf="isNew"
                     mat-raised-button
                     class="twep-save-btn"
                     (click)="updateModel()"

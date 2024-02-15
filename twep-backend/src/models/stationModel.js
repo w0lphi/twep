@@ -238,16 +238,20 @@ class StationModel {
     }
 
     static async createBikeModel(bikeModelData) {
-        const { name, description, wheelSize, extraFeatures, categoryId } = bikeModelData;
-        const newBikeModelId = uuidv4();
-
         try {
-            const queryText = `
-                INSERT INTO bike_models (id, name, description, wheel_size, extra_features, category_id)
-                VALUES ($1, $2, $3, $4, $5, $6)
-                RETURNING *;
-            `;
-            const { rows } = await pool.query(queryText, [newBikeModelId, name, description, wheelSize, extraFeatures, categoryId]);
+            const { name, description, wheelSize, extraFeatures, categoryId } = bikeModelData;
+            const newBikeModelId = uuidv4();
+            const { rows } = await pool.query(stationQueries.createBikeModel, [newBikeModelId, name, description, wheelSize, extraFeatures, categoryId]);
+            return rows[0];
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    static async updateBikeModel(bikeModelId, bikeModelData){
+        try {
+            const { name, description, wheelSize, extraFeatures, categoryId } = bikeModelData;
+            const { rows } = await pool.query(stationQueries.updateBikeModel, [bikeModelId, name, description, wheelSize, extraFeatures, categoryId]);
             return rows[0];
         } catch (error) {
             throw error;
@@ -380,6 +384,15 @@ class StationModel {
             }
         } catch (error) {
 
+        }
+    }
+
+    static async getBikesByModelId(modelId){
+        try {
+            const result = await pool.query(stationQueries.getBikesByModelId, [modelId]);
+            return result.rows;
+        } catch (error) {
+            throw error;
         }
     }
 
