@@ -224,8 +224,52 @@ const addMoneyToWallet = async (userId, amount) => {
 };
 
 const ticketCost = 10;
-const purchaseTicket = async (userId, { bikeId, fromDate, untilDate, immediateRenting }) => {
+const purchaseTicket = async (req, res) => {
     try {
+        const {
+            bikeId,
+            fromDate,
+            untilDate,
+            immediateRenting,
+        } = req.body;
+        const userId = req.params.userId;
+        const tokenUserId = req.user.userId;
+      
+        // Check if the user ID from the token matches the user ID from the request parameters
+        if (userId !== tokenUserId) {
+        return res.status(403).json({ error: "Forbidden - You can only purchase tickets for yourself" });
+        }
+    
+        // Check user's wallet balance
+        const { wallet } = await getUserAccount(userId)
+        if (wallet < 10) {
+            return res.status(400).json({ error: 'Insufficient funds in the wallet for ticket purchase' });
+        }
+    
+        try{
+            const fromDateMs = new Date(fromDate).getTime();
+            const untilDateMs = new Date(untilDate).getTime();
+            if(untilDateMs <= fromDateMs){
+                return res.status(400).json({ error: "Ticket end date must after start date" });
+            }
+        
+            if(fromDateMs < Date.now()){
+                return res.status(400).json({ error: "Ticket start date must be in the future" });
+            }
+        
+            if(untilDateMs < Date.now()){
+                return res.status(400).json({ error: "Ticket end date must be in the future" });
+            }
+        }catch(error){
+            console.error(error);
+            return res.status(400).json({ error: "Malformed date input" });
+        }
+
+        const isAlreadyBooked = await UserModel.checkIfBikeIsBooked(bikeId, fromDate, untilDate);
+        if(isAlreadyBooked){
+            return res.status(400).json({ error: "Bike is already booked in the given time interval" });
+        }
+
         // Generate QR code for the purchased ticket
         const qrCodeBase64 = await generateQRCode({ bikeId, fromDate, untilDate });
 
@@ -243,9 +287,13 @@ const purchaseTicket = async (userId, { bikeId, fromDate, untilDate, immediateRe
 
         const purchasedTicketCamel = convertKeysToCamelCase(purchasedTicket);
 
-        return purchasedTicketCamel;
+        return res.status(201).json({
+            ticket: purchasedTicketCamel,
+            qrCodePath: purchasedTicketCamel.qrCodePath // Return the QR code path in the response
+          });;
     } catch (error) {
-        throw error;
+        console.error(error);
+        res.status(500).json({ error: "Internal Server Error" });
     }
 };
 

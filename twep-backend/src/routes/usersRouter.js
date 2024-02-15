@@ -90,63 +90,6 @@ router.get("/:userId/account", async (req, res) => {
   }
 });
 
-router.post("/:userId/account/tickets", verifyToken, async (req, res) => {
-  try {
-    const {
-      bikeId,
-      fromDate,
-      untilDate,
-      immediateRenting,
-    } = req.body;
-    const userId = req.params.userId;
-    const tokenUserId = req.user.userId;
-
-    // Check if the user ID from the token matches the user ID from the request parameters
-    if (userId !== tokenUserId) {
-      return res.status(403).json({ error: "Forbidden - You can only purchase tickets for yourself" });
-    }
-
-    // Check user's wallet balance
-    const { wallet } = await userController.getUserAccount(userId)
-    if (wallet < 10) {
-        return res.status(400).json({ error: 'Insufficient funds in the wallet for ticket purchase' });
-    }
-
-    try{
-      const fromDateMs = new Date(fromDate).getTime();
-      const untilDateMs = new Date(untilDate).getTime();
-      if(untilDateMs <= fromDateMs){
-        return res.status(400).json({ error: "Ticket end date must after start date" });
-      }
-
-      if(fromDateMs < Date.now()){
-        return res.status(400).json({ error: "Ticket start date must be in the future" });
-      }
-
-      if(untilDateMs < Date.now()){
-        return res.status(400).json({ error: "Ticket end date must be in the future" });
-      }
-    }catch(error){
-      console.error(error);
-      return res.status(400).json({ error: "Malformed date input" });
-    }
-
-    // Purchase the ticket
-    const purchasedTicket = await userController.purchaseTicket(userId, {
-      bikeId,
-      fromDate,
-      untilDate,
-      immediateRenting,
-    });
-
-    res.status(201).json({
-      ticket: purchasedTicket,
-      qrCodePath: purchasedTicket.qrCodePath // Return the QR code path in the response
-    });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: "Internal Server Error" });
-  }
-});
+router.post("/:userId/account/tickets", verifyToken, userController.purchaseTicket);
 
 module.exports = router;

@@ -55,7 +55,6 @@ JOIN
     stations s ON pp.station_id = s.id
 WHERE
     t.user_id = $1;
-
 `;
 
 const deductMoneyFromWallet = 'UPDATE users SET wallet = wallet - $1 WHERE id = $2 RETURNING *'
@@ -98,6 +97,18 @@ const purchaseTicket = `
         immediate_renting,
         qr_code_base64;
 `;
+
+const checkIfBikeIsBooked = `
+        SELECT 
+            *
+        FROM
+            tickets
+        WHERE
+            bike_id = $1 
+        AND 
+            ((from_date BETWEEN SYMMETRIC $2 AND $3) OR (until_date BETWEEN SYMMETRIC $2 AND $3))
+        LIMIT 1
+`
 
 const getStations = `
     SELECT
@@ -207,6 +218,7 @@ module.exports = {
     getUserAccount,
     addMoneyToWallet,
     purchaseTicket,
+    checkIfBikeIsBooked,
     deductMoneyFromWallet,
     getStations,
     getStationById,

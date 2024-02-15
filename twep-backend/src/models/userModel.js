@@ -110,6 +110,19 @@ class UserModel {
         }
     }
 
+    static async checkIfBikeIsBooked(bikeId, fromDate, untilDate){
+        try {
+            const { rows } = await pool.query(userQueries.checkIfBikeIsBooked, [
+                bikeId,
+                fromDate, 
+                untilDate,
+            ]);
+            return rows.length > 0;
+        } catch (error) {
+            throw error;
+        }
+    }
+
     static async getUserAccount(userId) {
         try {
             const queryString = userQueries.getUserAccount;
