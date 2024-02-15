@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const { v4: uuidv4 } = require('uuid');
 const StationModel = require('../models/stationModel');
+const UserModel = require('../models/userModel');
 
 const snakeCaseToCamelCase = (snakeCaseString) => {
     return snakeCaseString.replace(/_([a-z])/g, (match, letter) => letter.toUpperCase());
@@ -87,7 +88,38 @@ const stationController = {
         }
     },
 
+    async updateStation(req, res){
+        try {
+            const id = req.params.id;
+            const stationBikes = await UserModel.getBikesAtStation(id);
+            if(stationBikes.length > 0){
+                return res.status(400).json({ error: 'Cannot update station while there are still bikes associated with it' });
+            }
 
+            const { name, location, operational, parkingPlaces } = req.body;
+            // Check if parkingPlaces is present and is an array
+            if (!parkingPlaces || !Array.isArray(parkingPlaces)) {
+                return res.status(400).json({ error: 'Invalid or missing parkingPlaces field in the request body.' });
+            }
+
+            // Convert bike categories array to an array of objects with 'name' property
+            const parkingPlacesData = parkingPlaces.map(place => ({
+                bikeCategories: place.bikeCategories.map(category => ({ name: category.name })),
+                occupied: place.occupied,
+            }));
+
+            // Create a new station
+            const newStation = await StationModel.updateStation(id, { name, location, operational }, parkingPlacesData);
+
+            // Convert keys to CamelCase before sending the response
+            const camelCaseStation = convertKeysToCamelCase(newStation);
+
+            res.status(201).json(camelCaseStation);
+        } catch (error) {
+            console.error(error);
+            res.status(500).send('Internal Server Error');
+        }
+    },
 
     async deleteStationById(req, res) {
         const { id } = req.params;
@@ -98,6 +130,12 @@ const stationController = {
             if (!station) {
                 // Return 404 if station not found
                 return res.status(404).json({ error: 'Station not found' });
+            }
+
+            const bikes = await UserModel.getBikesAtStation(id);
+
+            if(bikes.length > 0){
+                return res.status(400).json({ error: 'Cannot delete station while there are still bikes associated with it' });
             }
 
             // Call the deleteStationById in model
@@ -121,10 +159,8 @@ const stationController = {
                 return res.status(404).json({ error: 'Bike category not found' });
             }
 
-
             const camelCaseBikeCategory = convertKeysToCamelCase(bikeCategory);
-
-            res.json(bikeCategory);
+            res.json(camelCaseBikeCategory);
         } catch (error) {
             console.error(error);
             res.status(500).send('Internal Server Error');

@@ -297,9 +297,17 @@
                 "bikeCategories": {
                   "type": "array",
                   "items": {
-                    "type": "string"
+                    "type": "object",
+                    "properties": {
+                      "name": {
+                        "type": "string"
+                      }
+                    }
                   },
                   "description": "An array of existing category ids"
+                },
+                "id": {
+                  "type": "string"
                 },
                 "occupied": {
                   "type": "boolean",
@@ -377,10 +385,6 @@
       "BikeCategory": {
         "type": "object",
         "properties": {
-          "id": {
-            "type": "string",
-            "format": "uuid"
-          },
           "name": {
             "type": "string"
           }
@@ -1542,7 +1546,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/Station"
+                "$ref": "#/components/schemas/UpsertStation"
               }
             }
           }
@@ -1552,23 +1556,8 @@
             "description": "Station updated successfully",
             "content": {
               "application/json": {
-                "example": {
-                  "id": "uuid",
-                  "name": "Updated Bike Station",
-                  "location": {
-                    "latitude": 40.75,
-                    "longitude": -73.995
-                  },
-                  "parkingPlaces": [
-                    {
-                      "id": "uuid",
-                      "bikeCategories": [
-                        "city_bike",
-                        "mountain_bike"
-                      ]
-                    }
-                  ],
-                  "operational": true
+                "schema": {
+                  "$ref": "#/components/schemas/UpsertStation"
                 }
               }
             }
@@ -1629,6 +1618,16 @@
               "application/json": {
                 "example": {
                   "error": "Station not found"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "Invalid input data"
                 }
               }
             }

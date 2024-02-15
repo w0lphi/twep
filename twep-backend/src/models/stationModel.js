@@ -90,6 +90,51 @@ class StationModel {
         }
     }
 
+    static async updateStation(stationId, stationData, parkingPlacesData){
+        try {
+            await pool.query('BEGIN');
+
+            // Update the station
+            await pool.query(stationQueries.updateStation, [
+                stationId,
+                stationData.name,
+                stationData.location,
+                stationData.operational,
+            ]);
+
+            // Update parking places of the station
+            for (const parkingPlaceData of parkingPlacesData) {
+                const parkingPlaceId = parkingPlaceData.id;
+
+                // Convert bike categories array to an array of stringified JSON objects
+                const bikeCategoriesArray = parkingPlaceData.bikeCategories.map(category => JSON.stringify(category));
+
+                await pool.query(stationQueries.updateParkingPlace, [
+                    parkingPlaceId,
+                    parkingPlaceData.occupied,
+                    bikeCategoriesArray,
+                ]);
+            }
+            const detailedStationInfo = await pool.query(stationQueries.getStationById, [stationId]);
+            const detailedStation = detailedStationInfo.rows[0];
+
+            await pool.query('COMMIT');
+
+            const response = {
+                ...detailedStation,
+                parkingPlaces: parkingPlacesData.map(place => ({
+                    id: uuidv4(),
+                    bikeCategories: place.bikeCategories.map(category => category.name),
+                })),
+            };
+
+            return response;
+        } catch (error) {
+            await pool.query('ROLLBACK');
+            throw error;
+        }
+    }
+
 
     static async deleteStationById(stationId) {
         try {
