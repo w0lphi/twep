@@ -68,7 +68,7 @@ CREATE TABLE tickets (
     from_date TIMESTAMPTZ NOT NULL,
     until_date TIMESTAMPTZ NOT NULL,
     immediate_renting BOOLEAN NOT NULL,
-    qr_code_base64 TEXT NOT NULL
+    qr_code_base64 TEXT NOT NULL
 );
 
 -- insert default admin account into db. Password is "password"
