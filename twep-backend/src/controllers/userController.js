@@ -344,10 +344,6 @@ const simulateReturningBike = async (req, res) => {
         // Check if the ticket exists and belongs to the user
         const ticket = await UserModel.getTicketById(ticketId);
 
-        console.log(ticket);
-
-        console.log(ticket.user_id);
-        console.log(userId);
 
         if (!ticket || ticket.user_id !== userId) {
             return res.status(404).json({ message: 'Ticket not found or does not belong to the user.' });
@@ -359,8 +355,6 @@ const simulateReturningBike = async (req, res) => {
         }
 
         // Retrieve the bike using its ID
-        console.log(ticket.bike_id);
-        console.log(bikeId);
         const bike = await StationModel.findById(ticket.bike_id);
         if (!bike) {
             return res.status(404).json({ message: 'Bike not found.' });
