@@ -32,7 +32,8 @@ CREATE TABLE parking_places (
 
 CREATE TABLE bike_categories (
     id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
-    name VARCHAR(255)
+    name VARCHAR(255),
+    hour_price NUMERIC DEFAULT 0,
 );
 
 CREATE TABLE parking_place_bike_categories (
