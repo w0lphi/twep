@@ -90,7 +90,7 @@ class StationModel {
         }
     }
 
-    static async updateStation(stationId, stationData, parkingPlacesData){
+    static async updateStation(stationId, stationData, parkingPlacesData) {
         try {
             await pool.query('BEGIN');
 
@@ -183,7 +183,7 @@ class StationModel {
         }
     }
 
-    static async updateBikeCategoryPrice(categoryId, hourPrice){
+    static async updateBikeCategoryPrice(categoryId, hourPrice) {
         try {
             // Check if the bike category already exists
             const { rows } = await pool.query(stationQueries.updateBikeCategoryHourPrice, [
@@ -263,7 +263,7 @@ class StationModel {
         }
     }
 
-    static async updateBikeModel(bikeModelId, bikeModelData){
+    static async updateBikeModel(bikeModelId, bikeModelData) {
         try {
             const { name, description, wheelSize, extraFeatures, categoryId } = bikeModelData;
             const { rows } = await pool.query(stationQueries.updateBikeModel, [bikeModelId, name, description, wheelSize, extraFeatures, categoryId]);
@@ -402,7 +402,7 @@ class StationModel {
         }
     }
 
-    static async getBikesByModelId(modelId){
+    static async getBikesByModelId(modelId) {
         try {
             const result = await pool.query(stationQueries.getBikesByModelId, [modelId]);
             return result.rows;
@@ -411,7 +411,7 @@ class StationModel {
         }
     }
 
-    static async getAllOpenTicketsForBike(bikeId){
+    static async getAllOpenTicketsForBike(bikeId) {
         try {
             const result = await pool.query(stationQueries.getAllOpenTicketsForBike, [bikeId, new Date(Date.now()).toISOString()]);
             return result.rows;
@@ -420,6 +420,18 @@ class StationModel {
         }
     }
 
+    static async markBikeAsRented(bikeId) {
+        try {
+            const queryString = stationQueries.markBikeAsRented;
+            const result = await pool.query(queryString, [bikeId]);
+
+            if (result.rowCount === 0) {
+                throw { status: 500, message: 'Failed to mark bike as rented' };
+            }
+        } catch (error) {
+            throw error;
+        }
+    }
 
 }
 

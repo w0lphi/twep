@@ -214,6 +214,9 @@ const getAllBikes = `
 
 const getAllBikeModels = 'SELECT * FROM bike_models';
 const getAllBikeCategories = 'SELECT * FROM bike_categories';
+const getTicketById = 'SELECT * FROM tickets WHERE id = $1';
+const updateTicketStatus = 'UPDATE tickets SET status = $1 WHERE id = $2';
+
 
 
 
@@ -231,5 +234,7 @@ module.exports = {
     getBikesAtStation,
     getAllBikes,
     getAllBikeModels,
-    getAllBikeCategories
+    getAllBikeCategories,
+    getTicketById,
+    updateTicketStatus,
 };

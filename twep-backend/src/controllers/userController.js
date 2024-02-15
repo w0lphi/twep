@@ -9,6 +9,7 @@ const path = require('path');
 
 const qr = require('qrcode');
 const fs = require('fs');
+const StationModel = require('../models/stationModel');
 
 const registerUser = async (req, res) => {
     try {
@@ -300,6 +301,43 @@ const purchaseTicket = async (req, res) => {
 };
 
 
+const simulateTakingBike = async (req, res) => {
+    const { userId, ticketId } = req.params;
+
+    try {
+
+        const ticket = await UserModel.getTicketById(ticketId);
+
+        if (!ticket || ticket.user_id !== userId) {
+            return res.status(404).json({ message: 'Ticket not found or does not belong to the user.' });
+        }
+
+        if (ticket.status !== 'unused') {
+            return res.status(400).json({ message: 'Ticket status is not valid for riding.' });
+        }
+
+        const bike = await StationModel.findById(ticket.bike_id);
+
+
+
+        await StationModel.markParkingPlaceAsVacant(bike.parking_place_id);
+
+        await StationModel.markBikeAsRented(bike.id);
+
+        // TODO mark parking_place in table individual_bikes to smth specific
+
+        await UserModel.updateTicketStatus(ticketId, 'rented');
+
+
+        return res.status(200).json({ message: 'Taking bike simulated successfully.' });
+    } catch (error) {
+        console.error('Error simulating ride:', error);
+        return res.status(500).json({ message: 'Internal server error.' });
+    }
+};
+
+
+
 
 // Function to generate QR code for ticket data
 async function generateQRCode(ticketData) {
@@ -346,5 +384,6 @@ module.exports = {
     getAllTicketsForUser,
     getAllBikes,
     getAllBikeCategories,
-    getAllBikeModels
+    getAllBikeModels,
+    simulateTakingBike,
 };

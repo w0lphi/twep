@@ -186,6 +186,24 @@ class UserModel {
     }
 
 
+    static async getTicketById(ticketId) {
+        try {
+            const query = userQueries.getTicketById;
+            const { rows } = await pool.query(query, [ticketId]);
+            return rows[0];
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    static async updateTicketStatus(ticketId, status) {
+        try {
+            const query = userQueries.updateTicketStatus;
+            await pool.query(query, [status, ticketId]);
+        } catch (error) {
+            throw error;
+        }
+    }
 }
 
 module.exports = UserModel;
