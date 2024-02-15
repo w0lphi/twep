@@ -104,7 +104,7 @@ const stationController = {
 
             // Convert bike categories array to an array of objects with 'name' property
             const parkingPlacesData = parkingPlaces.map(place => ({
-                bikeCategories: place.bikeCategories.map(category => ({ name: category.name })),
+                bikeCategories: place.bikeCategories?.map(category => ({ name: category.name })) ?? [],
                 occupied: place.occupied,
             }));
 
@@ -371,8 +371,8 @@ const stationController = {
             }
 
             // Check if the individual bike is currently available
-            if (!individualBike.status) {
-                return res.status(400).json({ error: 'Individual bike is currently in use and cannot be reassigned' });
+            if (individualBike.status !== "available") {
+                return res.status(400).json({ error: 'Individual bike is currently in use and cannot be deleted' });
             }
 
             const tickets = await StationModel.getAllOpenTicketsForBike(id);            
@@ -405,7 +405,7 @@ const stationController = {
             }
 
             // Check if the individual bike is currently available
-            if (!individualBike.status) {
+            if (individualBike.status !== "available") {
                 return res.status(400).json({ error: 'Individual bike is currently in use and cannot be reassigned' });
             }
 
@@ -414,7 +414,6 @@ const stationController = {
             if (!targetStation) {
                 return res.status(404).json({ error: 'Target station not found' });
             }
-
             const bikeCategoryString = await StationModel.getBikeCategoryString(individualBike.category_id);
 
             // Check if there is an available parking place for the bike category at the target station
