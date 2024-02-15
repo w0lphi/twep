@@ -1,4 +1,4 @@
-import { Component, ChangeDetectorRef } from '@angular/core';
+import { Component, ChangeDetectorRef, NgZone } from '@angular/core';
 import { CommonModule} from '@angular/common';
 
 import { MatButtonModule } from '@angular/material/button';
@@ -15,6 +15,7 @@ import { Location } from '../model/location';
 import { StationCardComponent } from '../station-card/station-card.component';
 import { LoadingOverlayComponent } from '../common/loading-overlay/loading-overlay.component';
 import { NotificationService } from '../service/notification.service';
+import { ActivatedRoute, Params, Router } from '@angular/router';
 
 @Component({
   selector: 'app-user-map',
@@ -44,7 +45,10 @@ export class UserMapComponent {
   constructor(
     private bikeStationService: BikeStationService,
     private changeDetector: ChangeDetectorRef,
-    private notificationService: NotificationService
+    private notificationService: NotificationService,
+    private route: ActivatedRoute,
+    private router: Router,
+    private zone: NgZone
   ) {
     this.runningAction = true;
     this.displayedBikeStation = null;
@@ -69,7 +73,12 @@ export class UserMapComponent {
       const userMarker: Leaflet.Marker<any> = LeafletUtil.getUserMarker(latitude, longitude);
       userMarker.bindPopup("You are here");
       this.layers.push(userMarker);
-      map.setView(new Leaflet.LatLng(latitude, longitude), 14);
+      if(this.displayedBikeStation === null){
+        map.setView(new Leaflet.LatLng(latitude, longitude), 14);
+      }else{
+        const stationLocation: Location = this.displayedBikeStation.location;
+        map.setView(new Leaflet.LatLng(stationLocation.latitude, stationLocation.longitude), 17);
+      }
     }
   }
 
@@ -84,23 +93,38 @@ export class UserMapComponent {
           marker.addEventListener('click', () => this.openDetail(station));
           return marker;
         })
+        const queryParams: Params = this.route.snapshot.queryParams;
+        const stationId: string | undefined = queryParams["station"];
+        const bikeStation: BikeStation | undefined = this.bikeStations.find(({id}) => id === stationId);
+        if(bikeStation !== undefined){
+            this.openDetail(bikeStation);
+        }
       }
     })
   }
 
   openDetail(bikeStation: BikeStation): void{
-    setTimeout(() => this.map?.invalidateSize(true), 100);
-    const location: Location = bikeStation.location;
-    this.map?.flyTo(new Leaflet.LatLng(location.latitude, location.longitude), 17);
-    this.displayedBikeStation = bikeStation;
-    //This is needed, since the change of the displayedBikeStation would not be recognized in the HTML
-    this.changeDetector.detectChanges();
+    this.zone.run(() => {
+      setTimeout(() => this.map?.invalidateSize(true), 100);
+      const location: Location = bikeStation.location;
+      this.map?.flyTo(new Leaflet.LatLng(location.latitude, location.longitude), 17);
+      this.displayedBikeStation = bikeStation;
+      this.router.navigate(
+        [], 
+        {
+          relativeTo: this.route,
+          queryParams: { station: bikeStation.id },
+          queryParamsHandling: 'merge'
+        }
+      );
+    })
   }
 
   closeDetail() {
-    setTimeout(() => this.map?.invalidateSize(true), 100);
-    this.displayedBikeStation = null;
-    this.changeDetector.detectChanges();
+    this.zone.run(() => {
+      setTimeout(() => this.map?.invalidateSize(true), 100);
+      this.displayedBikeStation = null;
+    })
   }
 
   get stationDetailTitle(): string {

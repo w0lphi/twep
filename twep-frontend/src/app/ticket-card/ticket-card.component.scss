@@ -1,0 +1,32 @@
+.twep-ticket-card{
+    border: 1px solid #696969;
+    color: rgba(0, 0, 0, 1);
+
+    .mat-mdc-card-actions{
+        gap: 8px;
+    }
+
+    .mat-mdc-card-content{
+        display: flex;
+        flex-direction: column;
+        padding: 16px;
+        gap: 32px;
+
+        .twep-ticket-card-information{
+            display: grid;
+            grid-template-columns: min-content 1fr;
+            grid-template-rows: auto;
+            align-items: center;
+            row-gap: 8px;
+            column-gap: 8px;
+        }
+
+        .twep-ticket-card-bike{
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: 8px;
+            max-width: 600px;
+        }
+    }
+}

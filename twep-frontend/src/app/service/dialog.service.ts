@@ -5,6 +5,8 @@ import { PromptDialogComponent, PromptDialogData } from '../common/prompt-dialog
 import { BikeRentDialogComponent } from '../bike-rent-dialog/bike-rent-dialog.component';
 import { firstValueFrom } from 'rxjs';
 import { Bike } from '../model/bike';
+import { Ticket } from '../model/ticket';
+import { QrCodeDialogComponent } from '../qr-code-dialog/qr-code-dialog.component';
 
 @Injectable({ providedIn: 'root' })
 export class DialogService {
@@ -47,6 +49,17 @@ export class DialogService {
         width: "800px",
         disableClose: true,
         hasBackdrop: true,
+    })
+  }
+
+  public openQrCodeDialog(ticket: Ticket): void{
+    this.dialog.open(QrCodeDialogComponent, {
+      data: {
+        ticket
+      },
+      width: "400px",
+      disableClose: true,
+      hasBackdrop: true,
     })
   }
 }

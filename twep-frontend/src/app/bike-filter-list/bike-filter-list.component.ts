@@ -1,6 +1,7 @@
-import { ChangeDetectorRef, Component } from '@angular/core';
+import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { RouterLink } from '@angular/router';
 
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatIconModule } from '@angular/material/icon';
@@ -35,7 +36,8 @@ import { BikeStation } from '../model/bikeStation';
     MatSliderModule,
     MatSelectModule,
     MatFormFieldModule,
-    MatToolbarModule
+    MatToolbarModule,
+    RouterLink
   ],
   templateUrl: './bike-filter-list.component.html',
   styleUrl: './bike-filter-list.component.scss'

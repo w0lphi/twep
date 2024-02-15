@@ -1,0 +1,53 @@
+<mat-card
+    *ngIf="ticket"
+    [ngClass]="{
+        'twep-ticket-card': true,
+        'inactive': inactive
+    }"
+>
+    <mat-card-header class="twep-ticket-card-header">
+        <mat-card-title [title]="title">
+            {{title}}
+        </mat-card-title>
+        <mat-card-subtitle>
+            {{subtitle}}
+        </mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+        <div class="twep-ticket-card-information">
+            <mat-icon>schedule</mat-icon>
+            <div>{{timeInterval}}</div>
+            <mat-icon>location_on</mat-icon>
+            <div>
+                <a 
+                    routerLink="/user/home" 
+                    [queryParams]="{station: this.bike.station?.id}"
+                >
+                    {{ stationName }}
+                </a>
+            </div>
+        </div>
+        <div class="twep-ticket-card-bike">
+            <div>Selected Bike</div>
+            <app-bike-card [bike]="bike" [showRentBtn]="false" />
+        </div>
+    </mat-card-content>
+    <mat-card-actions>
+        <div class="twep-spacer"></div>
+        <button
+            mat-flat-button
+            (click)="showQRCode()"
+        >
+            <mat-icon>qr_code_2</mat-icon>
+            QR CODE
+        </button>
+        <button
+            *ngIf="!inactive"
+            mat-flat-button
+            color="accent"
+            (click)="cancelTicket()"
+        >
+            CANCEL TICKET
+        </button>
+    </mat-card-actions>
+</mat-card>

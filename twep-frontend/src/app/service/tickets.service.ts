@@ -2,7 +2,7 @@ import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
 import { HttpClient } from "@angular/common/http";
 import { environment } from "../environment/environment";
-import { Bike } from "../model/bike";
+import { Ticket } from "../model/ticket";
 
 @Injectable({
   providedIn: 'root'
@@ -12,18 +12,20 @@ export class TicketService {
 
   constructor(private http: HttpClient) { }
 
-  public getUserTickets(userId: string): Observable<UserTicket[]> {
-    return this.http.get<UserTicket[]>(`${this.apiUrl}/users/${userId}/account/tickets`);
+  public getUserTickets(userId: string): Observable<Ticket[]> {
+    return this.http.get<Ticket[]>(`${this.apiUrl}/users/${userId}/account/tickets`);
   }
 
   public createUserTicket(userId: string, ticket: UserTicketRequest): Observable<any> {
-    const url = `${this.apiUrl}/users/${userId}/account/tickets`;
-    return this.http.post(url, ticket);
+    return this.http.post(`${this.apiUrl}/users/${userId}/account/tickets`, ticket);
   }
 
   public calculateTicketPrice(ticket: UserTicketRequest): Observable<TicketPriceResponse> {
-    const url = `${this.apiUrl}/users/account/tickets`;
-    return this.http.post<TicketPriceResponse>(url, ticket);
+    return this.http.post<TicketPriceResponse>(`${this.apiUrl}/users/account/tickets`, ticket);
+  }
+
+  public cancelUserTicket(ticketId: string){
+    return this.http.delete<TicketPriceResponse>(`${this.apiUrl}/users/account/tickets/${ticketId}`);
   }
 }
 
@@ -32,14 +34,6 @@ export type UserTicketRequest = {
   fromDate: string,
   untilDate: string,
   immediateRenting: boolean,
-}
-
-export type UserTicket = {
-  fromDate: string,
-  untilDate: string,
-  immediateRenting: boolean,
-  bike: Bike,
-  qrcode: string,
 }
 
 export type TicketPriceResponse = {

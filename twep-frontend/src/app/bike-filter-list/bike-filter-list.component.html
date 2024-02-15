@@ -87,7 +87,13 @@
                     @for(station of filteredBikeStations; track station.id){
                         <div class="twep-filtered-bike-station">
                             <div class="twep-filtered-bike-station-title">
+                                
+                                <a 
+                                    routerLink="/user/home" 
+                                    [queryParams]="{station: station?.id}"
+                                >
                                 {{station.name}}
+                                </a>
                                 <mat-divider />
                             </div>
                             <div class="twep-filtered-bike-station-bikes">

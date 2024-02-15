@@ -1,0 +1,43 @@
+<div class="twep-qr-code-dialog">
+    <h1 mat-dialog-title>QR code</h1>
+    @if(step === 1){
+        <div mat-dialog-content>
+            <div class="twep-qr-code-container">
+                <img [src]="qrCodeBase64" alt="QR code of ticket"/>
+                <div class="twep-qr-code-overlay">
+                    <button 
+                        mat-flat-button
+                        color="primary"
+                        (click)="simulateRent()"
+                    >
+                        SIMULATE RENT
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div mat-dialog-actions>
+            <div class="twep-spacer"></div>
+            <button
+                mat-button
+                [mat-dialog-close]="false"
+            >
+                CLOSE
+            </button>
+        </div>
+    }
+    @else if(step === 2){
+        <div mat-dialog-content>
+            TODO: Implement return
+        </div>
+        <div mat-dialog-actions>
+            <div class="twep-spacer"></div>
+            <button
+                mat-button
+                [mat-dialog-close]="false"
+            >
+                CLOSE
+            </button>
+        </div>
+    }
+    
+</div>

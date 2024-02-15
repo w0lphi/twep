@@ -21,7 +21,7 @@ import { DialogService } from '../service/dialog.service';
   styleUrl: './bike-card.component.scss'
 })
 export class BikeCardComponent {
-  @Input("bike") bike?: Bike;
+  @Input("bike") bike!: Bike;
   @Input("showRentBtn") showRentBtn = true;
   @ViewChild("descriptionContainer") descriptionContainer?: ElementRef;
   showMore: boolean = false;

@@ -1,0 +1,30 @@
+.twep-qr-code-dialog{
+    .twep-qr-code-container{
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+        position: relative;
+
+        .twep-qr-code-overlay{
+            display: none;
+            height: 100%;
+            width: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+            background-color: rgba(255,255,255,0.7);
+            z-index: 200;
+            cursor: pointer;
+        }
+
+        &:hover{
+            .twep-qr-code-overlay{
+                display: flex
+            }
+        }
+    }
+}
