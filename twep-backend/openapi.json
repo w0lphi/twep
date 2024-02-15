@@ -1744,6 +1744,78 @@
               }
             }
           },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "Invalid input data"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Bike category not found",
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "Bike category not found"
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "summary": "Update price of bike category",
+        "tags": [
+          "management-bike models and categories"
+        ],
+        "parameters": [
+          {
+            "name": "categoryId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "The ID of the bike category to update"
+          }
+        ],
+        "requestBody": {
+          "description": "Bike model details",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "hourPrice": {
+                    "type": "number",
+                    "required": true
+                  }
+                } 
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Update price of bike category successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BikeCategory"
+                },
+                "example": {
+                  "id": "uuid",
+                  "name": "City Bike",
+                  "hourPrice": 10
+                }
+              }
+            }
+          },
           "404": {
             "description": "Bike category not found",
             "content": {
