@@ -59,7 +59,6 @@ export class AccountComponent implements OnInit {
   userAccount!: UserAccount;
   loggedInUserId: string | null = null;
   userId: string | null = null;
-  walletAmount: number | null = null;
   saveSuccessMessage: string | null = null;
 
 
@@ -94,9 +93,8 @@ export class AccountComponent implements OnInit {
     }
   }
 
-saveAdding(): void {
+  saveAdding(): void {
     const amountToAdd: number = Number(this.addMoneyFormControl.value);
-
     if (!Number.isNaN(amountToAdd)) {
       this.walletService.addMoneyToWallet(this.userId!, amountToAdd)
           .subscribe({
@@ -114,7 +112,14 @@ saveAdding(): void {
               }
           });
     }
-}
+  }
+
+  get walletAmount(): string{
+    return new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' }).format(
+      this.userAccount.wallet,
+    )
+  }
+
 }
 
   

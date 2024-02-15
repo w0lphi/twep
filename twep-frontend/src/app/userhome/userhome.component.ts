@@ -1,7 +1,7 @@
 import { Component, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { RouterOutlet, RouterLink, RouterLinkActive, Router } from '@angular/router';
+import { RouterOutlet, RouterLink, RouterLinkActive, Router, Event, EventType } from '@angular/router';
 
 import { MatButtonModule } from '@angular/material/button';
 import { MatToolbarModule } from '@angular/material/toolbar';
@@ -14,8 +14,6 @@ import { MatListModule } from '@angular/material/list';
 import { NavigationLink } from '../model/navigationLink';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { AuthService } from '../service/auth.service';
-
-
 
 @Component({
   selector: 'app-userhome',
@@ -58,19 +56,22 @@ export class UserhomeComponent {
       if(!this.isMobile) this.drawer?.close();
     })
 
-    this.router.events.subscribe(() => {
-      const index: number = this.navigationLinks.findIndex(tab => tab.route === this.router.url);
-      if (index > -1) {
-        this.activeLinkIndex = index;
+    this.router.events.subscribe((event: Event) => {
+      if(event.type === EventType.NavigationEnd){
+        const index: number = this.navigationLinks.findIndex(tab => this.router.url.startsWith(tab.route));
+        if (index > -1) {
+          this.activeLinkIndex = index;
+        }
       }
     })
   }
   
   ngOnInit(): void {
-    this.activeLinkIndex = this.navigationLinks.findIndex(tab => tab.route === this.router.url);
+    this.activeLinkIndex = this.navigationLinks.findIndex(tab => this.router.url.startsWith(tab.route));
   }
 
   navigate(index: number): void {
+    if(index === this.activeLinkIndex) return;
     const link: NavigationLink = this.navigationLinks[index];
     this.router.navigateByUrl(link.route);
     if(this.isMobile) this.drawer?.close();
