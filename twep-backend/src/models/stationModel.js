@@ -433,6 +433,20 @@ class StationModel {
         }
     }
 
+
+    static async markBikeAsAvailable(bikeId) {
+        try {
+            const queryString = stationQueries.markBikeAsAvailable;
+            const result = await pool.query(queryString, [bikeId]);
+
+            if (result.rowCount === 0) {
+                throw { status: 500, message: 'Failed to mark bike as available' };
+            }
+        } catch (error) {
+            throw error;
+        }
+    }
+
 }
 
 module.exports = StationModel;

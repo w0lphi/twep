@@ -166,6 +166,7 @@ const getBikesByModelId = `SELECT * FROM individual_bikes WHERE bike_model_id = 
 const getAllOpenTicketsForBike = `SELECT * FROM tickets WHERE bike_id = $1 AND until_date >= $2`
 
 const markBikeAsRented = `UPDATE individual_bikes SET status = 'rented' WHERE id = $1;`
+const markBikeAsAvailable = `UPDATE individual_bikes SET status = 'available' WHERE id = $1;`
 
 module.exports = {
     getUsers,
@@ -198,4 +199,5 @@ module.exports = {
     getBikesByModelId,
     getAllOpenTicketsForBike,
     markBikeAsRented,
+    markBikeAsAvailable,
 };

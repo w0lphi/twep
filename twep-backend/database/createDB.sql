@@ -55,7 +55,7 @@ ADD COLUMN category_id UUID REFERENCES bike_categories(id);
 
 CREATE TABLE individual_bikes (
     id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
-    bike_category VARCHAR(50) NOT NULL,
+    bike_category_id UUID REFERENCES bike_categories(id) ON DELETE CASCADE,
     status VARCHAR(50) NOT NULL,
     bike_model_id UUID REFERENCES bike_models(id) ON DELETE CASCADE
 );

@@ -336,6 +336,70 @@ const simulateTakingBike = async (req, res) => {
     }
 };
 
+const simulateReturningBike = async (req, res) => {
+    const { userId, ticketId } = req.params;
+    const { stationId, bikeId } = req.body;
+
+    try {
+        // Check if the ticket exists and belongs to the user
+        const ticket = await UserModel.getTicketById(ticketId);
+
+        console.log(ticket);
+
+        console.log(ticket.user_id);
+        console.log(userId);
+
+        if (!ticket || ticket.user_id !== userId) {
+            return res.status(404).json({ message: 'Ticket not found or does not belong to the user.' });
+        }
+
+        // Check if the ticket status is 'rented'
+        if (ticket.status !== 'rented') {
+            return res.status(400).json({ message: 'Ticket status is not valid for returning.' });
+        }
+
+        // Retrieve the bike using its ID
+        console.log(ticket.bike_id);
+        console.log(bikeId);
+        const bike = await StationModel.findById(ticket.bike_id);
+        if (!bike) {
+            return res.status(404).json({ message: 'Bike not found.' });
+        }
+
+        // Check if the station exists
+        const station = await StationModel.getStationById(stationId);
+        if (!station) {
+            return res.status(404).json({ message: 'Station not found.' });
+        }
+
+        // Check if the station has a parking place available for the bike category
+        const bikeCategoryString = await StationModel.getBikeCategoryString(bike.category_id);
+        const parkingPlaceAvailable = await StationModel.findAvailableParkingPlace(stationId, { name: bikeCategoryString });
+        if (!parkingPlaceAvailable) {
+            return res.status(400).json({ message: 'No available parking place for this bike category at the station.' });
+        }
+
+        // Mark bike as available
+        await StationModel.markBikeAsAvailable(ticket.bike_id);
+
+        // Mark parking place as occupied
+        await StationModel.markParkingPlaceAsOccupied(stationId, ticket.bike_id);
+
+        // Update individual bike with the new parking place ID
+        await StationModel.updateParkingPlace(bikeId, stationId);
+
+        // Update ticket status as returned
+        await UserModel.updateTicketStatus(ticketId, 'returned');
+
+        return res.status(200).json({ message: 'Bike returned successfully.' });
+    } catch (error) {
+        console.error('Error simulating bike return:', error);
+        return res.status(500).json({ message: 'Internal server error.' });
+    }
+};
+
+
+
 
 
 
@@ -386,4 +450,5 @@ module.exports = {
     getAllBikeCategories,
     getAllBikeModels,
     simulateTakingBike,
+    simulateReturningBike,
 };
