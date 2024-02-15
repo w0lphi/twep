@@ -162,6 +162,8 @@ const markParkingPlaceAsOccupied = `
 
 const getBikesByModelId = `SELECT * FROM individual_bikes WHERE bike_model_id = $1`
 
+const getAllOpenTicketsForBike = `SELECT * FROM tickets WHERE bike_id = $1 AND until_date >= $2`
+
 module.exports = {
     getUsers,
     getStations,
@@ -189,5 +191,6 @@ module.exports = {
     markParkingPlaceAsVacant,
     updateIndividualBikeParkingPlace,
     markParkingPlaceAsOccupied,
-    getBikesByModelId
+    getBikesByModelId,
+    getAllOpenTicketsForBike
 };

@@ -343,9 +343,23 @@ const stationController = {
     },
 
     async deleteIndividualBikeById(req, res) {
-        const { id } = req.params;
-
         try {
+            const { id } = req.params;
+            const individualBike = await StationModel.findById(id);
+            if (!individualBike) {
+                return res.status(404).json({ error: 'Individual bike not found' });
+            }
+
+            // Check if the individual bike is currently available
+            if (!individualBike.status) {
+                return res.status(400).json({ error: 'Individual bike is currently in use and cannot be reassigned' });
+            }
+
+            const tickets = await StationModel.getAllOpenTicketsForBike(id);            
+            if(tickets.length > 0){
+                return res.status(400).json({ error: 'Cannot delete individual bike while there are still active tickets associated with it' })
+            }
+
             const deleteResult = await StationModel.deleteIndividualBikeById(id);
 
             if (!deleteResult) {

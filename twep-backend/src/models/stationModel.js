@@ -396,6 +396,16 @@ class StationModel {
         }
     }
 
+    static async getAllOpenTicketsForBike(bikeId){
+        try {
+            const result = await pool.query(stationQueries.getAllOpenTicketsForBike, [bikeId, new Date(Date.now()).toISOString()]);
+            return result.rows;
+        } catch (error) {
+            throw error;
+        }
+    }
+
+
 }
 
 module.exports = StationModel;
