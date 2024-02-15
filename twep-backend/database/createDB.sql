@@ -70,7 +70,7 @@ CREATE TABLE tickets (
     until_date TIMESTAMPTZ NOT NULL,
     immediate_renting BOOLEAN NOT NULL,
     price NUMERIC(10, 2) DEFAULT 0, 
-    status TEXT SET DEFAULT 'unused'; 
+    status TEXT DEFAULT 'unused',
     qr_code_base64 TEXT NOT NULL
 );
 
@@ -101,10 +101,10 @@ VALUES
     ('186760ff-6379-4703-89c2-0844b85b3433', 'KTM Summit Trailblazer', 'Introducing the Summit Trailblazer, a high-performance mountain bike designed for rugged terrains and thrilling adventures. Its lightweight aluminum frame ensures agility, while the precision-engineered suspension system provides a smooth ride. Equipped with responsive disc brakes and versatile gearing, the Summit Trailblazer conquers trails with unmatched reliability and style.', 27.5, '{"Lighweight Aluminium Frame","Improved suspension system","Responsive disc brake"}', 'daf594a3-c350-42d5-9b1f-7f679ae0a30b'),
     ('20acd6d9-262c-4c2b-b80c-2ca04912295b', 'UrbanCruise 500', 'The UrbanCruise 500 is a sleek and agile city bike designed for urban commuters seeking a perfect blend of style and functionality. With a lightweight aluminum frame, comfortable saddle, and responsive brakes, it offers a smooth and efficient ride through the bustling streets, making commuting a breeze.', 29, '{"Extra comfortable saddle","Responsive breaks"}', 'daf594a3-c350-42d5-9b1f-7f679ae0a30e');
 
-INSERT INTO individual_bikes (id, bike_category, status, bike_model_id, parking_place_id)
+INSERT INTO individual_bikes (id, bike_category_id, status, bike_model_id, parking_place_id)
 VALUES
-    ('b3182d20-32d8-4ee7-93c5-20477f76af13', 'City Bike', 'available', '20acd6d9-262c-4c2b-b80c-2ca04912295b', '7635787f-3f4d-4a1f-93c7-f7efb42f9cfe'),
-    ('b3182d20-32d8-4ee7-93c5-20477f76af14', 'Mountain Bike', 'available', '186760ff-6379-4703-89c2-0844b85b3433', '91faa446-1bf1-4d84-8a54-2b15e0e8f4ca');
+    ('b3182d20-32d8-4ee7-93c5-20477f76af13', 'daf594a3-c350-42d5-9b1f-7f679ae0a30e', 'available', '20acd6d9-262c-4c2b-b80c-2ca04912295b', '7635787f-3f4d-4a1f-93c7-f7efb42f9cfe'),
+    ('b3182d20-32d8-4ee7-93c5-20477f76af14', 'daf594a3-c350-42d5-9b1f-7f679ae0a30b', 'available', '186760ff-6379-4703-89c2-0844b85b3433', '91faa446-1bf1-4d84-8a54-2b15e0e8f4ca');
 
 
 
