@@ -2,9 +2,11 @@
     *ngIf="ticket"
     [ngClass]="{
         'twep-ticket-card': true,
-        'inactive': inactive
     }"
 >
+    <div *ngIf="isRented" class="twep-active-circle-container">
+        <div class="twep-active-circle"></div>
+    </div>
     <mat-card-header class="twep-ticket-card-header">
         <mat-card-title [title]="title">
             {{title}}
@@ -14,6 +16,17 @@
         </mat-card-subtitle>
     </mat-card-header>
     <mat-card-content>
+        <div 
+            [ngClass]="{
+                'twep-ticket-card-status': true,
+                'rented': isRented,
+                'unused': isUnused,
+                'returned': isReturned,
+            }"
+        >
+            <mat-icon class="material-icons-outlined">{{statusIcon}}</mat-icon>
+            <div>{{statusText}}</div>
+        </div>
         <div class="twep-ticket-card-information">
             <mat-icon>schedule</mat-icon>
             <div>{{timeInterval}}</div>
@@ -42,7 +55,7 @@
             QR CODE
         </button>
         <button
-            *ngIf="!inactive"
+            *ngIf="isUnused"
             mat-flat-button
             color="accent"
             (click)="cancelTicket()"

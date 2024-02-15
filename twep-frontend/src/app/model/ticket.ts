@@ -8,4 +8,12 @@ export type Ticket = {
     immediateRenting: boolean,
     bike: Bike,
     qrCodeBase64: string,
+    status: TicketStatus,
+    price: string,
+}
+
+export enum TicketStatus {
+    RENTED = "rented",
+    UNUSED = "unused",
+    RETURNED = "returned",
 }

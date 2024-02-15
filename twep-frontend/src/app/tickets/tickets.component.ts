@@ -16,7 +16,7 @@ import { AuthService } from '../service/auth.service';
 
 import { TicketCardComponent } from '../ticket-card/ticket-card.component';
 import { LoadingOverlayComponent } from '../common/loading-overlay/loading-overlay.component';
-import { Ticket } from '../model/ticket';
+import { Ticket, TicketStatus } from '../model/ticket';
 
 @Component({
   selector: 'app-tickets',
@@ -66,7 +66,18 @@ export class TicketsComponent {
           this.runningAction = false;
         }
       });
-  } 
+  }
+  
+  getTicketStatusWeight(ticket: Ticket): number{
+    switch(ticket.status){
+      case TicketStatus.RENTED:
+        return 2;
+      case TicketStatus.UNUSED:
+        return 1;
+      case TicketStatus.RETURNED:
+        return 0;
+    }
+  }
 }
 
 

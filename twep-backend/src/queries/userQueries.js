@@ -56,7 +56,15 @@ JOIN
 JOIN
     stations s ON pp.station_id = s.id
 WHERE
-    t.user_id = $1;
+    t.user_id = $1
+ORDER BY
+    (CASE t.status 
+        WHEN 'rented' then 1
+        WHEN 'unused' then 2
+        WHEN 'returned' then 3
+        ELSE 0
+    END) ASC,   
+    t.from_date ASC;
 `;
 
 const deductMoneyFromWallet = 'UPDATE users SET wallet = wallet - $1 WHERE id = $2 RETURNING *'

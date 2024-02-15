@@ -8,7 +8,7 @@ import { MatButtonModule } from '@angular/material/button';
 
 import { BikeCardComponent } from '../bike-card/bike-card.component';
 
-import { Ticket } from '../model/ticket';
+import { Ticket, TicketStatus } from '../model/ticket';
 import { format } from "date-fns"; 
 import { Bike } from '../model/bike';
 import { DialogService } from '../service/dialog.service';
@@ -31,16 +31,11 @@ import { TicketService } from '../service/tickets.service';
 export class TicketCardComponent {
   @Input("ticket") ticket!: Ticket;
   @Output("cancelTicket") cancelEvent: EventEmitter<void> = new EventEmitter<void>();
-  inactive: boolean = false;
 
   constructor(
     private dialogService: DialogService,
     private ticketService: TicketService,
   ){
-  }
-
-  ngOnInit(): void{
-   // this.inactive = new Date(this.ticket.untilDate).getTime() <= Date.now();
   }
 
   async cancelTicket(): Promise<void>{
@@ -69,7 +64,7 @@ export class TicketCardComponent {
   }
 
   get subtitle(): string {
-    return `Ticket-ID: ${this.ticket.ticketId}`
+    return `ID: ${this.ticket.ticketId}`
   }
 
   get fromDateFormatted(): string {
@@ -88,4 +83,41 @@ export class TicketCardComponent {
     return `${this.bike.station?.name}`
   }
 
+  get isRented(): boolean {
+    return this.ticket.status === TicketStatus.RENTED;
+  }
+
+  get isUnused(): boolean {
+    return this.ticket.status === TicketStatus.UNUSED;
+  }
+
+  get isReturned(): boolean {
+    return this.ticket.status === TicketStatus.RETURNED;
+  }
+
+  get statusText(): string {
+    switch(this.ticket.status){
+      case TicketStatus.RENTED:
+        return 'Bike was taken from the station. Please return before the end date and have a nice ride!';
+      case TicketStatus.UNUSED:
+        let text: string = `Bike is booked for the given interval.`;
+        if(!this.ticket.immediateRenting){
+          text = `${text} Ticket is cancellable until 1 hour before the start date`
+        }
+        return text;
+      case TicketStatus.RETURNED:
+        return 'Bike was returned to a station'
+    }
+  }
+
+  get statusIcon(): string{
+    switch(this.ticket.status){
+      case TicketStatus.RENTED:
+        return 'timer';
+      case TicketStatus.UNUSED:
+        return 'info'
+      case TicketStatus.RETURNED:
+        return 'check_circle'
+    }
+  }
 }

@@ -36,7 +36,7 @@ export class BikeCardComponent {
   }
 
   ngOnInit(){
-    this.unavailable = this.bike?.status !== BikeStatus.AVAILABLE;
+    this.unavailable = this.bike?.status !== BikeStatus.AVAILABLE && this.showRentBtn === true;
   }
   
   ngAfterViewInit() {

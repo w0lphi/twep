@@ -1,6 +1,8 @@
 <div class="twep-qr-code-dialog">
-    <h1 mat-dialog-title>QR code</h1>
-    @if(step === 1){
+    @if(runningAction){
+        <app-loading-overlay />
+    } @else if(step === 1){
+        <h1 mat-dialog-title>QR code</h1>
         <div mat-dialog-content>
             <div class="twep-qr-code-container">
                 <img [src]="qrCodeBase64" alt="QR code of ticket"/>
@@ -26,8 +28,22 @@
         </div>
     }
     @else if(step === 2){
+        <h1 mat-dialog-title>Return bike to station</h1>
         <div mat-dialog-content>
-            TODO: Implement return
+            <div class="twep-qr-code-container">
+                Specify to which station the bike should be returned
+                <mat-form-field>
+                    <mat-select
+                        [(ngModel)]="bikeStationId"
+                        name="model"
+                        placeholder="Select bike station for return"
+                    >
+                        @for (station of bikeStations; track station.id) {
+                            <mat-option [value]="station.id">{{station.name}}</mat-option>
+                        }
+                    </mat-select>
+                </mat-form-field>
+            </div>
         </div>
         <div mat-dialog-actions>
             <div class="twep-spacer"></div>
@@ -36,6 +52,14 @@
                 [mat-dialog-close]="false"
             >
                 CLOSE
+            </button>
+            <button
+                mat-button
+                [disabled]="bikeStationId === null"
+                color="primary"
+                (click)="returnBike()"
+            >
+                RETURN
             </button>
         </div>
     }

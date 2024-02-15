@@ -51,7 +51,7 @@ export class ServerErrorInterceptor implements HttpInterceptor {
     
     //Default error notification handling
     const body: any = error.error;
-    const message: string =  body?.error ?? "Ups, something went wrong";
+    const message: string =  body?.error ?? body?.message ?? "Ups, something went wrong";
     this.notificationService.showClientError(message);
     return throwError(() => new Error(error.message));
   }

@@ -27,6 +27,14 @@ export class TicketService {
   public cancelUserTicket(ticketId: string){
     return this.http.delete<TicketPriceResponse>(`${this.apiUrl}/users/account/tickets/${ticketId}`);
   }
+
+  public simulateRideBike(ticketId: string, userId: string): Observable<any>{
+    return this.http.post(`${this.apiUrl}/users/${userId}/tickets/${ticketId}/ride`, null)
+  }
+
+  public simulateReturnBike(ticketId: string, userId: string, stationId: string): Observable<any>{
+    return this.http.post(`${this.apiUrl}/users/${userId}/tickets/${ticketId}/return`, { stationId });
+  }
 }
 
 export type UserTicketRequest = {

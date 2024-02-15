@@ -3,8 +3,12 @@
     color: rgba(0, 0, 0, 1);
 
     &.unavailable{
-        color: rgba(0, 0, 0, 0.19);
+        color: rgba(0, 0, 0, 0.5);
         border: 1px solid black;
+
+        a:link{
+            color: rgba(0, 0, 0, 0.6);
+        }
     }
 
     .twep-bike-card-header{

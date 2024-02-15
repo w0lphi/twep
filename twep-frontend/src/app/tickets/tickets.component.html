@@ -18,20 +18,19 @@
         <div class="twep-no-items-message">No active tickets yet</div>
       }
     </div>
-    <mat-divider />
     <mat-toolbar>
       <h1>Previous tickets</h1>
     </mat-toolbar>
-    <div class="twep-user-tickets-list">
       @if(previousUserTickets.length > 0){
-      <app-ticket-card 
-          *ngFor="let ticket of previousUserTickets"
-          [ticket]="ticket"
-        />
+        <div class="twep-user-tickets-list">
+          <app-ticket-card 
+              *ngFor="let ticket of previousUserTickets"
+              [ticket]="ticket"
+            />
+        </div>
       }
       @else {
         <div class="twep-no-items-message">No previous booked tickets</div>
       }
-    </div>
   }
 </div>

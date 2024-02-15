@@ -1,10 +1,17 @@
 .twep-qr-code-dialog{
+    position: relative;
+
     .twep-qr-code-container{
         display: flex;
-        flex-direction: row;
+        flex-direction: column;
         justify-content: center;
         align-items: center;
         position: relative;
+        gap: 16px;
+
+        .mat-mdc-form-field{
+            width: 100%;
+        }
 
         .twep-qr-code-overlay{
             display: none;

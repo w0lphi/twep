@@ -135,7 +135,7 @@ export class StationDetailComponent {
     bikeStation.location = new Location(this.latitude?.value, this.longitude?.value);
     bikeStation.name = this.name?.value;
     bikeStation.operational = this.operational?.value;
-    bikeStation.parkingPlaces = this.parkingPlaces;
+    bikeStation.parkingPlaces = this.parkingPlaces.filter(({id}) => id !== null);
 
     if (this.isNew) {
       this.bikeStationService.createBikeStation(bikeStation).subscribe({
@@ -191,7 +191,7 @@ export class StationDetailComponent {
       id: bikeStation.id,
       name: bikeStation.name,
       longitude: bikeStation.location?.longitude,
-      latitude: bikeStation.location?.longitude,
+      latitude: bikeStation.location?.latitude,
       operational: bikeStation.operational,
     })
     this.parkingPlaces = this.bikeStation?.parkingPlaces ?? [];
