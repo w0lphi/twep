@@ -491,6 +491,70 @@
           ],
           "categoryId": "daf594a3-c350-42d5-9b1f-7f679ae0a30b"
         }
+      },
+      "OverdueTicket": {
+        "type": "object",
+        "properties": {
+          "ticketId": {
+            "type": "string"
+          },
+          "fromDate": {
+            "type": "string"
+          },
+          "untilDate": {
+            "type": "string"
+          },
+          "bike": {
+            "type": "object",
+            "required": [
+              "id",
+              "model"
+            ],
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "model": {
+                "type": "string"
+              }
+            }
+          },
+          "user": {
+            "type": "object",
+            "required": [
+              "id",
+              "email"
+            ],
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "email": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "required": [
+          "ticketId",
+          "fromDate",
+          "untilDate",
+          "bike",
+          "user"
+        ],
+        "example": {
+          "ticketId": "b367a121-77f1-4396-9158-3f08cd0bd29f",
+          "fromDate": "2024-02-10T11:42:00.000Z",
+          "untilDate": "2024-02-14T11:44:00.000Z",
+          "user": {
+              "id": "3d577f6d-f4a3-4c25-a43c-05e7e0629345",
+              "email": "example@twep.com"
+          },
+          "bike": {
+              "id": "b3182d20-32d8-4ee7-93c5-20477f76af13",
+              "model": "UrbanCruise 500"
+          }
+        }
       }
     }
   },
@@ -2422,6 +2486,29 @@
               "application/json": {
                 "example": {
                   "error": "Station, parking place, or individual bike not found"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/management/overdue-tickets": {
+      "get": {
+        "summary": "Get all overdue ticket",
+        "tags": [
+          "management-tickets"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/OverdueTicket"
+                  }
                 }
               }
             }

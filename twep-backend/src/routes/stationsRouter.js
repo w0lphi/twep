@@ -39,4 +39,6 @@ router.delete('/bikes/:id', stationController.deleteIndividualBikeById);
 
 router.post('/reassign-bikes', stationController.reassignBike);
 
+router.get('/overdue-tickets', stationController.getAllOverdueTickets)
+
 module.exports = router;

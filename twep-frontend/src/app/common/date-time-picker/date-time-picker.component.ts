@@ -46,7 +46,7 @@ export class DateTimePickerComponent {
     const minutes: number = Number(timeParts[1]);
     date.setHours(hours);
     date.setMinutes(minutes);
-    date.setTime(date.getTime() + (this.timezoneOffset * 60 * 1000))
+    date.setTime(date.getTime())
     this.datetimeChange.emit(date);
   }
 

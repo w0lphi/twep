@@ -35,6 +35,10 @@ export class TicketService {
   public simulateReturnBike(ticketId: string, userId: string, stationId: string): Observable<any>{
     return this.http.post(`${this.apiUrl}/users/${userId}/tickets/${ticketId}/return`, { stationId });
   }
+
+  public getAllOverdueTickets(){
+    return this.http.get<OverdueTicket[]>(`${this.apiUrl}/management/overdue-tickets`);
+  }
 }
 
 export type UserTicketRequest = {
@@ -46,4 +50,22 @@ export type UserTicketRequest = {
 
 export type TicketPriceResponse = {
   price: number
+}
+
+export type OverdueTicket = {
+  ticketId: string,
+  fromDate: string,
+  untilDate: string,
+  bike: OverdueBike,
+  user: OverdueUser,
+}
+
+export type OverdueBike = {
+  id: string,
+  model: string
+}
+
+export type OverdueUser = {
+  id: string,
+  email: string,
 }

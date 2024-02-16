@@ -2,6 +2,8 @@ import { Component } from '@angular/core';
 
 import { MatTableModule } from '@angular/material/table';
 import { AdminTableComponent } from '../admin-table/admin-table.component';
+import { OverdueTicket, TicketService } from '../../service/tickets.service';
+import { Duration, format, intervalToDuration, intlFormatDistance } from 'date-fns';
 
 @Component({
   selector: 'app-overdue-rentals-list',
@@ -15,17 +17,41 @@ import { AdminTableComponent } from '../admin-table/admin-table.component';
 })
 export class OverdueRentalsListComponent {
   runningAction: boolean = false;
-  overdueRentals: any[] = [];
+  overdueTickets: OverdueTicket[] = [];
 
-
-  getOverdueRentals(){
-
+  constructor(
+    private ticketService: TicketService
+  ){
+    this.getOverdueTickets();
   }
+
+
+  getOverdueTickets(){
+    this.runningAction = true;
+    this.ticketService.getAllOverdueTickets().subscribe({
+      next: (tickets: OverdueTicket[]) => {
+        this.overdueTickets = tickets;
+        this.runningAction = false;
+      },
+      error: () => {
+        this.runningAction = false;
+      }
+    })
+  }
+
+  getFormattedDate(ticket: OverdueTicket){
+    const untilDate: Date = new Date(ticket.untilDate);
+    const distance: string = intlFormatDistance(untilDate, new Date(Date.now()), { numeric: 'always'});
+    return `${format(untilDate, 'dd.MM.yyyy HH:mm')} (${distance})`
+  }
+
 
   get columns(): string[]{
     return [
-      "user",
       "ticket",
+      "user",
+      "bike",
+      "returnDate"
     ]
   }
 }

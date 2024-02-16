@@ -168,6 +168,33 @@ const getAllOpenTicketsForBike = `SELECT * FROM tickets WHERE bike_id = $1 AND u
 const markBikeAsRented = `UPDATE individual_bikes SET status = 'rented' WHERE id = $1;`
 const markBikeAsAvailable = `UPDATE individual_bikes SET status = 'available' WHERE id = $1;`
 
+const getAllOverdueTickets = `
+    SELECT 
+        t.id AS ticket_id,
+        t.from_date,
+        t.until_date,
+        jsonb_build_object(
+            'id', u.id,
+            'email', u.email
+        ) AS user,
+        jsonb_build_object(
+            'id', b.id,
+            'model', bm.name
+        ) AS bike
+    FROM
+        tickets t
+    INNER JOIN
+        users u ON t.user_id = u.id 
+    INNER JOIN
+        individual_bikes b ON t.bike_id = b.id
+    INNER JOIN
+        bike_models bm ON b.bike_model_id = bm.id
+    WHERE 
+        t.status = 'rented'
+    AND
+        t.until_date < now();
+`
+
 module.exports = {
     getUsers,
     getStations,
@@ -200,4 +227,5 @@ module.exports = {
     getAllOpenTicketsForBike,
     markBikeAsRented,
     markBikeAsAvailable,
+    getAllOverdueTickets
 };

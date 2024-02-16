@@ -23,6 +23,7 @@ import { Bike } from '../model/bike';
 import { Router } from '@angular/router';
 import { TicketPriceResponse, TicketService, UserTicketRequest } from '../service/tickets.service';
 import { AuthService } from '../service/auth.service';
+import { formatISO } from 'date-fns';
 
 export type BikeRentDialogData = {
   bike: Bike;
@@ -75,13 +76,13 @@ export class BikeRentDialogComponent {
 
   purchaseTicket(): void {
     this.runningAction = true;
-    const userId: string | null = this.authService.getLoggedInUserId();
+    const userId: string | null = this.authService.getLoggedInUserId()
     if (userId !== null && this.bookingStart !== null && this.bookingEnd !== null) {
       const fromDate: Date = this.immediateRenting ? new Date(Date.now()) : this.bookingStart;
       const ticket: UserTicketRequest = {
         bikeId: this.bike.id,
-        fromDate: fromDate.toISOString(),
-        untilDate: this.bookingEnd.toISOString(),
+        fromDate: formatISO(fromDate),
+        untilDate: formatISO(this.bookingEnd),
         immediateRenting: this.immediateRenting,
       }
 
@@ -110,8 +111,8 @@ export class BikeRentDialogComponent {
       const fromDate: Date = this.immediateRenting ? new Date(Date.now()) : this.bookingStart ;
       const ticket: UserTicketRequest = {
         bikeId: this.bike.id,
-        fromDate: fromDate.toISOString(),
-        untilDate: this.bookingEnd.toISOString(),
+        fromDate: formatISO(fromDate),
+        untilDate: formatISO(this.bookingEnd),
         immediateRenting: this.immediateRenting,
       }
       return;

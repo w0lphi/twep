@@ -447,6 +447,21 @@ class StationModel {
         }
     }
 
+    static async getAllOverdueTickets(){
+        try{
+            const result = await pool.query(stationQueries.getAllOverdueTickets);
+            return result.rows.map(ticket => {
+                return {
+                    ...ticket,
+                    from_date: ticket.from_date.toISOString(),
+                    until_date: ticket.until_date.toISOString()
+                };
+            });
+        }catch(error){
+            throw error
+        }
+    }
+
 }
 
 module.exports = StationModel;

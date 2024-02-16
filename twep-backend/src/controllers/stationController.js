@@ -439,6 +439,16 @@ const stationController = {
             res.status(500).json({ error: 'Internal Server Error' });
         }
     },
+
+    async getAllOverdueTickets(req, res){
+        try{
+            const overdueTickets = await StationModel.getAllOverdueTickets();
+            return res.json(convertKeysToCamelCase(overdueTickets));
+        }catch(error){
+            console.error(error);
+            res.status(500).json({ error: 'Internal Server Error' });
+        }
+    }
 }
 
 
