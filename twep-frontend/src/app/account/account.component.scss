@@ -2,33 +2,37 @@
     display: flex;
     flex-wrap: wrap; 
     padding: 16px;
+    gap: 24px;
     filter: drop-shadow(5px 5px 5px rgba(0, 0, 0, 0.118));
 }
 
 .left-panel {
     flex: 0 0 30%;
-    margin-right: 24px;
-    margin-left: 24px;
 }
 
 .right-panel {
     flex: 1;
-    margin-left: 24px;
-    margin-right: 24px;
 }
 
 .wallet-panel {
     flex: 0 0 20%;
-   
 }
 
 .profile-picture {
-    display: block; 
+    display: flex; 
     width: 100px;
     height: 100px;
     border-radius: 50%;
     background-color: #ccc;
-    margin: 10px; 
+    margin: 12px; 
+    align-items: center;
+    justify-content: center;
+
+    .mat-icon{
+        height: 64px;
+        width: 64px;
+        font-size: 64px;
+    }
 }
 
 .avatar-info-container {
@@ -55,19 +59,17 @@ mat-card-content {
 }
 
 .input-field input {
-   
     margin-right: 12px; 
 }
 
-
-
-
+.success-message{
+    margin-top: 16px;
+}
 
 
 @media (max-width: 767px) {
     .mobile-stack {
         flex: 1 100%; 
-        margin: 10px 0; 
     }
 
     .avatar-info-container {

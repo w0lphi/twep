@@ -78,17 +78,24 @@ const getUserAccount = `
         u.email,
         u.role,
         u.wallet,
-        t.id AS ticket_id,
-        t.bike_id,
-        to_char(t.from_date, 'YYYY-MM-DD"T"HH24:MI:SS"Z"') AS from_date,
-        to_char(t.until_date, 'YYYY-MM-DD"T"HH24:MI:SS"Z"') AS until_date,
-        t.immediate_renting AS immediate_renting,
-        t.status,
-        t.price
+        (
+            SELECT 
+                json_agg(
+                    json_build_object(
+                        'id', t.id,
+                        'bike_id', t.bike_id,
+                        'from_date', t.from_date,
+                        'until_date', t.until_date,
+                        'immediate_renting', t.immediate_renting,
+                        'status', t.status,
+                        'price', t.price
+                    )
+                ) 
+            FROM tickets t 
+            WHERE t.user_id = u.id
+        ) AS tickets
     FROM
         users u
-    LEFT JOIN
-        tickets t ON u.id = t.user_id
     WHERE
         u.id = $1; 
 `;

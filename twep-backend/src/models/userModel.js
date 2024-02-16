@@ -128,30 +128,8 @@ class UserModel {
     static async getUserAccount(userId) {
         try {
             const queryString = userQueries.getUserAccount;
-
             const { rows } = await pool.query(queryString, [userId]);
-
-            if (rows.length === 0) {
-                throw { status: 404, message: 'User account not found' };
-            }
-
-            const userAccount = {
-                id: rows[0].id,
-                email: rows[0].email,
-                role: rows[0].role,
-                wallet: rows[0].wallet,
-                tickets: rows.map(ticket => ({
-                    id: ticket.id,
-                    bikeId: ticket.bike_id,
-                    fromDate: fns.formatISO(ticket.from_date),
-                    untilDate: fns.formatISO(ticket.until_date),
-                    immediateRenting: ticket.immediate_renting,
-                    status: status,
-                    price: price,
-                })),
-            };
-
-            return userAccount;
+            return rows[0];
         } catch (error) {
             throw error;
         }
