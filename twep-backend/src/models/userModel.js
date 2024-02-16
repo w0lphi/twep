@@ -204,6 +204,16 @@ class UserModel {
             throw error;
         }
     }
+
+    static async insertPriceIntoTicket(ticketId, price) {
+        try {
+            const query = userQueries.insertPriceIntoTicket;
+            const result = await pool.query(query, [ticketId, price]);
+            return result.rows[0];
+        } catch (error) {
+            throw error;
+        }
+    }
 }
 
 module.exports = UserModel;

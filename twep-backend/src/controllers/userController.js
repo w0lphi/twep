@@ -226,7 +226,7 @@ const addMoneyToWallet = async (userId, amount) => {
     }
 };
 
-const ticketCost = 10;
+
 const purchaseTicket = async (req, res) => {
     try {
         const {
@@ -241,12 +241,6 @@ const purchaseTicket = async (req, res) => {
         // Check if the user ID from the token matches the user ID from the request parameters
         if (userId !== tokenUserId) {
             return res.status(403).json({ error: "Forbidden - You can only purchase tickets for yourself" });
-        }
-
-        // Check user's wallet balance
-        const { wallet } = await getUserAccount(userId)
-        if (wallet < 10) {
-            return res.status(400).json({ error: 'Insufficient funds in the wallet for ticket purchase' });
         }
 
         try {
@@ -273,6 +267,7 @@ const purchaseTicket = async (req, res) => {
             return res.status(400).json({ error: "Bike is already booked in the given time interval" });
         }
 
+
         // Generate QR code for the purchased ticket
         const qrCodeBase64 = await generateQRCode({ bikeId, fromDate, untilDate });
 
@@ -285,14 +280,62 @@ const purchaseTicket = async (req, res) => {
             qrCodeBase64,
         });
 
-        // Deduct ticket cost from the user's wallet
-        await UserModel.deductMoneyFromWallet(userId, ticketCost);
 
         const purchasedTicketCamel = convertKeysToCamelCase(purchasedTicket);
 
         return res.status(201).json({
             ticket: purchasedTicketCamel,
             qrCodePath: purchasedTicketCamel.qrCodePath // Return the QR code path in the response
+        });;
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: "Internal Server Error" });
+    }
+};
+
+
+const calculatePrice = async (req, res) => {
+    try {
+        const {
+            bikeId,
+            fromDate,
+            untilDate,
+        } = req.body;
+        const { userId, ticketId } = req.params;
+
+
+        // Retrieve bike information to get the category ID
+        const bike = await StationModel.findById(bikeId);
+        if (!bike) {
+            return res.status(404).json({ error: "Bike not found" });
+        }
+
+        // Retrieve bike category information to get the price per hour
+        const bikeCategory = await StationModel.getBikeCategoryById(bike.category_id);
+        if (!bikeCategory) {
+            return res.status(404).json({ error: "Bike category not found" });
+        }
+
+        // Calculate the total cost based on the price per hour and duration
+        const pricePerHour = bikeCategory.hour_price;
+        const durationInHours = Math.ceil((new Date(untilDate) - new Date(fromDate)) / (1000 * 60 * 60));
+        const totalCost = pricePerHour * durationInHours;
+
+        // Check user's wallet balance
+        const { wallet } = await getUserAccount(userId)
+        if (wallet < totalCost) {
+            return res.status(400).json({ error: 'Insufficient funds in the wallet for ticket purchase' });
+        }
+
+        // Insert ticket into the ticket table
+        await UserModel.insertPriceIntoTicket(ticketId, totalCost);
+
+        // Deduct ticket cost from the user's wallet
+        await UserModel.deductMoneyFromWallet(userId, totalCost);
+
+
+        return res.status(201).json({
+            price: totalCost
         });;
     } catch (error) {
         console.error(error);
@@ -445,4 +488,5 @@ module.exports = {
     getAllBikeModels,
     simulateTakingBike,
     simulateReturningBike,
+    calculatePrice,
 };

@@ -72,86 +72,86 @@
           "password"
         ]
       },
-      "BikeType": {
-        "type": "string",
-        "enum": [
-          "Mountain Bike",
-          "City Bike",
-          "Electric Bike",
-          "Children Bike"
-        ]
-      },
-      "PurchaseTicket": {
+      "BuyTicket": {
         "type": "object",
         "properties": {
-          "bikeType": {
-            "$ref": "#/components/schemas/BikeType"
+          "bikeId": {
+            "type": "string",
+            "format": "uuid"
           },
-          "station": {
-            "type": "string"
+          "fromDate": {
+            "type": "string",
+            "format": "date-time"
           },
-          "purchaseDate": {
+          "untilDate": {
             "type": "string",
             "format": "date-time"
           },
           "immediateRenting": {
             "type": "boolean"
           },
-          "reservedStation": {
+          "status": {
             "type": "string"
+          },
+          "price": {
+            "type": "number",
+            "format": "double"
           }
         },
         "required": [
-          "bikeType",
-          "station",
-          "purchaseDate",
-          "immediateRenting"
-        ],
-        "example": {
-          "bikeType": "Mountain Bike",
-          "station": "Station A",
-          "purchaseDate": "2024-01-10T08:00:00Z",
-          "immediateRenting": true,
-          "reservedStation": "Station B"
-        }
+          "id",
+          "bikeId",
+          "fromDate",
+          "untilDate",
+          "immediateRenting",
+          "status",
+          "price"
+        ]
       },
       "Ticket": {
         "type": "object",
         "properties": {
           "id": {
-            "type": "integer"
+            "type": "string",
+            "format": "uuid"
           },
-          "bikeType": {
-            "$ref": "#/components/schemas/BikeType"
+          "bikeId": {
+            "type": "string",
+            "format": "uuid"
           },
-          "station": {
-            "type": "string"
+          "fromDate": {
+            "type": "string",
+            "format": "date-time"
           },
-          "purchaseDate": {
+          "untilDate": {
             "type": "string",
             "format": "date-time"
           },
           "immediateRenting": {
             "type": "boolean"
           },
-          "reservedStation": {
+          "status": {
             "type": "string"
+          },
+          "price": {
+            "type": "number",
+            "format": "double"
+          },
+          "qrCode": {
+            "type": "string",
+            "description": "Base64 encoded QR code image"
           }
         },
         "required": [
-          "bikeType",
-          "station",
-          "purchaseDate",
-          "immediateRenting"
-        ],
-        "example": {
-          "id": 1,
-          "bikeType": "Mountain Bike",
-          "station": "Station A",
-          "purchaseDate": "2024-01-10T08:00:00Z",
-          "immediateRenting": true,
-          "reservedStation": "Station B"
-        }
+          "id",
+          "bikeId",
+          "fromDate",
+          "untilDate",
+          "immediateRenting",
+          "status",
+          "price",
+          "qrCode"
+        ]
       },
       "CreateStation": {
         "type": "object",
@@ -408,7 +408,7 @@
             "type": "string",
             "format": "uuid"
           },
-          "bikeType": {
+          "bikeCategory": {
             "type": "string",
             "enum": [
               "mountain_bike",
@@ -430,13 +430,13 @@
           }
         },
         "required": [
-          "bikeType",
+          "bikeCategory",
           "status",
           "bikeModel"
         ],
         "example": {
           "id": "uuid",
-          "bikeType": "mountain_bike",
+          "bike": "mountain_bike",
           "status": "available",
           "bikeModel": {
             "name": "Mountain Bike XL",
@@ -490,70 +490,6 @@
             "Responsive disc brake"
           ],
           "categoryId": "daf594a3-c350-42d5-9b1f-7f679ae0a30b"
-        }
-      },
-      "OverdueTicket": {
-        "type": "object",
-        "properties": {
-          "ticketId": {
-            "type": "string"
-          },
-          "fromDate": {
-            "type": "string"
-          },
-          "untilDate": {
-            "type": "string"
-          },
-          "bike": {
-            "type": "object",
-            "required": [
-              "id",
-              "model"
-            ],
-            "properties": {
-              "id": {
-                "type": "string"
-              },
-              "model": {
-                "type": "string"
-              }
-            }
-          },
-          "user": {
-            "type": "object",
-            "required": [
-              "id",
-              "email"
-            ],
-            "properties": {
-              "id": {
-                "type": "string"
-              },
-              "email": {
-                "type": "string"
-              }
-            }
-          }
-        },
-        "required": [
-          "ticketId",
-          "fromDate",
-          "untilDate",
-          "bike",
-          "user"
-        ],
-        "example": {
-          "ticketId": "b367a121-77f1-4396-9158-3f08cd0bd29f",
-          "fromDate": "2024-02-10T11:42:00.000Z",
-          "untilDate": "2024-02-14T11:44:00.000Z",
-          "user": {
-              "id": "3d577f6d-f4a3-4c25-a43c-05e7e0629345",
-              "email": "example@twep.com"
-          },
-          "bike": {
-              "id": "b3182d20-32d8-4ee7-93c5-20477f76af13",
-              "model": "UrbanCruise 500"
-          }
         }
       }
     }
@@ -837,21 +773,18 @@
             "description": "Successful response",
             "content": {
               "application/json": {
-                "example": {
-                  "tickets": [
-                    {
-                      "id": 1,
-                      "bikeType": "Mountain Bike",
-                      "station": "Station A",
-                      "purchaseDate": "2024-01-10T08:00:00Z"
-                    },
-                    {
-                      "id": 2,
-                      "bikeType": "City Bike",
-                      "station": "Station B",
-                      "purchaseDate": "2024-01-15T10:30:00Z"
-                    }
-                  ]
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "allOf": [
+                      {
+                        "$ref": "#/components/schemas/Ticket"
+                      },
+                      {
+                        "$ref": "#/components/schemas/IndividualBike"
+                      }
+                    ]
+                  }
                 }
               }
             }
@@ -895,7 +828,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/PurchaseTicket"
+                "$ref": "#/components/schemas/BuyTicket"
               }
             }
           }
@@ -905,13 +838,8 @@
             "description": "Ticket purchased successfully",
             "content": {
               "application/json": {
-                "example": {
-                  "id": 1,
-                  "bikeType": "Mountain Bike",
-                  "station": "Station A",
-                  "purchaseDate": "2024-01-10T08:00:00Z",
-                  "immediateRenting": true,
-                  "reservedStation": "Station B"
+                "schema": {
+                  "$ref": "#/components/schemas/Ticket"
                 }
               }
             }
@@ -1678,22 +1606,22 @@
               }
             }
           },
-          "404": {
-            "description": "Station not found",
-            "content": {
-              "application/json": {
-                "example": {
-                  "error": "Station not found"
-                }
-              }
-            }
-          },
           "400": {
             "description": "Bad request",
             "content": {
               "application/json": {
                 "example": {
                   "error": "Invalid input data"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Station not found",
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "Station not found"
                 }
               }
             }
@@ -1856,10 +1784,12 @@
                 "type": "object",
                 "properties": {
                   "hourPrice": {
-                    "type": "number",
-                    "required": true
+                    "type": "number"
                   }
-                } 
+                },
+                "required": [
+                  "hourPrice"
+                ]
               }
             }
           }
@@ -2069,16 +1999,16 @@
             "content": {
               "application/json": {
                 "example": {
-                    "id": "186760ff-6379-4703-89c2-0844b85b3433",
-                    "name": "KTM Summit Trailblazer",
-                    "description": "Test description",
-                    "wheelSize": 27.5,
-                    "extraFeatures": [
-                        "Lighweight Aluminium Frame",
-                        "Improved suspension system",
-                        "Responsive disc brake"
-                    ],
-                    "categoryId": "daf594a3-c350-42d5-9b1f-7f679ae0a30b"
+                  "id": "186760ff-6379-4703-89c2-0844b85b3433",
+                  "name": "KTM Summit Trailblazer",
+                  "description": "Test description",
+                  "wheelSize": 27.5,
+                  "extraFeatures": [
+                    "Lighweight Aluminium Frame",
+                    "Improved suspension system",
+                    "Responsive disc brake"
+                  ],
+                  "categoryId": "daf594a3-c350-42d5-9b1f-7f679ae0a30b"
                 }
               }
             }
@@ -2493,25 +2423,202 @@
         }
       }
     },
-    "/management/overdue-tickets": {
-      "get": {
-        "summary": "Get all overdue ticket",
+    "/users/{userId}/tickets/{ticketId}/ride": {
+      "post": {
+        "summary": "Simulate taking a bike",
         "tags": [
-          "management-tickets"
+          "user"
         ],
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "The ID of the user"
+          },
+          {
+            "name": "ticketId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "The ID of the ticket"
+          }
+        ],
+        "requestBody": {
+          "required": false,
+          "content": {}
+        },
         "responses": {
           "200": {
-            "description": "OK",
+            "description": "Bike taken successfully"
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "404": {
+            "description": "Not found"
+          }
+        }
+      }
+    },
+    "/users/{userId}/tickets/{ticketId}/price": {
+      "post": {
+        "summary": "Calculate ticket price",
+        "tags": [
+          "user"
+        ],
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "The ID of the user"
+          },
+          {
+            "name": "ticketId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "The ID of ticket"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "bikeId": {
+                    "type": "string",
+                    "format": "uuid"
+                  },
+                  "fromDate": {
+                    "type": "string",
+                    "format": "date-time"
+                  },
+                  "untilDate": {
+                    "type": "string",
+                    "format": "date-time"
+                  }
+                },
+                "required": [
+                  "bikeId",
+                  "fromDate",
+                  "untilDate"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful response",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/OverdueTicket"
+                  "type": "object",
+                  "properties": {
+                    "price": {
+                      "type": "number",
+                      "format": "double"
+                    }
                   }
                 }
               }
             }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "Insufficient funds in the wallet for ticket purchase"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "Bike not found"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/{userId}/tickets/{ticketId}/return": {
+      "post": {
+        "summary": "Simulate returning a bike",
+        "tags": [
+          "user"
+        ],
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "The ID of the user"
+          },
+          {
+            "name": "ticketId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "The ID of the ticket"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "stationId": {
+                    "type": "string",
+                    "format": "uuid"
+                  }
+                }
+              }
+            }
+          },
+          "description": "The ID of the station where the bike is being returned\n"
+        },
+        "responses": {
+          "200": {
+            "description": "Bike returned successfully"
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "404": {
+            "description": "Not found"
           }
         }
       }

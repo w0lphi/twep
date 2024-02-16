@@ -225,7 +225,7 @@ const getAllBikeCategories = 'SELECT * FROM bike_categories';
 const getTicketById = 'SELECT * FROM tickets WHERE id = $1';
 const updateTicketStatus = 'UPDATE tickets SET status = $1 WHERE id = $2';
 
-
+const insertPriceIntoTicket = 'UPDATE tickets SET price = $2 WHERE id = $1';
 
 
 module.exports = {
@@ -245,4 +245,5 @@ module.exports = {
     getAllBikeCategories,
     getTicketById,
     updateTicketStatus,
+    insertPriceIntoTicket,
 };
