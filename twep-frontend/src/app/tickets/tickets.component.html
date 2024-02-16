@@ -12,6 +12,7 @@
             *ngFor="let ticket of activeUserTickets"
             [ticket]="ticket"
             (cancelTicket)="getUserTickets()"
+            (reload)="getUserTickets()"
           />
         </div>
       }

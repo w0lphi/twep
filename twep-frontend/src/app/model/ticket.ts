@@ -16,4 +16,5 @@ export enum TicketStatus {
     RENTED = "rented",
     UNUSED = "unused",
     RETURNED = "returned",
+    CANCELLED = "cancelled",
 }

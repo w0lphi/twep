@@ -27,6 +27,10 @@
             &.unused{
                 color: var(--blue);
             }
+
+            &.cancelled{
+                color: var(--red);
+            }
         }
 
         .twep-ticket-card-information{

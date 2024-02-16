@@ -120,6 +120,8 @@ const checkIfBikeIsBooked = `
         WHERE
             bike_id = $1 
         AND 
+            (status = 'rented' OR status = 'unused')
+        AND 
             ((from_date BETWEEN SYMMETRIC $2 AND $3) OR (until_date BETWEEN SYMMETRIC $2 AND $3))
         LIMIT 1
 `
