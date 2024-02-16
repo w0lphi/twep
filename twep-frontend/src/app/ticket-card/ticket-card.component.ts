@@ -9,10 +9,11 @@ import { MatButtonModule } from '@angular/material/button';
 import { BikeCardComponent } from '../bike-card/bike-card.component';
 
 import { Ticket, TicketStatus } from '../model/ticket';
-import { format } from "date-fns"; 
+import { differenceInHours, format } from "date-fns"; 
 import { Bike } from '../model/bike';
 import { DialogService } from '../service/dialog.service';
 import { TicketService } from '../service/tickets.service';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-ticket-card',
@@ -31,11 +32,17 @@ import { TicketService } from '../service/tickets.service';
 export class TicketCardComponent {
   @Input("ticket") ticket!: Ticket;
   @Output("cancelTicket") cancelEvent: EventEmitter<void> = new EventEmitter<void>();
+  @Output("reload") reloadEvent: EventEmitter<void> = new EventEmitter<void>();
+  displayCancelBtn: boolean = true;
 
   constructor(
     private dialogService: DialogService,
     private ticketService: TicketService,
-  ){
+  ){}
+
+  ngOnInit(){
+    const hourDifference = differenceInHours(this.ticket.fromDate, Date.now());
+    this.displayCancelBtn = this.isUnused && hourDifference >= 1;
   }
 
   async cancelTicket(): Promise<void>{
@@ -52,7 +59,11 @@ export class TicketCardComponent {
   }
 
   showQRCode(): void{
-    this.dialogService.openQrCodeDialog(this.ticket);
+    this.dialogService.openQrCodeDialog(this.ticket).subscribe({
+      next: (reload: boolean | undefined) => {
+        if(reload) this.reloadEvent.emit()
+      }
+    })
   }
 
   get bike(): Bike{
@@ -106,7 +117,9 @@ export class TicketCardComponent {
         }
         return text;
       case TicketStatus.RETURNED:
-        return 'Bike was returned to a station'
+        return 'Bike was returned to a station';
+      case TicketStatus.CANCELLED:
+        return 'Ticket was cancelled'
     }
   }
 
@@ -118,6 +131,8 @@ export class TicketCardComponent {
         return 'info'
       case TicketStatus.RETURNED:
         return 'check_circle'
+      case TicketStatus.CANCELLED:
+        return 'cancel'
     }
   }
 }

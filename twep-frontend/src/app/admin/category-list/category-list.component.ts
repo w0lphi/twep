@@ -53,8 +53,11 @@ export class CategoryListComponent {
   }
 
   async createCategory(): Promise<void> {
-    const reload = await this.dialogService.openBikeCategoryCreateDialog();
-    if(reload) this.getCategories();
+    this.dialogService.openBikeCategoryCreateDialog().subscribe({
+      next: (reload: boolean | undefined) => {
+        if(reload) this.getCategories();
+      }
+    });
   }
 
   async updateCategoryPrice(bikeCategory: BikeCategory): Promise<void>{

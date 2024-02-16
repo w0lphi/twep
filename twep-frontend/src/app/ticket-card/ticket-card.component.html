@@ -45,7 +45,7 @@
             <app-bike-card [bike]="bike" [showRentBtn]="false" />
         </div>
     </mat-card-content>
-    <mat-card-actions>
+    <mat-card-actions *ngIf="isRented || isUnused || displayCancelBtn">
         <div class="twep-spacer"></div>
         <button
             mat-flat-button
@@ -55,7 +55,7 @@
             QR CODE
         </button>
         <button
-            *ngIf="isUnused"
+            *ngIf="displayCancelBtn"
             mat-flat-button
             color="accent"
             (click)="cancelTicket()"

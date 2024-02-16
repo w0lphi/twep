@@ -94,7 +94,7 @@ export class BikeDetailComponent {
 
     if (this.isNew) {
       this.bikeName = "New bike"
-      this.bike = new Bike("", null);
+      this.bike = new Bike("", "");
     } else {
       this.runningAction = true;
 
@@ -113,10 +113,10 @@ export class BikeDetailComponent {
   }
 
   upsertBike(): void{
-    if (this.bike === undefined) return;
+    const bikeModelId: string = this.model?.value;
+    if (this.bike === undefined || bikeModelId === undefined) return;
     this.runningAction = true;
-    const bikeModel: BikeModel | null = this.bikeModels.find(({id}) => id === this.model?.value) ?? null;
-    const bike: Bike = new Bike(this.bike.id, bikeModel);
+    const bike: Bike = new Bike(this.bike.id, bikeModelId);
     if (this.isNew) {
       this.bikeService.createBike(bike).subscribe({
          next: (response: any): void => {

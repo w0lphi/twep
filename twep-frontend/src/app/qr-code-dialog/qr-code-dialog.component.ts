@@ -51,7 +51,7 @@ export class QrCodeDialogComponent {
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: QrCodeDialogData,
-    private dialogRef: MatDialogRef<QrCodeDialogComponent>,
+    private dialog: MatDialogRef<QrCodeDialogComponent, boolean>,
     private ticketService: TicketService,
     private authService: AuthService,
     private bikeStationService: BikeStationService
@@ -95,14 +95,16 @@ export class QrCodeDialogComponent {
     this.runningAction = true;
     this.ticketService.simulateReturnBike(this.ticket.ticketId, this.userId, this.bikeStationId).subscribe({
       next: (): void => {
-        this.progressToReturn()
+        this.closeDialog(true);
       },
       error: (): void => {
         this.runningAction = false;
       }
     });
+  }
 
-
+  closeDialog(reload: boolean = false){
+    this.dialog.close(reload);
   }
 
   get qrCodeBase64(): string {

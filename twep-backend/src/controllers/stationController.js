@@ -336,10 +336,20 @@ const stationController = {
 
     async createIndividualBike(req, res) {
         try {
-            const individualBikeData = req.body;
+            const { bikeModelId, status } = req.body;
 
-            const newIndividualBike = await StationModel.createIndividualBike(individualBikeData);
+            //Check if bike model exists
+            const bikeModel = await this.getBikeModelById(bikeModelId);
+            if(!bikeModel){
+                return res.status(404).json({ error: "Bike model not found" });
+            }
 
+            const bikeCategoryId = bikeModel.categoryId;
+            const newIndividualBike = await StationModel.createIndividualBike({
+                bikeCategoryId,
+                bikeModelId,
+                status
+            });
             res.status(201).json({ individualBike: newIndividualBike, message: 'Bike created successfully.' });
         } catch (error) {
             console.error(error);

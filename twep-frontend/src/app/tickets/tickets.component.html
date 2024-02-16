@@ -6,18 +6,19 @@
     <mat-toolbar>
       <h1>Active tickets</h1>
     </mat-toolbar>
-    <div class="twep-user-tickets-list">
       @if(activeUserTickets.length > 0){
-        <app-ticket-card 
-          *ngFor="let ticket of activeUserTickets"
-          [ticket]="ticket"
-          (cancelTicket)="getUserTickets()"
-        />
+        <div class="twep-user-tickets-list">
+          <app-ticket-card 
+            *ngFor="let ticket of activeUserTickets"
+            [ticket]="ticket"
+            (cancelTicket)="getUserTickets()"
+            (reload)="getUserTickets()"
+          />
+        </div>
       }
       @else {
         <div class="twep-no-items-message">No active tickets yet</div>
       }
-    </div>
     <mat-toolbar>
       <h1>Previous tickets</h1>
     </mat-toolbar>

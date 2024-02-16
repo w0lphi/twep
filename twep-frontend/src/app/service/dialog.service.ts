@@ -3,7 +3,7 @@ import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { ConfirmDialogComponent } from '../common/confirm-dialog/confirm-dialog.component';
 import { PromptDialogComponent, PromptDialogData } from '../common/prompt-dialog/prompt-dialog.component';
 import { BikeRentDialogComponent } from '../bike-rent-dialog/bike-rent-dialog.component';
-import { firstValueFrom } from 'rxjs';
+import { Observable, firstValueFrom } from 'rxjs';
 import { Bike } from '../model/bike';
 import { Ticket } from '../model/ticket';
 import { QrCodeDialogComponent } from '../qr-code-dialog/qr-code-dialog.component';
@@ -13,7 +13,6 @@ import { CreateCategoryDialogComponent } from '../create-category-dialog/create-
 export class DialogService {
   private confirmDialogRef!: MatDialogRef<ConfirmDialogComponent, boolean>;
   private promptDialogRef!: MatDialogRef<PromptDialogComponent, string | null>;
-  private createCategoryDialogRef!: MatDialogRef<CreateCategoryDialogComponent, boolean>;
 
   constructor(private dialog: MatDialog) {}
 
@@ -54,8 +53,8 @@ export class DialogService {
     })
   }
 
-  public openQrCodeDialog(ticket: Ticket): void{
-    this.dialog.open(QrCodeDialogComponent, {
+  public openQrCodeDialog(ticket: Ticket): Observable<boolean | undefined>{
+    const dialogRef: MatDialogRef<QrCodeDialogComponent, boolean> = this.dialog.open(QrCodeDialogComponent, {
       data: {
         ticket
       },
@@ -63,16 +62,17 @@ export class DialogService {
       disableClose: true,
       hasBackdrop: true,
     })
+
+    return dialogRef.afterClosed();
   }
 
-  async openBikeCategoryCreateDialog(): Promise<boolean>{
-    this.createCategoryDialogRef = this.dialog.open(CreateCategoryDialogComponent, {
+  openBikeCategoryCreateDialog(): Observable<boolean | undefined>{
+    const dialogRef: MatDialogRef<CreateCategoryDialogComponent, boolean> = this.dialog.open(CreateCategoryDialogComponent, {
       width: "600px",
       disableClose: true,
       hasBackdrop: true
     });
 
-    const reload: boolean | undefined = await firstValueFrom(this.createCategoryDialogRef.afterClosed());
-    return reload ?? false;
+    return dialogRef.afterClosed();
   }
 }

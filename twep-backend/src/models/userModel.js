@@ -1,5 +1,6 @@
 const pool = require('../db');
 const userQueries = require('../queries/userQueries');
+const fns = require('date-fns')
 
 class UserModel {
     static async registerUser({ email, password, wallet = 0, tickets = [] }) {
@@ -26,8 +27,8 @@ class UserModel {
             return rows.map(ticket => {
                 return {
                     ...ticket,
-                    from_date: ticket.from_date.toISOString(),
-                    until_date: ticket.until_date.toISOString()
+                    from_date: fns.formatISO(ticket.from_date),
+                    until_date: fns.formatISO(ticket.until_date),
                 };
             });
         } catch (error) {
@@ -102,8 +103,8 @@ class UserModel {
             const purchasedTicket = rows[0];
             return {
                 ...purchasedTicket,
-                from_date: purchasedTicket.from_date.toISOString(),
-                until_date: purchasedTicket.until_date.toISOString()
+                from_date: fns.formatISO(purchasedTicket.from_date),
+                until_date: fns.formatISO(purchasedTicket.until_date)
             };
         } catch (error) {
             throw error;
@@ -141,8 +142,8 @@ class UserModel {
                 tickets: rows.map(ticket => ({
                     id: ticket.id,
                     bikeId: ticket.bike_id,
-                    fromDate: ticket.from_date,
-                    untilDate: ticket.until_date,
+                    fromDate: fns.formatISO(ticket.from_date),
+                    untilDate: fns.formatISO(ticket.until_date),
                     immediateRenting: ticket.immediate_renting,
                     status: status,
                     price: price,

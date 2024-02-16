@@ -295,12 +295,12 @@ class StationModel {
 
     static async createIndividualBike(individualBikeData) {
         try {
-
+            const { bikeModelId, status, bikeCategoryId } = individualBikeData;
             const newIndividualBike = await pool.query(stationQueries.createIndividualBike, [
                 uuidv4(),
-                individualBikeData.bikeCategory,
-                individualBikeData.status,
-                individualBikeData.bikeModelId,
+                bikeCategoryId,
+                status,
+                bikeModelId,
             ]);
 
             return newIndividualBike.rows[0];
