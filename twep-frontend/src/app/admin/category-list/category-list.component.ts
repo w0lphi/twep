@@ -10,6 +10,7 @@ import { BikeCategory } from '../../model/bikeCategory';
 import { BikeCategoryService } from '../../service/bikeCategory.service';
 import { DialogService } from '../../service/dialog.service';
 import { PromptDialogData } from '../../common/prompt-dialog/prompt-dialog.component';
+import { formatCurrency } from '../../util/currency-util';
 
 @Component({
   selector: 'app-category-list',
@@ -28,7 +29,6 @@ import { PromptDialogData } from '../../common/prompt-dialog/prompt-dialog.compo
 export class CategoryListComponent {
   runningAction: boolean = false
   bikeCategories: BikeCategory[] = [];
-  numberFormatter: Intl.NumberFormat = new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' });
 
   constructor(
     private bikeCategoryService: BikeCategoryService,
@@ -105,6 +105,10 @@ export class CategoryListComponent {
         this.runningAction = false;
       }
     })
+  }
+
+  getHourlyRate(hourPrice: number){
+    return formatCurrency(hourPrice);
   }
   
   get columns(): string[] {

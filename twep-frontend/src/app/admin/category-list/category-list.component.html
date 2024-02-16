@@ -48,7 +48,7 @@
                 *matCellDef="let element"
                 class="bike-category-price"
             >
-                {{numberFormatter.format(element.hourPrice)}}
+                {{getHourlyRate(element.hourPrice)}}
             </td>
         </ng-container>
         <ng-container matColumnDef="actions">

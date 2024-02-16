@@ -24,6 +24,7 @@ import { Router } from '@angular/router';
 import { TicketPriceResponse, TicketService, UserTicketRequest } from '../service/tickets.service';
 import { AuthService } from '../service/auth.service';
 import { formatISO } from 'date-fns';
+import { formatCurrency } from '../util/currency-util';
 
 export type BikeRentDialogData = {
   bike: Bike;
@@ -144,9 +145,7 @@ export class BikeRentDialogComponent {
   }
 
   get formattedPrice(): string {
-    return new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' }).format(
-      this.price,
-    )
+    return formatCurrency(this.price)
   }
 
 }

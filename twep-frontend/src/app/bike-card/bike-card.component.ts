@@ -6,6 +6,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { Bike, BikeStatus } from '../model/bike';
 import { DialogService } from '../service/dialog.service';
+import { formatCurrency } from '../util/currency-util';
 
 @Component({
   selector: 'app-bike-card',
@@ -27,7 +28,6 @@ export class BikeCardComponent {
   showMore: boolean = false;
   hasMoreDescription: boolean = false;
   unavailable: boolean = false;
-  currencyFormatter: Intl.NumberFormat = new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' })
 
   constructor(
     private changeDetector: ChangeDetectorRef,
@@ -76,9 +76,7 @@ export class BikeCardComponent {
   }
 
   get subtitle(): string | null {
-    const formattedHourPrice = this.currencyFormatter.format(
-      this.bike.hourPrice ?? 0,
-    )
+    const formattedHourPrice = formatCurrency(this.bike.hourPrice ?? 0);
     return `${this.bike.category} (${formattedHourPrice} per hour)`;
   }
 

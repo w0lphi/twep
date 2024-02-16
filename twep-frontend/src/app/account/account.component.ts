@@ -26,6 +26,7 @@ import { UserAccount } from '../model/user-account';
 import { ViewChild, ElementRef } from '@angular/core';
 import { TicketStatus } from '../model/ticket';
 import { isBefore } from 'date-fns';
+import { formatCurrency } from '../util/currency-util';
 
 @Component({
   selector: 'app-account',
@@ -121,9 +122,7 @@ export class AccountComponent implements OnInit {
   }
 
   get walletAmount(): string{
-    return new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' }).format(
-      this.userAccount.wallet,
-    )
+    return formatCurrency(this.userAccount.wallet);
   }
 
   get overdueTicketsCount(): number {

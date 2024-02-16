@@ -14,6 +14,7 @@ import { Bike } from '../model/bike';
 import { DialogService } from '../service/dialog.service';
 import { TicketService } from '../service/tickets.service';
 import { Observable } from 'rxjs';
+import { formatCurrency } from '../util/currency-util';
 
 @Component({
   selector: 'app-ticket-card',
@@ -92,6 +93,10 @@ export class TicketCardComponent {
 
   get stationName(): string {
     return `${this.bike.station?.name}`
+  }
+
+  get price(): string {
+    return formatCurrency(this.ticket.price);
   }
 
   get isRented(): boolean {
