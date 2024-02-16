@@ -67,35 +67,8 @@ const loginUser = async (req, res) => {
 
 const getUserAccount = async (userId) => {
     try {
-        const accountDetails = await pool.query(userQueries.getUserAccount, [userId]);
-
-        if (accountDetails.rows.length === 0) {
-            throw { status: 404, message: 'User account not found' };
-        }
-
-        const { id, email, role, wallet, ticket_id, bike_id, from_date, until_date, immediate_renting, status, price } = accountDetails.rows[0];
-
-        const response = {
-            id,
-            email,
-            role,
-            wallet,
-            tickets: [],
-        };
-
-        if (ticket_id) {
-            response.tickets.push({
-                id: ticket_id,
-                bikeId: bike_id,
-                fromDate: from_date,
-                untilDate: until_date,
-                immediateRenting: immediate_renting,
-                status: status,
-                price: price,
-            });
-        }
-
-        return response;
+        const userAccount = await UserModel.getUserAccount(userId);
+        return userAccount;
     } catch (error) {
         throw error;
     }

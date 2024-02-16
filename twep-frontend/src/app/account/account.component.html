@@ -1,9 +1,11 @@
 <div class="container">
     <mat-card class="left-panel mobile-stack">
         <mat-card-header>
-            <div mat-card-avatar class="profile-picture"></div>
+            <div mat-card-avatar class="profile-picture">
+                <mat-icon>account_circle</mat-icon>
+            </div>
             <div class="profile-info">
-                <mat-card-title>Hello, {{ userAccount.role }}!</mat-card-title>
+                <mat-card-title>Hello, {{ name }}!</mat-card-title>
                 <mat-card-subtitle>User ID: {{ userAccount.id }}</mat-card-subtitle>
                 <mat-card-subtitle>Email Address: {{ userAccount.email }}</mat-card-subtitle>
                 <mat-card-subtitle>Role: {{ userAccount.role }}</mat-card-subtitle>
@@ -33,7 +35,6 @@
                 </mat-form-field>
             
                 <button mat-raised-button class="twep-save-btn" (click)="saveAdding()">SAVE</button>
-
                 <div *ngIf="saveSuccessMessage" class="success-message">{{ saveSuccessMessage }}</div>
             </div>
         </mat-card-content>
@@ -44,9 +45,8 @@
             <mat-card-title>Statistics</mat-card-title>
         </mat-card-header>
         <mat-card-content>
-            <mat-card-subtitle>Wallet Amount: {{ userAccount.wallet }}€</mat-card-subtitle>
             <mat-card-subtitle>Number of Tickets purchased: {{ userAccount.tickets.length }}</mat-card-subtitle>
-            <mat-card-subtitle>Number of Tickets overdue: not implemented yet</mat-card-subtitle>
+            <mat-card-subtitle>Number of Tickets overdue: {{ overdueTicketsCount }}</mat-card-subtitle>
         </mat-card-content>
     </mat-card>
 </div>

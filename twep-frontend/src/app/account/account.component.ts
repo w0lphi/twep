@@ -24,6 +24,8 @@ import { AccountService } from '../service/account.service';
 import { UserAccount } from '../model/user-account';
 
 import { ViewChild, ElementRef } from '@angular/core';
+import { TicketStatus } from '../model/ticket';
+import { isBefore } from 'date-fns';
 
 @Component({
   selector: 'app-account',
@@ -114,10 +116,20 @@ export class AccountComponent implements OnInit {
     }
   }
 
+  get name(): string{
+    return this.userAccount.email.split('@')[0];
+  }
+
   get walletAmount(): string{
     return new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' }).format(
       this.userAccount.wallet,
     )
+  }
+
+  get overdueTicketsCount(): number {
+    return this.userAccount.tickets.filter(({untilDate, status }) => {
+      return status === TicketStatus.RENTED && isBefore(new Date(untilDate), Date.now());
+    }).length;
   }
 
 }
