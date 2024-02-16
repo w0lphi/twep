@@ -447,8 +447,8 @@ class StationModel {
         }
     }
 
-    static async getAllOverdueTickets(){
-        try{
+    static async getAllOverdueTickets() {
+        try {
             const result = await pool.query(stationQueries.getAllOverdueTickets);
             return result.rows.map(ticket => {
                 return {
@@ -457,7 +457,7 @@ class StationModel {
                     until_date: ticket.until_date.toISOString()
                 };
             });
-        }catch(error){
+        } catch (error) {
             throw error
         }
     }

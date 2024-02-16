@@ -15,6 +15,8 @@ const loginUser = `
     WHERE email = $1 AND password = $2;
 `;
 
+const getBasicUserInfo = 'SELECT * FROM users WHERE id = $1';
+
 const getUserTickets = `
 SELECT
     t.id AS ticket_id,
@@ -100,8 +102,8 @@ const addMoneyToWallet = `
 `;
 
 const purchaseTicket = `
-    INSERT INTO tickets (id, user_id, bike_id, from_date, until_date, immediate_renting, qr_code_base64)
-    VALUES (uuid_generate_v4(), $1, $2, $3, $4, $5, $6)
+    INSERT INTO tickets (id, user_id, bike_id, from_date, until_date, immediate_renting, qr_code_base64, price)
+    VALUES (uuid_generate_v4(), $1, $2, $3, $4, $5, $6, $7)
     RETURNING
         id,
         bike_id,
@@ -251,4 +253,5 @@ module.exports = {
     getTicketById,
     updateTicketStatus,
     insertPriceIntoTicket,
+    getBasicUserInfo,
 };

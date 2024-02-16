@@ -90,7 +90,7 @@ class UserModel {
         }
     }
 
-    static async purchaseTicket(userId, { bikeId, immediateRenting, fromDate, untilDate, qrCodeBase64 }) {
+    static async purchaseTicket(userId, { bikeId, immediateRenting, fromDate, untilDate, qrCodeBase64, price }) {
         try {
             const { rows } = await pool.query(userQueries.purchaseTicket, [
                 userId,
@@ -99,6 +99,7 @@ class UserModel {
                 untilDate,
                 immediateRenting,
                 qrCodeBase64,
+                price
             ]);
             const purchasedTicket = rows[0];
             return {
@@ -155,6 +156,17 @@ class UserModel {
             throw error;
         }
     }
+
+    static async getBasicUserInfo(userId) {
+        try {
+            const query = userQueries.getBasicUserInfo;
+            const { rows } = await pool.query(query, [userId]);
+            return rows[0];
+        } catch (error) {
+            throw error;
+        }
+    }
+
 
     static async deductMoneyFromWallet(userId, amount) {
         try {

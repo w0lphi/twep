@@ -21,7 +21,7 @@ router.get('/:userId/account/tickets', userController.getAllTicketsForUser);
 
 router.post('/:userId/tickets/:ticketId/ride', userController.simulateTakingBike);
 router.post('/:userId/tickets/:ticketId/return', userController.simulateReturningBike);
-router.post('/:userId/tickets/:ticketId/price', userController.calculatePrice);
+router.post('/tickets/price', userController.calculatePriceAndRespond);
 
 router.post("/:userId/account/add-money", async (req, res) => {
   try {

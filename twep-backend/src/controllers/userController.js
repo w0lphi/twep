@@ -267,6 +267,7 @@ const purchaseTicket = async (req, res) => {
             return res.status(400).json({ error: "Bike is already booked in the given time interval" });
         }
 
+        const price = await calculatePrice(bikeId, fromDate, untilDate);
 
         // Generate QR code for the purchased ticket
         const qrCodeBase64 = await generateQRCode({ bikeId, fromDate, untilDate });
@@ -278,6 +279,7 @@ const purchaseTicket = async (req, res) => {
             untilDate,
             immediateRenting,
             qrCodeBase64,
+            price,
         });
 
 
@@ -294,52 +296,43 @@ const purchaseTicket = async (req, res) => {
 };
 
 
-const calculatePrice = async (req, res) => {
+const calculatePriceAndRespond = async (req, res) => {
     try {
-        const {
-            bikeId,
-            fromDate,
-            untilDate,
-        } = req.body;
-        const { userId, ticketId } = req.params;
+        const { bikeId, fromDate, untilDate } = req.body;
 
+        const totalPrice = await calculatePrice(bikeId, fromDate, untilDate);
 
+        return res.status(201).json({
+            price: totalPrice
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: "Internal Server Error" });
+    }
+};
+
+const calculatePrice = async (bikeId, fromDate, untilDate) => {
+    try {
         // Retrieve bike information to get the category ID
         const bike = await StationModel.findById(bikeId);
         if (!bike) {
-            return res.status(404).json({ error: "Bike not found" });
+            throw new Error("Bike not found");
         }
 
         // Retrieve bike category information to get the price per hour
         const bikeCategory = await StationModel.getBikeCategoryById(bike.category_id);
         if (!bikeCategory) {
-            return res.status(404).json({ error: "Bike category not found" });
+            throw new Error("Bike category not found");
         }
 
-        // Calculate the total cost based on the price per hour and duration
+        // Calculate the total price based on the price per hour and duration
         const pricePerHour = bikeCategory.hour_price;
         const durationInHours = Math.ceil((new Date(untilDate) - new Date(fromDate)) / (1000 * 60 * 60));
-        const totalCost = pricePerHour * durationInHours;
+        const totalPrice = pricePerHour * durationInHours;
 
-        // Check user's wallet balance
-        const { wallet } = await getUserAccount(userId)
-        if (wallet < totalCost) {
-            return res.status(400).json({ error: 'Insufficient funds in the wallet for ticket purchase' });
-        }
-
-        // Insert ticket into the ticket table
-        await UserModel.insertPriceIntoTicket(ticketId, totalCost);
-
-        // Deduct ticket cost from the user's wallet
-        await UserModel.deductMoneyFromWallet(userId, totalCost);
-
-
-        return res.status(201).json({
-            price: totalCost
-        });;
+        return totalPrice;
     } catch (error) {
-        console.error(error);
-        res.status(500).json({ error: "Internal Server Error" });
+        throw error;
     }
 };
 
@@ -348,8 +341,9 @@ const simulateTakingBike = async (req, res) => {
     const { userId, ticketId } = req.params;
 
     try {
-
         const ticket = await UserModel.getTicketById(ticketId);
+        const user = await UserModel.getBasicUserInfo(userId);
+
 
         if (!ticket || ticket.user_id !== userId) {
             return res.status(404).json({ message: 'Ticket not found or does not belong to the user.' });
@@ -359,18 +353,21 @@ const simulateTakingBike = async (req, res) => {
             return res.status(400).json({ message: 'Ticket status is not valid for riding.' });
         }
 
+        if (user.wallet < ticket.price) {
+            return res.status(400).json({ message: 'Insufficient funds' });
+        }
+
         const bike = await StationModel.findById(ticket.bike_id);
 
-
-
         await StationModel.markParkingPlaceAsVacant(bike.parking_place_id);
-
         await StationModel.markBikeAsRented(bike.id);
 
-        // TODO mark parking_place in table individual_bikes to smth specific
-
+        // Update ticket status to 'rented'
         await UserModel.updateTicketStatus(ticketId, 'rented');
 
+
+        // Deduct ticket price from the user's wallet
+        await UserModel.deductMoneyFromWallet(userId, ticket.price);
 
         return res.status(200).json({ message: 'Taking bike simulated successfully.' });
     } catch (error) {
@@ -378,6 +375,7 @@ const simulateTakingBike = async (req, res) => {
         return res.status(500).json({ message: 'Internal server error.' });
     }
 };
+
 
 const simulateReturningBike = async (req, res) => {
     const { userId, ticketId } = req.params;
@@ -489,4 +487,5 @@ module.exports = {
     simulateTakingBike,
     simulateReturningBike,
     calculatePrice,
+    calculatePriceAndRespond,
 };
