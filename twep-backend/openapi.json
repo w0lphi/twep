@@ -408,14 +408,8 @@
             "type": "string",
             "format": "uuid"
           },
-          "bikeType": {
-            "type": "string",
-            "enum": [
-              "mountain_bike",
-              "city_bike",
-              "electric_bike",
-              "children_bike"
-            ]
+          "bikeModelId": {
+            "type": "string"
           },
           "status": {
             "type": "string",
@@ -424,33 +418,16 @@
               "rented",
               "unavailable"
             ]
-          },
-          "bikeModel": {
-            "$ref": "#/components/schemas/BikeModel"
           }
         },
         "required": [
-          "bikeType",
-          "status",
-          "bikeModel"
+          "bikeModelId",
+          "status"
         ],
         "example": {
           "id": "uuid",
-          "bikeType": "mountain_bike",
-          "status": "available",
-          "bikeModel": {
-            "name": "Mountain Bike XL",
-            "description": "A robust mountain bike for off-road adventures",
-            "wheelSize": 29.5,
-            "extraFeatures": [
-              "Shimano XT gears",
-              "Front suspension with 120mm travel"
-            ],
-            "bikeCategory": {
-              "id": "uuid",
-              "name": "Mountain Bike"
-            }
-          }
+          "bikeModelId": "20acd6d9-262c-4c2b-b80c-2ca04912295b",
+          "status": "available"
         }
       },
       "BikeModel": {

@@ -105,7 +105,7 @@ const getAllIndividualBikes = `
     ib.id, ib.status, bc.name, bc.id, bm.id, bm.name, bm.description, bm.wheel_size, bm.extra_features, pp.id, s.id
 `;
 
-const createIndividualBike = 'INSERT INTO individual_bikes(id, bike_category, status, bike_model_id) VALUES ($1, $2, $3, $4) RETURNING *';
+const createIndividualBike = 'INSERT INTO individual_bikes(id, bike_category_id, status, bike_model_id) VALUES ($1, $2, $3, $4) RETURNING *';
 const deleteIndividualBikeById = 'DELETE FROM individual_bikes WHERE id = $1';
 const findIndividualBikeById = `
     SELECT

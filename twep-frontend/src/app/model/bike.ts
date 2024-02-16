@@ -5,7 +5,6 @@ import { BikeStation } from "./bikeStation";
 export class Bike{
     id: string;
     bikeModelId: string;
-    bikeCategory: string;
     status: BikeStatus;
 
     //Only in response
@@ -19,10 +18,9 @@ export class Bike{
     categoryId?: string;
     station?: BikeStation;
 
-    constructor(id: string, bikeModel: BikeModel | null, status?: BikeStatus) {
+    constructor(id: string, bikeModelId: string, status?: BikeStatus) {
         this.id = id;
-        this.bikeModelId = bikeModel?.id ?? "";
-        this.bikeCategory = bikeModel?.bikeCategory ?? "";
+        this.bikeModelId = bikeModelId;
         this.status = status ?? BikeStatus.AVAILABLE;
     }
 }
