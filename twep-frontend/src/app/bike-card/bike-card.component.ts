@@ -27,6 +27,7 @@ export class BikeCardComponent {
   showMore: boolean = false;
   hasMoreDescription: boolean = false;
   unavailable: boolean = false;
+  currencyFormatter: Intl.NumberFormat = new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' })
 
   constructor(
     private changeDetector: ChangeDetectorRef,
@@ -74,8 +75,11 @@ export class BikeCardComponent {
     return `${wheelSize} ${name}`;
   }
 
-  get category(): string | null {
-    return this.bike?.category ?? "";
+  get subtitle(): string | null {
+    const formattedHourPrice = this.currencyFormatter.format(
+      this.bike.hourPrice ?? 0,
+    )
+    return `${this.bike.category} (${formattedHourPrice} per hour)`;
   }
 
   get description(): string | null{
