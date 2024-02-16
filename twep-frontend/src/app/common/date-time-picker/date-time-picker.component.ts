@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output, SimpleChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
@@ -23,7 +23,6 @@ export class DateTimePickerComponent {
   @Input() datetime: Date | null = new Date(Date.now());
   @Input() disabled: boolean = false;
   @Output() datetimeChange = new EventEmitter<Date | null>();
-
   date: string;
   time: string;
   timezoneOffset: number;
@@ -34,6 +33,13 @@ export class DateTimePickerComponent {
     this.time = format(datetime, 'HH:mm');
     this.timezoneOffset = datetime.getTimezoneOffset();
   }
+
+  ngOnChanges(changes: SimpleChanges) {
+    const datetime = changes["datetime"]?.currentValue ?? new Date(Date.now());
+    this.date = formatISO(datetime, { representation: 'date' });
+    this.time = format(datetime, 'HH:mm');
+    this.timezoneOffset = datetime.getTimezoneOffset(); 
+}
 
   updateDate(): void {
     if (!this.time || !this.date) {

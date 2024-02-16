@@ -48,7 +48,7 @@
                         [disabled]="immediateRenting" 
                         (datetimeChange)="calculatePrice()" 
                     />
-                    <mat-checkbox [(ngModel)]="immediateRenting" (change)="calculatePrice()">
+                    <mat-checkbox [(ngModel)]="immediateRenting" (change)="setImmediateRenting()">
                         Immediate renting
                     </mat-checkbox>
                 </div>
