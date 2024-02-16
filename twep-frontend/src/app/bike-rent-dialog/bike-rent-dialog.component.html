@@ -9,19 +9,13 @@
             <div mat-dialog-content>
                 <div class="twep-rent-success-container">
                     <mat-icon>check_circle</mat-icon>
+                    <div>Ticket <strong>{{createdTicketId}}</strong> created successfully</div>
                 </div>
             </div>
             <div
                 mat-dialog-actions
                 [align]="'end'"
             >
-                <button
-                    mat-button
-                    color
-                    [mat-dialog-close]="true"
-                >
-                    CLOSE
-                </button>
                 <button
                     mat-button
                     color="primary"
@@ -80,6 +74,7 @@
                     CANCEL
                 </button>
                 <button
+                    [disabled]="calculatingPrice"
                     mat-button
                     color="primary"
                     (click)="purchaseTicket()"

@@ -47,7 +47,7 @@
             <app-bike-card [bike]="bike" [showRentBtn]="false" />
         </div>
     </mat-card-content>
-    <mat-card-actions *ngIf="isRented || isUnused || displayCancelBtn">
+    <mat-card-actions *ngIf="displayActions">
         <div class="twep-spacer"></div>
         <button
             mat-flat-button

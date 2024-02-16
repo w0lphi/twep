@@ -10,6 +10,7 @@ const path = require('path');
 const qr = require('qrcode');
 const fs = require('fs');
 const StationModel = require('../models/stationModel');
+const { differenceInHours } = require('date-fns');
 
 const registerUser = async (req, res) => {
     try {
@@ -301,8 +302,7 @@ const calculatePrice = async (bikeId, fromDate, untilDate) => {
         // Calculate the total price based on the price per hour and duration
         const pricePerHour = bikeCategory.hour_price;
         const durationInHours = Math.ceil((new Date(untilDate) - new Date(fromDate)) / (1000 * 60 * 60));
-        const totalPrice = pricePerHour * durationInHours;
-
+        const totalPrice = pricePerHour * (durationInHours > 0 ? durationInHours : 1);
         return totalPrice;
     } catch (error) {
         throw error;
@@ -326,7 +326,7 @@ const simulateTakingBike = async (req, res) => {
             return res.status(400).json({ message: 'Ticket status is not valid for riding.' });
         }
 
-        if (user.wallet < ticket.price) {
+        if (Number(user.wallet) < Number(ticket.price)) {
             return res.status(400).json({ message: 'Insufficient funds' });
         }
 

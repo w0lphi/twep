@@ -5,7 +5,9 @@
   @else {
     <mat-toolbar>
       <h1>Active tickets</h1>
-      <mat-divider />
+      <div class="twep-spacer"></div>
+      <div class="twep-ticket-amount">({{ activeUserTickets.length}})</div>
+      <mat-icon class="material-icons-outlined">confirmation_number</mat-icon>
     </mat-toolbar>
       @if(activeUserTickets.length > 0){
         <div class="twep-user-tickets-list">
@@ -22,6 +24,9 @@
       }
     <mat-toolbar>
       <h1>Previous tickets</h1>
+      <div class="twep-spacer"></div>
+      <div class="twep-ticket-amount">({{ previousUserTickets.length}})</div>
+      <mat-icon class="material-icons-outlined">confirmation_number</mat-icon>
     </mat-toolbar>
       @if(previousUserTickets.length > 0){
         <div class="twep-user-tickets-list">

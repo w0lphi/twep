@@ -19,12 +19,14 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { BikeCardComponent } from '../bike-card/bike-card.component';
 import { DateTimePickerComponent } from '../common/date-time-picker/date-time-picker.component';
 import { LoadingOverlayComponent } from '../common/loading-overlay/loading-overlay.component';
+import { TicketCardComponent } from '../ticket-card/ticket-card.component';
 import { Bike } from '../model/bike';
 import { Router } from '@angular/router';
-import { TicketPriceResponse, TicketService, UserTicketRequest } from '../service/tickets.service';
+import { CreateUserTicketResponse, TicketPriceRequest, TicketPriceResponse, TicketService, UserTicketRequest } from '../service/tickets.service';
 import { AuthService } from '../service/auth.service';
 import { formatISO } from 'date-fns';
 import { formatCurrency } from '../util/currency-util';
+import { Ticket } from '../model/ticket';
 
 export type BikeRentDialogData = {
   bike: Bike;
@@ -48,6 +50,7 @@ export type BikeRentDialogData = {
     DateTimePickerComponent,
     LoadingOverlayComponent,
     MatProgressSpinnerModule,
+    TicketCardComponent,
   ],
   templateUrl: './bike-rent-dialog.component.html',
   styleUrl: './bike-rent-dialog.component.scss'
@@ -62,6 +65,7 @@ export class BikeRentDialogComponent {
   price: number = 0;
   calculatingPrice: boolean = false;
   immediateRenting: boolean = false;
+  createdTicketId?: string;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: BikeRentDialogData,
@@ -73,6 +77,10 @@ export class BikeRentDialogComponent {
     this.bike = this.data.bike;
     this.bookingStart = new Date(Date.now());
     this.bookingEnd = new Date(Date.now());
+  }
+
+  ngOnInit(){
+    this.calculatePrice();
   }
 
   purchaseTicket(): void {
@@ -87,8 +95,9 @@ export class BikeRentDialogComponent {
       }
 
       this.ticketService.createUserTicket(userId, ticket).subscribe({
-        next: (): void => {
+        next: (response: CreateUserTicketResponse): void => {
           this.bookingSuccessful = true;
+          this.createdTicketId = response.ticket.id;
           this.runningAction = false;
         },
         error: (): void => {
@@ -116,16 +125,13 @@ export class BikeRentDialogComponent {
 
   calculatePrice(): void {
     if (this.bookingStart !== null && this.bookingEnd !== null) {
-      const fromDate: Date = this.immediateRenting ? new Date(Date.now()) : this.bookingStart ;
-      const ticket: UserTicketRequest = {
+      const request: TicketPriceRequest = {
         bikeId: this.bike.id,
-        fromDate: formatISO(fromDate),
+        fromDate: formatISO(this.bookingStart),
         untilDate: formatISO(this.bookingEnd),
-        immediateRenting: this.immediateRenting,
       }
-      return;
       this.calculatingPrice = true;
-      this.ticketService.calculateTicketPrice(ticket).subscribe({
+      this.ticketService.calculateTicketPrice(request).subscribe({
         next: (response: TicketPriceResponse): void => {
           this.price = response.price;
           this.calculatingPrice = false;
@@ -145,7 +151,8 @@ export class BikeRentDialogComponent {
   }
 
   get formattedPrice(): string {
-    return formatCurrency(this.price)
+    const price: number = this.price > 0 ? this.price : 0;
+    return formatCurrency(price)
   }
 
 }

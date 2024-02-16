@@ -90,10 +90,10 @@ VALUES
 
 INSERT INTO bike_categories (id, name, hour_price)
 VALUES
-    ('daf594a3-c350-42d5-9b1f-7f679ae0a30b', 'Mountain Bike', 15),
-    ('daf594a3-c350-42d5-9b1f-7f679ae0a30c', 'Road Bike', 10),
-    ('daf594a3-c350-42d5-9b1f-7f679ae0a30d', 'Electric Bike', 40),
-    ('daf594a3-c350-42d5-9b1f-7f679ae0a30e', 'City Bike', 20);
+    ('daf594a3-c350-42d5-9b1f-7f679ae0a30b', 'Mountain Bike', 0.75),
+    ('daf594a3-c350-42d5-9b1f-7f679ae0a30c', 'Road Bike', 0.8),
+    ('daf594a3-c350-42d5-9b1f-7f679ae0a30d', 'Electric Bike', 1.5),
+    ('daf594a3-c350-42d5-9b1f-7f679ae0a30e', 'City Bike', 1);
 
 
 INSERT INTO bike_models (id, name, description, wheel_size, extra_features, category_id) 

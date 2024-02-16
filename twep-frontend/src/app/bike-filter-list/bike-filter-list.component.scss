@@ -21,7 +21,7 @@
     .twep-bike-filter-content{
         display: flex;
         flex-direction: column;
-        gap: 16px;
+        gap: 32px;
         position: relative;
         padding: 16px 0px;
 
@@ -42,7 +42,7 @@
                     display: grid;
                     grid-template-columns: max-content 1fr;
                     align-items: center;
-                    column-gap: 8px;
+                    column-gap: 16px;
                     color: gray !important;
                     margin-bottom: 8px;
     
@@ -65,6 +65,8 @@
 
     .mat-toolbar{
         background-color: white;
+        border-bottom: 2px solid var(--twep-main);
+        min-height: 64px;
     }
 
     >.mat-divider{

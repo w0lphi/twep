@@ -16,12 +16,12 @@ export class TicketService {
     return this.http.get<Ticket[]>(`${this.apiUrl}/users/${userId}/account/tickets`);
   }
 
-  public createUserTicket(userId: string, ticket: UserTicketRequest): Observable<any> {
-    return this.http.post(`${this.apiUrl}/users/${userId}/account/tickets`, ticket);
+  public createUserTicket(userId: string, ticket: UserTicketRequest): Observable<CreateUserTicketResponse> {
+    return this.http.post<CreateUserTicketResponse>(`${this.apiUrl}/users/${userId}/account/tickets`, ticket);
   }
 
-  public calculateTicketPrice(ticket: UserTicketRequest): Observable<TicketPriceResponse> {
-    return this.http.post<TicketPriceResponse>(`${this.apiUrl}/users/account/tickets`, ticket);
+  public calculateTicketPrice(request: TicketPriceRequest): Observable<TicketPriceResponse> {
+    return this.http.post<TicketPriceResponse>(`${this.apiUrl}/users/tickets/price`, request);
   }
 
   public cancelUserTicket(ticketId: string){
@@ -46,6 +46,16 @@ export type UserTicketRequest = {
   fromDate: string,
   untilDate: string,
   immediateRenting: boolean,
+}
+
+export type CreateUserTicketResponse = {
+  ticket: Ticket;
+}
+
+export type TicketPriceRequest = {
+  bikeId: string,
+  fromDate: string,
+  untilDate: string,
 }
 
 export type TicketPriceResponse = {

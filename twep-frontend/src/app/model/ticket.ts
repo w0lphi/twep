@@ -1,6 +1,7 @@
 import { Bike } from "./bike";
 
 export type Ticket = {
+    id?: string,
     ticketId: string,
     userId: string,
     fromDate: string,

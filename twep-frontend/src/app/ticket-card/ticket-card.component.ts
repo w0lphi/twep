@@ -32,6 +32,7 @@ import { formatCurrency } from '../util/currency-util';
 })
 export class TicketCardComponent {
   @Input("ticket") ticket!: Ticket;
+  @Input("readonly") readonly: boolean = false;
   @Output("cancelTicket") cancelEvent: EventEmitter<void> = new EventEmitter<void>();
   @Output("reload") reloadEvent: EventEmitter<void> = new EventEmitter<void>();
   displayCancelBtn: boolean = true;
@@ -109,6 +110,10 @@ export class TicketCardComponent {
 
   get isReturned(): boolean {
     return this.ticket.status === TicketStatus.RETURNED;
+  }
+
+  get displayActions(): boolean{
+    return !this.readonly && (this.isRented || this.isUnused || this.displayCancelBtn)
   }
 
   get statusText(): string {
