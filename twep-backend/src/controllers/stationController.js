@@ -339,7 +339,7 @@ const stationController = {
             const { bikeModelId, status } = req.body;
 
             //Check if bike model exists
-            const bikeModel = await this.getBikeModelById(bikeModelId);
+            const bikeModel = await StationModel.getBikeModelById(bikeModelId);
             if(!bikeModel){
                 return res.status(404).json({ error: "Bike model not found" });
             }

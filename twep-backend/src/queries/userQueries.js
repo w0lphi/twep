@@ -30,6 +30,7 @@ SELECT
         'status', ib.status,
         'categoryId', bc.id,
         'category', bc.name,
+        'hourPrice', bc.hour_price,
         'modelId', bm.id,
         'model', bm.name,
         'description', bm.description,

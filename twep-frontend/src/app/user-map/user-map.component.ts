@@ -44,7 +44,6 @@ export class UserMapComponent {
 
   constructor(
     private bikeStationService: BikeStationService,
-    private changeDetector: ChangeDetectorRef,
     private notificationService: NotificationService,
     private route: ActivatedRoute,
     private router: Router,
@@ -124,6 +123,14 @@ export class UserMapComponent {
     this.zone.run(() => {
       setTimeout(() => this.map?.invalidateSize(true), 100);
       this.displayedBikeStation = null;
+      this.router.navigate(
+        [], 
+        {
+          relativeTo: this.route,
+          queryParams: { station: null },
+          queryParamsHandling: 'merge'
+        }
+      );
     })
   }
 
