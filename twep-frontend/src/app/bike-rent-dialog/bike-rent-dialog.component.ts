@@ -78,10 +78,9 @@ export class BikeRentDialogComponent {
     this.runningAction = true;
     const userId: string | null = this.authService.getLoggedInUserId()
     if (userId !== null && this.bookingStart !== null && this.bookingEnd !== null) {
-      const fromDate: Date = this.immediateRenting ? new Date(Date.now()) : this.bookingStart;
       const ticket: UserTicketRequest = {
         bikeId: this.bike.id,
-        fromDate: formatISO(fromDate),
+        fromDate: formatISO(this.bookingStart),
         untilDate: formatISO(this.bookingEnd),
         immediateRenting: this.immediateRenting,
       }
@@ -104,6 +103,14 @@ export class BikeRentDialogComponent {
   navigateToTicket(): void {
     this.router.navigateByUrl("/user/tickets");
     this.dialogRef.close();
+  }
+
+  setImmediateRenting(){
+    if(this.immediateRenting){
+      //If immediate renting, set start date to one minute in the future
+      this.bookingStart = new Date(Date.now() + (1 * 60 * 1000));
+    }
+    this.calculatePrice();
   }
 
   calculatePrice(): void {

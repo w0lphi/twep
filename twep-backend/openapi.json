@@ -926,19 +926,35 @@
               "application/json": {
                 "example": {
                   "bikes": [
-                    {
-                      "id": "uuid",
-                      "status": "available",
-                      "category": "Electric Bike",
-                      "model": "Model X",
-                      "description": "Electric Bike, powerful motor",
-                      "wheelSize": 26.5,
-                      "extraFeatures": [
-                        "Front suspension",
-                        "GPS device"
-                      ],
-                      "parkingPlaceId": "c2c6b68e-759c-496a-a860-ee27c8874884"
-                    }
+                      {
+                          "id": "b3182d20-32d8-4ee7-93c5-20477f76af13",
+                          "status": "available",
+                          "category": "City Bike",
+                          "hourPrice": 20,
+                          "model": "UrbanCruise 500",
+                          "description": "The UrbanCruise 500 is a sleek and agile city bike designed for urban commuters seeking a perfect blend of style and functionality. With a lightweight aluminum frame, comfortable saddle, and responsive brakes, it offers a smooth and efficient ride through the bustling streets, making commuting a breeze.",
+                          "wheelSize": 29,
+                          "extraFeatures": [
+                              "Extra comfortable saddle",
+                              "Responsive breaks"
+                          ],
+                          "parkingPlaceId": "7635787f-3f4d-4a1f-93c7-f7efb42f9cfe"
+                      },
+                      {
+                          "id": "b3182d20-32d8-4ee7-93c5-20477f76af14",
+                          "status": "available",
+                          "category": "Mountain Bike",
+                          "hourPrice": 15,
+                          "model": "KTM Summit Trailblazer",
+                          "description": "Introducing the Summit Trailblazer, a high-performance mountain bike designed for rugged terrains and thrilling adventures. Its lightweight aluminum frame ensures agility, while the precision-engineered suspension system provides a smooth ride. Equipped with responsive disc brakes and versatile gearing, the Summit Trailblazer conquers trails with unmatched reliability and style.",
+                          "wheelSize": 27.5,
+                          "extraFeatures": [
+                              "Lighweight Aluminium Frame",
+                              "Improved suspension system",
+                              "Responsive disc brake"
+                          ],
+                          "parkingPlaceId": "91faa446-1bf1-4d84-8a54-2b15e0e8f4ca"
+                      }
                   ]
                 }
               }
@@ -975,6 +991,7 @@
                       "status": "available",
                       "categoryId": "3a4dfc98-79da-4a7b-875d-5122008119d5",
                       "category": "Mountain Bikes",
+                      "hourPrice": 10,
                       "modelId": "2e5ae85b-77f2-4d28-bace-fbcd467bcb9a",
                       "model": "KTM 1.0",
                       "description": "KTM's finest new addition. Can go up any mountain and down any valley",
@@ -2062,6 +2079,7 @@
                     "status": "available",
                     "categoryId": "3a4dfc98-79da-4a7b-875d-5122008119d5",
                     "category": "Mountain Bikes",
+                    "hourPrice": 10,
                     "modelId": "2e5ae85b-77f2-4d28-bace-fbcd467bcb9a",
                     "model": "KTM 1.0",
                     "description": "KTM's finest new addition. Can go up any mountain and down any valley",
@@ -2178,6 +2196,7 @@
                   "status": "available",
                   "categoryId": "3a4dfc98-79da-4a7b-875d-5122008119d5",
                   "category": "Mountain Bikes",
+                  "hourPrice": 10,
                   "modelId": "2e5ae85b-77f2-4d28-bace-fbcd467bcb9a",
                   "model": "KTM 1.0",
                   "description": "KTM's finest new addition. Can go up any mountain and down any valley",
