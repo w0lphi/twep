@@ -445,6 +445,9 @@ const stationController = {
             // Update the status of the new parking place to occupied
             await StationModel.markParkingPlaceAsOccupied(availableParkingPlace.id);
 
+            //Update the station id of the unused user tickets
+            await UserModel.updateStationOfUserTickets(bikeId, targetStationId);
+
             // Send a success response
             res.status(200).json({ message: 'Individual bike reassigned successfully' });
         } catch (error) {

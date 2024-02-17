@@ -66,6 +66,7 @@ CREATE TABLE tickets (
     id UUID PRIMARY KEY,
     user_id UUID REFERENCES users(id) ON DELETE CASCADE,
     bike_id UUID REFERENCES individual_bikes(id) ON DELETE CASCADE,
+    station_id UUID REFERENCES stations(id) ON DELETE CASCADE,
     from_date TIMESTAMPTZ NOT NULL,
     until_date TIMESTAMPTZ NOT NULL,
     immediate_renting BOOLEAN NOT NULL,

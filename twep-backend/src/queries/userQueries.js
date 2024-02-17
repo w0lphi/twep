@@ -58,7 +58,7 @@ JOIN
 JOIN
     parking_places pp ON ib.parking_place_id = pp.id
 JOIN
-    stations s ON pp.station_id = s.id
+    stations s ON t.station_id = s.id
 WHERE
     t.user_id = $1
 ORDER BY
@@ -110,8 +110,8 @@ const addMoneyToWallet = `
 `;
 
 const purchaseTicket = `
-    INSERT INTO tickets (id, user_id, bike_id, from_date, until_date, immediate_renting, qr_code_base64, price, eligible_for_cancellation)
-    VALUES (uuid_generate_v4(), $1, $2, $3, $4, $5, $6, $7, $8)
+    INSERT INTO tickets (id, user_id, bike_id, from_date, until_date, immediate_renting, qr_code_base64, price, eligible_for_cancellation, station_id)
+    VALUES (uuid_generate_v4(), $1, $2, $3, $4, $5, $6, $7, $8, $9)
     RETURNING
         id,
         bike_id,
@@ -121,7 +121,9 @@ const purchaseTicket = `
         qr_code_base64,
         status,
         price,
-        eligible_for_cancellation;
+        eligible_for_cancellation,
+        station_id
+    ;
 `;
 
 const checkIfBikeIsBooked = `
@@ -236,6 +238,31 @@ const getAllBikes = `
     ib.id, ib.status, bc.name, bc.id, bm.id, bm.name, bm.description, bm.wheel_size, bm.extra_features, pp.id, s.id
 `;
 
+const getStationOfBikeById = `
+    SELECT 
+        s.id AS station_id
+    FROM 
+        stations s 
+    JOIN 
+        parking_places pp ON pp.station_id = s.id
+    JOIN 
+        individual_bikes b ON b.parking_place_id = pp.id
+    WHERE 
+        b.id = $1;
+`
+
+const updateStationOfUserTicket = `
+    UPDATE 
+        tickets 
+    SET 
+        station_id = $1
+    WHERE 
+        bike_id = $2
+    AND
+        status = 'unused';
+
+`
+
 const getAllBikeModels = 'SELECT * FROM bike_models';
 const getAllBikeCategories = 'SELECT * FROM bike_categories';
 const getTicketById = 'SELECT * FROM tickets WHERE id = $1';
@@ -263,4 +290,6 @@ module.exports = {
     updateTicketStatus,
     insertPriceIntoTicket,
     getBasicUserInfo,
+    getStationOfBikeById,
+    updateStationOfUserTicket
 };

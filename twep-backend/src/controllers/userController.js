@@ -307,6 +307,13 @@ const purchaseTicket = async (req, res) => {
             return res.status(400).json({ message: 'Insufficient funds' });
         }
 
+        const result = await UserModel.getStationOfBike(bikeId);
+        const stationId = result.station_id;
+
+        if(!stationId){
+            return res.status(404).json({ error: "Station not found" });
+        }
+
         // Generate QR code for the purchased ticket
         const qrCodeBase64 = await generateQRCode({ bikeId, fromDate, untilDate });
 
@@ -321,6 +328,7 @@ const purchaseTicket = async (req, res) => {
             immediateRenting,
             qrCodeBase64,
             price,
+            stationId,
             eligible
         });
 
@@ -438,7 +446,7 @@ const isBikeReturnedLate = async (ticketId) => {
 
 const simulateReturningBike = async (req, res) => {
     const { userId, ticketId } = req.params;
-    const { stationId, bikeId } = req.body;
+    const { stationId } = req.body;
 
     try {
         // Check if the ticket exists and belongs to the user
@@ -465,23 +473,23 @@ const simulateReturningBike = async (req, res) => {
         if (!station) {
             return res.status(404).json({ message: 'Station not found.' });
         }
-
+        console.log("Return station", station);
         // Check if the station has a parking place available for the bike category
         const bikeCategoryString = await StationModel.getBikeCategoryString(bike.category_id);
-        const parkingPlaceAvailable = await StationModel.findAvailableParkingPlace(stationId, { name: bikeCategoryString });
-        if (!parkingPlaceAvailable) {
+        const availableParkingPlace = await StationModel.findAvailableParkingPlace(stationId, { name: bikeCategoryString });
+        if (!availableParkingPlace) {
             return res.status(400).json({ message: 'No available parking place for this bike category at the station.' });
         }
 
-
+        console.log("Returned bike", ticket.bike_id, availableParkingPlace.id);
         // Mark bike as available
         await StationModel.markBikeAsAvailable(ticket.bike_id);
 
         // Mark parking place as occupied
-        await StationModel.markParkingPlaceAsOccupied(stationId, ticket.bike_id);
+        await StationModel.markParkingPlaceAsOccupied(availableParkingPlace.id);
 
         // Update individual bike with the new parking place ID
-        await StationModel.updateParkingPlace(bikeId, stationId);
+        await StationModel.updateParkingPlace(ticket.bike_id, availableParkingPlace.id);
 
         // Update ticket status as returned
         await UserModel.updateTicketStatus(ticketId, 'returned');

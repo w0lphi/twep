@@ -90,7 +90,7 @@ class UserModel {
         }
     }
 
-    static async purchaseTicket(userId, { bikeId, immediateRenting, fromDate, untilDate, qrCodeBase64, price, eligible }) {
+    static async purchaseTicket(userId, { bikeId, immediateRenting, fromDate, untilDate, qrCodeBase64, price, eligible, stationId }) {
         try {
             const { rows } = await pool.query(userQueries.purchaseTicket, [
                 userId,
@@ -100,7 +100,8 @@ class UserModel {
                 immediateRenting,
                 qrCodeBase64,
                 price,
-                eligible
+                eligible,
+                stationId
             ]);
             const purchasedTicket = rows[0];
             return {
@@ -201,6 +202,26 @@ class UserModel {
         try {
             const query = userQueries.insertPriceIntoTicket;
             const result = await pool.query(query, [ticketId, price]);
+            return result.rows[0];
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    static async getStationOfBike(bikeId){
+        try {
+            const query = userQueries.getStationOfBikeById;
+            const result = await pool.query(query, [bikeId]);
+            return result.rows[0];
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    static async updateStationOfUserTickets(bikeId, stationId){
+        try {
+            const query = userQueries.updateStationOfUserTicket;
+            const result = await pool.query(query, [stationId, bikeId]);
             return result.rows[0];
         } catch (error) {
             throw error;
