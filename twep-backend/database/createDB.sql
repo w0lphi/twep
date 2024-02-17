@@ -103,8 +103,8 @@ VALUES
 
 INSERT INTO individual_bikes (id, bike_category_id, status, bike_model_id, parking_place_id)
 VALUES
-    ('b3182d20-32d8-4ee7-93c5-20477f76af13', 'daf594a3-c350-42d5-9b1f-7f679ae0a30e', 'available', '20acd6d9-262c-4c2b-b80c-2ca04912295b', '7635787f-3f4d-4a1f-93c7-f7efb42f9cfe'),
-    ('b3182d20-32d8-4ee7-93c5-20477f76af14', 'daf594a3-c350-42d5-9b1f-7f679ae0a30b', 'available', '186760ff-6379-4703-89c2-0844b85b3433', '91faa446-1bf1-4d84-8a54-2b15e0e8f4ca');
+    ('b3182d20-32d8-4ee7-93c5-20477f76af13', 'daf594a3-c350-42d5-9b1f-7f679ae0a30e', 'available', '20acd6d9-262c-4c2b-b80c-2ca04912295b', '91faa446-1bf1-4d84-8a54-2b15e0e8f4ca'),
+    ('b3182d20-32d8-4ee7-93c5-20477f76af14', 'daf594a3-c350-42d5-9b1f-7f679ae0a30b', 'available', '186760ff-6379-4703-89c2-0844b85b3433', '7635787f-3f4d-4a1f-93c7-f7efb42f9cfe');
 
 
 

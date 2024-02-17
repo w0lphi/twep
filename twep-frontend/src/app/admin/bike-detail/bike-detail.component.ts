@@ -113,6 +113,7 @@ export class BikeDetailComponent {
   }
 
   upsertBike(): void{
+    if(this.bikeForm.invalid) return;
     const bikeModelId: string = this.model?.value;
     if (this.bike === undefined || bikeModelId === undefined) return;
     this.runningAction = true;
@@ -225,8 +226,8 @@ export class BikeDetailComponent {
   }
 
   updateBikeLocation(): void{
-    const latitude: number | undefined = this.bike?.station?.location.latitude;
-    const longitude: number | undefined = this.bike?.station?.location.longitude;
+    const latitude: number | undefined = this.bike?.station?.location?.latitude;
+    const longitude: number | undefined = this.bike?.station?.location?.longitude;
     if(this.map !== undefined && latitude !== undefined && longitude !== undefined){
       this.map.setView(new Leaflet.LatLng(latitude, longitude), 14);
     }

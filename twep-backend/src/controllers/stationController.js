@@ -390,6 +390,9 @@ const stationController = {
                 return res.status(400).json({ error: 'Cannot delete individual bike while there are still active tickets associated with it' })
             }
 
+            // Update the status of the old parking place to vacant
+            await StationModel.markParkingPlaceAsVacant(individualBike.parking_place_id);
+
             const deleteResult = await StationModel.deleteIndividualBikeById(id);
 
             if (!deleteResult) {
