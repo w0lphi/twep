@@ -7,6 +7,7 @@
         flex-direction: column;
         justify-content: center;
         gap: 16px;
+        width: 100%;
 
         .mat-mdc-slider{
             display: flex;
@@ -66,7 +67,16 @@
     .mat-toolbar{
         background-color: white;
         border-bottom: 2px solid var(--twep-main);
-        min-height: 64px;
+
+        .mat-toolbar-row{
+            height: min-content;
+            min-height: 64px;
+
+            >.mat-expansion-panel{
+                margin-bottom: 16px;
+                width: 100%;
+            }
+        }
     }
 
     >.mat-divider{
