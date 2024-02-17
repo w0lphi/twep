@@ -17,13 +17,7 @@
     </mat-card-header>
     <mat-card-content>
         <div 
-            [ngClass]="{
-                'twep-ticket-card-status': true,
-                'rented': isRented,
-                'unused': isUnused,
-                'returned': isReturned,
-                'overdue': isOverdue,
-            }"
+            [ngClass]="'twep-ticket-card-status ' + status"
         >
             <mat-icon class="material-icons-outlined">{{statusIcon}}</mat-icon>
             <div>{{statusText}}</div>

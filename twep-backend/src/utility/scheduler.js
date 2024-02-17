@@ -2,6 +2,9 @@ const { minutesToMilliseconds } = require("date-fns");
 const StationModel = require("../models/stationModel");
 const UserModel = require("../models/userModel");
 
+/**
+ * Update the eligiable cancellation status of tickets
+ */
 async function updateCancellableTickets(){
     try{
         console.log("Running updateCancellableTickets...")
@@ -12,7 +15,10 @@ async function updateCancellableTickets(){
     }
 }
 
-async function updateUsersWallet(){
+/**
+ * Process the unused tickets, deduct fee from users and set ticket to expired
+ */
+async function processUnusedUserTickets(){
     try{
         console.log("Running updateUsersWallet...")
         const expiredUserTickets = await StationModel.getExpiredUserTickets();
@@ -25,7 +31,7 @@ async function updateUsersWallet(){
                 const unsusedBikeFee = Math.round((Number(expiredTicket.price) * 0.1) * 100) / 100;
                 console.log(`updateUsersWallet: Deducting unused bike fee of ${unsusedBikeFee} from wallet of user ${userId} `);
                 await UserModel.deductMoneyFromWallet(userId, unsusedBikeFee);
-                await UserModel.updateTicketStatus(ticketId, "returned");
+                await UserModel.updateTicketStatus(ticketId, "expired");
             }
         }
         console.log('Ran updateUsersWallet');
@@ -39,9 +45,10 @@ const startScheduler = (intervalMinutes) => {
     console.log("Started scheduler")
     setInterval(() => {
         console.log("Triggering scheduler jobs...")
-        //Update eligiable for cancellation state of tickets
+
         updateCancellableTickets();
-        updateUsersWallet();
+        processUnusedUserTickets();
+
         console.log(`Triggered scheduler jobs, waiting ${intervalMinutes} minute`)
     }, intervalMs)
 }

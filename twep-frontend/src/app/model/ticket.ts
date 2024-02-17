@@ -19,4 +19,5 @@ export enum TicketStatus {
     RETURNED = "returned",
     CANCELLED = "cancelled",
     OVERDUE = "overdue",
+    EXPIRED = "expired",
 }

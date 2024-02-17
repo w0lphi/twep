@@ -132,9 +132,10 @@ export class TicketCardComponent {
         return 'Bike was taken from the station. Please return before the end date and have a nice ride!';
       case TicketStatus.UNUSED:
         let text: string = `Bike is booked for the given interval.`;
-        if(!this.ticket.immediateRenting){
-          text = `${text} Ticket is cancellable until 1 hour before the start date`
+        if(!this.ticket.immediateRenting && differenceInHours(this.ticket.fromDate, new Date(Date.now())) > 1){
+          text = `${text} Ticket is cancellable until 1 hour before the start date.`
         }
+        text = `${text} If the bike is not taken a fee of 10% of the ticket price will be deducted from your wallet`
         return text;
       case TicketStatus.RETURNED:
         return 'Bike was returned to a station';
@@ -142,6 +143,8 @@ export class TicketCardComponent {
         return 'Ticket was cancelled'
       case TicketStatus.OVERDUE:
         return 'This ticket is overdue! Please return the bike to the next station'
+        case TicketStatus.EXPIRED:
+          return 'This ticket expired without taking the bike. A fee of 10% was deducted from your wallet';
     }
   }
 
@@ -157,6 +160,8 @@ export class TicketCardComponent {
         return 'cancel';
       case TicketStatus.OVERDUE:
         return 'warning';
+      case TicketStatus.EXPIRED:
+        return 'timer_off';
     }
   }
 }

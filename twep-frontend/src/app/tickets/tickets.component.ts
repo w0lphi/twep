@@ -59,8 +59,12 @@ export class TicketsComponent {
     this.ticketService.getUserTickets(userId)
       .subscribe({
         next: (tickets: Ticket[]) => {
-          this.activeUserTickets = tickets.filter(({status}) => status === TicketStatus.RENTED || status === TicketStatus.UNUSED);
-          this.previousUserTickets = tickets.filter(({status}) => status === TicketStatus.RETURNED || status === TicketStatus.CANCELLED);
+          this.activeUserTickets = tickets.filter(({status}) => 
+            status === TicketStatus.RENTED || status === TicketStatus.UNUSED
+          );
+          this.previousUserTickets = tickets.filter(({status}) => 
+            status === TicketStatus.RETURNED || status === TicketStatus.CANCELLED || status === TicketStatus.EXPIRED
+          );
           this.runningAction = false;
         },
         error: () => {

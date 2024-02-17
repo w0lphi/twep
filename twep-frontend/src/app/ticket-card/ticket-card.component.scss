@@ -29,7 +29,8 @@
             }
 
             &.cancelled,
-            &.overdue{
+            &.overdue,
+            &.expired{
                 color: var(--red);
             }
         }
