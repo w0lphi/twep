@@ -71,7 +71,8 @@ CREATE TABLE tickets (
     immediate_renting BOOLEAN NOT NULL,
     price NUMERIC(10, 2) DEFAULT 0, 
     status TEXT DEFAULT 'unused',
-    qr_code_base64 TEXT NOT NULL
+    qr_code_base64 TEXT NOT NULL,
+    eligible_for_cancellation BOOLEAN
 );
 
 -- insert default admin account into db. Password is "password"

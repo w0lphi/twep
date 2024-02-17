@@ -200,6 +200,30 @@ const addMoneyToWallet = async (userId, amount) => {
     }
 };
 
+const eligibleForCancellation = async (immediateRenting, fromDate) => {
+    try {
+        if (immediateRenting) {
+            return false;
+        }
+
+        const fromDateMs = new Date(fromDate).getTime();
+        const currentDateMs = Date.now();
+        const twoHoursMs = 2 * 60 * 60 * 1000; // 2 hours in milliseconds
+
+        // If the difference is less than 2 hours, the ticket is not eligible for cancellation
+        if ((fromDateMs - currentDateMs) < twoHoursMs) {
+            return false;
+        }
+
+        // Otherwise, the ticket is eligible for cancellation
+        return true;
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: "Internal Server Error" });
+    }
+
+}
+
 
 const purchaseTicket = async (req, res) => {
     try {
@@ -246,6 +270,9 @@ const purchaseTicket = async (req, res) => {
         // Generate QR code for the purchased ticket
         const qrCodeBase64 = await generateQRCode({ bikeId, fromDate, untilDate });
 
+        // Determine if the ticket is eligible for cancellation
+        const eligible = await eligibleForCancellation(immediateRenting, fromDate);
+
         // Proceed with ticket purchase if wallet balance is sufficient, passing the generated QR code
         const purchasedTicket = await UserModel.purchaseTicket(userId, {
             bikeId,
@@ -254,6 +281,7 @@ const purchaseTicket = async (req, res) => {
             immediateRenting,
             qrCodeBase64,
             price,
+            eligible
         });
 
 
@@ -461,4 +489,5 @@ module.exports = {
     simulateReturningBike,
     calculatePrice,
     calculatePriceAndRespond,
+    eligibleForCancellation,
 };

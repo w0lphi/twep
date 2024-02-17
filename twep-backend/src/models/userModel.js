@@ -90,7 +90,7 @@ class UserModel {
         }
     }
 
-    static async purchaseTicket(userId, { bikeId, immediateRenting, fromDate, untilDate, qrCodeBase64, price }) {
+    static async purchaseTicket(userId, { bikeId, immediateRenting, fromDate, untilDate, qrCodeBase64, price, eligible }) {
         try {
             const { rows } = await pool.query(userQueries.purchaseTicket, [
                 userId,
@@ -99,7 +99,8 @@ class UserModel {
                 untilDate,
                 immediateRenting,
                 qrCodeBase64,
-                price
+                price,
+                eligible
             ]);
             const purchasedTicket = rows[0];
             return {

@@ -27,6 +27,7 @@ SELECT
     t.qr_code_base64,
     t.status,
     t.price,
+    t.eligible_for_cancellation,
     jsonb_build_object(
         'id', ib.id,
         'status', ib.status,
@@ -109,8 +110,8 @@ const addMoneyToWallet = `
 `;
 
 const purchaseTicket = `
-    INSERT INTO tickets (id, user_id, bike_id, from_date, until_date, immediate_renting, qr_code_base64, price)
-    VALUES (uuid_generate_v4(), $1, $2, $3, $4, $5, $6, $7)
+    INSERT INTO tickets (id, user_id, bike_id, from_date, until_date, immediate_renting, qr_code_base64, price, eligible_for_cancellation)
+    VALUES (uuid_generate_v4(), $1, $2, $3, $4, $5, $6, $7, $8)
     RETURNING
         id,
         bike_id,
@@ -119,7 +120,8 @@ const purchaseTicket = `
         immediate_renting,
         qr_code_base64,
         status,
-        price;
+        price,
+        eligible_for_cancellation;
 `;
 
 const checkIfBikeIsBooked = `

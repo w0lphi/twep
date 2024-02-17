@@ -140,6 +140,9 @@
           "qrCode": {
             "type": "string",
             "description": "Base64 encoded QR code image"
+          },
+          "eligibleForCancellation": {
+            "type": "boolean"
           }
         },
         "required": [
