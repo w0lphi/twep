@@ -30,6 +30,11 @@ export class ServerErrorInterceptor implements HttpInterceptor {
 
   handleErrorResponse(error: HttpErrorResponse, request: HttpRequest<any>): Observable<never>{
     if(request.url.endsWith("/login")){
+      if(error.status === 423){
+        //Display punishment page
+        this.router.navigateByUrl("/punishment");
+        return throwError(() => new Error("User has been punished"));
+      }
       //Display default error message on login
       this.notificationService.showClientError("Username or password incorrect");
       return throwError(() => new Error(error.message));

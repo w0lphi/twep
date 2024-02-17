@@ -1,0 +1,24 @@
+.twep-punishment-page{
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;   
+    padding: 0 16px;
+
+    .twep-punishment-page-logo{
+        padding: 16px 0;
+    }
+
+    .twep-punishment-page-title{
+        font-weight: bold;
+        text-align: center;
+        color: #e9891c;
+    }
+
+    .twep-punishment-page-subtitle{
+        text-align: center;
+        color: rgba(0, 0, 0, 0.54);
+        font-weight: 500;
+    }
+}

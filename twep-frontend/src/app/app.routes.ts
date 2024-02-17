@@ -20,12 +20,17 @@ import { TicketsComponent } from './tickets/tickets.component';
 import {AccountComponent} from './account/account.component';
 import { BikeFilterListComponent } from './bike-filter-list/bike-filter-list.component';
 import { OverdueRentalsListComponent } from './admin/overdue-rentals-list/overdue-rentals-list.component';
+import { PunishmentPageComponent } from './punishment-page/punishment-page.component';
 
 export const routes: Routes = [
     {
         path: '',
         pathMatch: 'full',
         redirectTo: 'login'
+    },
+    {
+        path: 'punishment',
+        component: PunishmentPageComponent
     },
     {
         path: 'login',

@@ -7,12 +7,11 @@ export const authenticationGuard: CanActivateChildFn = (route, state) => {
   if (!authenticated) {
     return inject(Router).navigateByUrl("login")
   }
-  /* TODO: Enable once the role is stored in the JWT token
+
   const currentPath: string = state.url;
   const role: string | null = inject(AuthService).getLoggedInUserRole();
-  if (currentPath.startsWith("/admin") && role !== "management") {
+  if (currentPath.startsWith("/admin") && role !== "admin") {
     return inject(Router).navigateByUrl("notfound")
   }
-  */
   return true;
 };
