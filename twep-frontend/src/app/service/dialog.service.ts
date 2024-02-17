@@ -8,6 +8,7 @@ import { Bike } from '../model/bike';
 import { Ticket } from '../model/ticket';
 import { QrCodeDialogComponent } from '../qr-code-dialog/qr-code-dialog.component';
 import { CreateCategoryDialogComponent } from '../create-category-dialog/create-category-dialog.component';
+import { OverdueWarningDialogComponent } from '../overdue-warning-dialog/overdue-warning-dialog.component';
 
 @Injectable({ providedIn: 'root' })
 export class DialogService {
@@ -74,5 +75,13 @@ export class DialogService {
     });
 
     return dialogRef.afterClosed();
+  }
+
+  openOverdueTicketWarningDialog(): void {
+    this.dialog.open(OverdueWarningDialogComponent, {
+      width: "600px",
+      disableClose: true,
+      hasBackdrop: true
+    })
   }
 }

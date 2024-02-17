@@ -9,7 +9,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { BikeCardComponent } from '../bike-card/bike-card.component';
 
 import { Ticket, TicketStatus } from '../model/ticket';
-import { differenceInHours, format } from "date-fns"; 
+import { differenceInHours, format, isBefore } from "date-fns"; 
 import { Bike } from '../model/bike';
 import { DialogService } from '../service/dialog.service';
 import { TicketService } from '../service/tickets.service';
@@ -80,6 +80,12 @@ export class TicketCardComponent {
     return `ID: ${this.ticket.ticketId}`
   }
 
+  get status(): TicketStatus {
+    const isOverdue: boolean = this.ticket.status === TicketStatus.RENTED && isBefore(new Date(this.ticket.untilDate), Date.now())
+    if(isOverdue) return TicketStatus.OVERDUE;
+    return this.ticket.status;
+  }
+
   get fromDateFormatted(): string {
     return format(new Date(this.ticket.fromDate), "dd.MM.yyyy HH:mm");
   }
@@ -101,15 +107,19 @@ export class TicketCardComponent {
   }
 
   get isRented(): boolean {
-    return this.ticket.status === TicketStatus.RENTED;
+    return this.status === TicketStatus.RENTED;
   }
 
   get isUnused(): boolean {
-    return this.ticket.status === TicketStatus.UNUSED;
+    return this.status === TicketStatus.UNUSED;
   }
 
   get isReturned(): boolean {
-    return this.ticket.status === TicketStatus.RETURNED;
+    return this.status === TicketStatus.RETURNED;
+  }
+
+  get isOverdue(): boolean {
+    return this.status === TicketStatus.OVERDUE;
   }
 
   get displayActions(): boolean{
@@ -117,7 +127,7 @@ export class TicketCardComponent {
   }
 
   get statusText(): string {
-    switch(this.ticket.status){
+    switch(this.status){
       case TicketStatus.RENTED:
         return 'Bike was taken from the station. Please return before the end date and have a nice ride!';
       case TicketStatus.UNUSED:
@@ -130,11 +140,13 @@ export class TicketCardComponent {
         return 'Bike was returned to a station';
       case TicketStatus.CANCELLED:
         return 'Ticket was cancelled'
+      case TicketStatus.OVERDUE:
+        return 'This ticket is overdue! Please return the bike to the next station'
     }
   }
 
   get statusIcon(): string{
-    switch(this.ticket.status){
+    switch(this.status){
       case TicketStatus.RENTED:
         return 'timer';
       case TicketStatus.UNUSED:
@@ -142,7 +154,9 @@ export class TicketCardComponent {
       case TicketStatus.RETURNED:
         return 'check_circle'
       case TicketStatus.CANCELLED:
-        return 'cancel'
+        return 'cancel';
+      case TicketStatus.OVERDUE:
+        return 'warning';
     }
   }
 }

@@ -27,7 +27,7 @@ export class ConfirmDialogComponent {
   ) { }
 }
 
-class ConfirmDialogData{
-  title?: string;
-  text?: string;
+export type ConfirmDialogData = {
+  title: string;
+  text: string;
 }

@@ -14,6 +14,10 @@ import { MatListModule } from '@angular/material/list';
 import { NavigationLink } from '../model/navigationLink';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { AuthService } from '../service/auth.service';
+import { TicketService } from '../service/tickets.service';
+import { Ticket, TicketStatus } from '../model/ticket';
+import { isBefore } from 'date-fns';
+import { DialogService } from '../service/dialog.service';
 
 @Component({
   selector: 'app-userhome',
@@ -50,6 +54,8 @@ export class UserhomeComponent {
     private router: Router,
     private breakpointObserver: BreakpointObserver,
     private authService: AuthService,
+    private ticketService: TicketService,
+    private dialogService: DialogService,
   ) {
     this.breakpointObserver.observe(Breakpoints.XSmall).subscribe(result => {
       this.isMobile = result.matches;
@@ -68,6 +74,7 @@ export class UserhomeComponent {
   
   ngOnInit(): void {
     this.activeLinkIndex = this.navigationLinks.findIndex(tab => this.router.url.startsWith(tab.route));
+    this.getOverdueTickets();
   }
 
   navigate(index: number): void {
@@ -75,6 +82,24 @@ export class UserhomeComponent {
     const link: NavigationLink = this.navigationLinks[index];
     this.router.navigateByUrl(link.route);
     if(this.isMobile) this.drawer?.close();
+  }
+
+  getOverdueTickets(): void {
+    const userId: string | null = this.authService.getLoggedInUserId();
+    if(userId === null) return;
+    this.ticketService.getUserTickets(userId).subscribe({
+      next: (tickets: Ticket[]) => {
+        const hasOverdueTickets: boolean = tickets.some(({untilDate, status }) => {
+          return status === TicketStatus.RENTED && isBefore(new Date(untilDate), Date.now());
+        })
+
+        if(hasOverdueTickets) this.displayOverdueTicketWarning();
+      }
+    })
+  }
+
+  displayOverdueTicketWarning(){
+    this.dialogService.openOverdueTicketWarningDialog();
   }
 
   logout() {

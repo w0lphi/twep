@@ -1,0 +1,16 @@
+<div class="twep-overdue-warning-dialog">
+    <h1 mat-dialog-title>You have overdue tickets!</h1>
+    <div mat-dialog-content>
+       It seems like you still have a bike to return! Please check the ticket page for more information.
+    </div>
+    <div mat-dialog-actions [align]="'end'">
+        <button
+            mat-button
+            color="primary"
+            (click)="navigateToTickets()"
+        >
+            VIEW TICKETS
+        </button>
+    </div>
+
+</div>

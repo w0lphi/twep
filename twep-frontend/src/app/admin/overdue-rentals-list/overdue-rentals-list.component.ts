@@ -41,7 +41,7 @@ export class OverdueRentalsListComponent {
 
   getFormattedDate(ticket: OverdueTicket){
     const untilDate: Date = new Date(ticket.untilDate);
-    const distance: string = intlFormatDistance(untilDate, new Date(Date.now()), { numeric: 'always'});
+    const distance: string = intlFormatDistance(untilDate, new Date(Date.now()), { locale: "en-GB", numeric: 'always'});
     return `${format(untilDate, 'dd.MM.yyyy HH:mm')} (${distance})`
   }
 

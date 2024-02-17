@@ -4,7 +4,7 @@
         'twep-ticket-card': true,
     }"
 >
-    <div *ngIf="isRented" class="twep-active-circle-container">
+    <div *ngIf="isRented || isOverdue" class="twep-active-circle-container">
         <div class="twep-active-circle"></div>
     </div>
     <mat-card-header class="twep-ticket-card-header">
@@ -22,6 +22,7 @@
                 'rented': isRented,
                 'unused': isUnused,
                 'returned': isReturned,
+                'overdue': isOverdue,
             }"
         >
             <mat-icon class="material-icons-outlined">{{statusIcon}}</mat-icon>

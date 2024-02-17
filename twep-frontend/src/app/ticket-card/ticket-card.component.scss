@@ -28,7 +28,8 @@
                 color: var(--blue);
             }
 
-            &.cancelled{
+            &.cancelled,
+            &.overdue{
                 color: var(--red);
             }
         }
@@ -53,8 +54,8 @@
 
     .twep-active-circle-container{
         position: absolute;
-        top: 8px;
-        right: 8px;
+        top: 4px;
+        right: 4px;
     }
 
     .twep-active-circle, 
