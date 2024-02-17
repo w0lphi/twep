@@ -6,11 +6,12 @@ const userQueries = require('../queries/userQueries');
 const { convertKeysToCamelCase, snakeCaseToCamelCase, convertSnakeToCamel } = require('../utility/utility');
 const UserModel = require('../models/userModel');
 const path = require('path');
-
+const dateFns = require('date-fns');
 const qr = require('qrcode');
 const fs = require('fs');
 const StationModel = require('../models/stationModel');
 const { differenceInHours } = require('date-fns');
+const { use } = require('../routes/usersRouter');
 
 const registerUser = async (req, res) => {
     try {
@@ -63,6 +64,34 @@ const loginUser = async (req, res) => {
     } catch (error) {
         console.error(error);
         res.status(500).json({ error: 'Internal Server Error' });
+    }
+};
+
+const isRentedOver24Hours = async (userId) => {
+    try {
+
+        const userTickets = await UserModel.getUserTickets(userId);
+
+        // Filter tickets where it has been more than 24 hours since fromDate
+        const expiredTickets = userTickets.filter(ticket => {
+            if (ticket.status === 'rented') {
+                const fromDate = new Date(ticket.fromDate);
+                const currentDate = new Date();
+                const differenceInHours = Math.abs(Math.round((currentDate - fromDate) / (1000 * 60 * 60))); // Calculate difference in hours
+
+                // Check if it has been more than 24 hours
+                return differenceInHours >= 24;
+            }
+            return false;
+        });
+
+        if (expiredTickets.length > 0) {
+            console.log("You have had a bike rented for more than 24 hours.");
+
+        }
+    } catch (error) {
+        console.error('Error checking rent duration:', error);
+
     }
 };
 
@@ -377,6 +406,24 @@ const simulateTakingBike = async (req, res) => {
     }
 };
 
+const isBikeReturnedLate = async (ticketId) => {
+    const ticket = await UserModel.getTicketById(ticketId);
+    const currentDate = new Date();
+    const untilDate = new Date(ticket.until_date);
+
+    if (dateFns.isAfter(currentDate, untilDate)) {
+        // Calculate the difference in hours between the current date and the untilDate
+        const hoursLate = dateFns.differenceInHours(currentDate, untilDate);
+
+        // Calculate the late fee (5€ for every hour late)
+        const lateFee = hoursLate * 5;
+
+        return { late: true, lateFee };
+    } else {
+        return { late: false, lateFee: 0 };
+    }
+};
+
 
 const simulateReturningBike = async (req, res) => {
     const { userId, ticketId } = req.params;
@@ -415,6 +462,7 @@ const simulateReturningBike = async (req, res) => {
             return res.status(400).json({ message: 'No available parking place for this bike category at the station.' });
         }
 
+
         // Mark bike as available
         await StationModel.markBikeAsAvailable(ticket.bike_id);
 
@@ -427,7 +475,16 @@ const simulateReturningBike = async (req, res) => {
         // Update ticket status as returned
         await UserModel.updateTicketStatus(ticketId, 'returned');
 
-        return res.status(200).json({ message: 'Bike returned successfully.' });
+        // Check if the bike is returned late
+        const { late, lateFee } = await isBikeReturnedLate(ticketId);
+
+        if (late) {
+            // Deduct the late fee from the user's wallet
+            await UserModel.deductMoneyFromWallet(userId, lateFee);
+            return res.status(200).json({ message: 'Bike returned late. Late fee deducted from your wallet.', lateFee: `${lateFee}€` });
+        } else {
+            return res.status(200).json({ message: 'Bike returned successfully.' });
+        }
     } catch (error) {
         console.error('Error simulating bike return:', error);
         return res.status(500).json({ message: 'Internal server error.' });
