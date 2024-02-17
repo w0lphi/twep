@@ -1,3 +1,4 @@
+const { formatISO, addHours } = require('date-fns');
 const pool = require('../db');
 const stationQueries = require('../queries/stationQueries');
 const { v4: uuidv4 } = require('uuid');
@@ -459,6 +460,25 @@ class StationModel {
             });
         } catch (error) {
             throw error
+        }
+    }
+
+    static async updateCancellableTickets(){
+        try{
+            const twoHoursFromNow = addHours(new Date(Date.now()), 2);
+            const result = await pool.query(stationQueries.updateCancellableTickets, [twoHoursFromNow]);
+            return result.rows
+        }catch (error) {
+            throw error
+        }
+    }
+
+    static async getExpiredUserTickets(){
+        try{
+            const result = await pool.query(stationQueries.getExpiredUserTickets);
+            return result.rows;
+        }catch(error){
+            throw error;
         }
     }
 

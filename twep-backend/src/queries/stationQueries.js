@@ -197,6 +197,38 @@ const getAllOverdueTickets = `
         t.until_date < now();
 `
 
+//Update the eligible_for_cancellation flag for tickets which are not cancellable
+const updateCancellableTickets = `
+    UPDATE tickets
+    SET
+        eligible_for_cancellation = true
+    WHERE
+        id IN (
+            SELECT t.id 
+            FROM tickets t 
+            WHERE eligible_for_cancellation IS false 
+            AND from_date > now()
+            AND from_date < $1)
+    RETURNING
+        id;
+`;
+
+const getExpiredUserTickets = `
+    SELECT 
+        u.id AS user_id, 
+        t.id AS ticket_id, 
+        u.wallet, 
+        t.price 
+    FROM 
+        users u 
+    JOIN 
+        tickets t ON t.user_id = u.id 
+    WHERE 
+        t.status = 'unused' 
+    AND 
+        t.until_date < now()
+`
+
 module.exports = {
     getUsers,
     getStations,
@@ -229,5 +261,7 @@ module.exports = {
     getAllOpenTicketsForBike,
     markBikeAsRented,
     markBikeAsAvailable,
-    getAllOverdueTickets
+    getAllOverdueTickets,
+    updateCancellableTickets,
+    getExpiredUserTickets
 };

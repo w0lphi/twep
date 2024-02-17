@@ -300,8 +300,12 @@ const purchaseTicket = async (req, res) => {
         if (isAlreadyBooked) {
             return res.status(400).json({ error: "Bike is already booked in the given time interval" });
         }
-
+        const user = await UserModel.getBasicUserInfo(userId);
         const price = await calculatePrice(bikeId, fromDate, untilDate);
+
+        if (Number(user.wallet) < Number(price)) {
+            return res.status(400).json({ message: 'Insufficient funds' });
+        }
 
         // Generate QR code for the purchased ticket
         const qrCodeBase64 = await generateQRCode({ bikeId, fromDate, untilDate });

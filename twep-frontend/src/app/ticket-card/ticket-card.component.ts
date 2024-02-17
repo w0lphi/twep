@@ -123,7 +123,7 @@ export class TicketCardComponent {
   }
 
   get displayActions(): boolean{
-    return !this.readonly && (this.isRented || this.isUnused || this.displayCancelBtn)
+    return !this.readonly && (this.isRented || this.isUnused || this.isOverdue || this.displayCancelBtn)
   }
 
   get statusText(): string {

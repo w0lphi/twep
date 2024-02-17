@@ -2,11 +2,9 @@
 const express = require('express');
 const session = require('express-session');
 const cookieParser = require('cookie-parser');
-const jwt = require('jsonwebtoken');
 const swaggerUi = require('swagger-ui-express');
 const swaggerDocument = require('./openapi.json');
 const cors = require('cors');
-const verifyToken = require('./src/middleware/verifyToken');
 
 
 const app = express();
@@ -26,11 +24,6 @@ app.use(cors());
 // Routes
 app.get('/', (req, res) => {
     res.send('Hello, this is your backend!');
-});
-
-// Protected Route using JWT
-app.get('/protected-route', verifyToken, (req, res) => {
-    res.json({ message: 'This route is protected with JWT' });
 });
 
 // External Routes
@@ -54,6 +47,9 @@ pool.connect()
 
 // Server Start
 const PORT = process.env.PORT || 3000;
+const { startScheduler } = require('./src/utility/scheduler');
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
+    startScheduler(1);
 });
+
