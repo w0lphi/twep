@@ -60,6 +60,12 @@ const loginUser = async (req, res) => {
             role: loggedInUser.role
         }, 'twep-jwt-secret', { expiresIn: '1h' });
 
+        // Check if the user has rented a bike for more than 24 hours
+        const isRentedOver24 = await isRentedOver24Hours(user.rows[0].id);
+        if (isRentedOver24) {
+            return res.status(423).json({ error: 'Access to your account blocked. A bike has been missing for more than 24h. Please pay your fine and return the bike.' });
+        }
+
         res.status(200).json({ token });
     } catch (error) {
         console.error(error);
@@ -69,13 +75,12 @@ const loginUser = async (req, res) => {
 
 const isRentedOver24Hours = async (userId) => {
     try {
-
         const userTickets = await UserModel.getUserTickets(userId);
 
         // Filter tickets where it has been more than 24 hours since fromDate
         const expiredTickets = userTickets.filter(ticket => {
             if (ticket.status === 'rented') {
-                const fromDate = new Date(ticket.fromDate);
+                const fromDate = new Date(ticket.from_date);
                 const currentDate = new Date();
                 const differenceInHours = Math.abs(Math.round((currentDate - fromDate) / (1000 * 60 * 60))); // Calculate difference in hours
 
@@ -86,14 +91,16 @@ const isRentedOver24Hours = async (userId) => {
         });
 
         if (expiredTickets.length > 0) {
-            console.log("You have had a bike rented for more than 24 hours.");
-
+            return true; // User has rented a bike for more than 24 hours
+        } else {
+            return false;
         }
     } catch (error) {
         console.error('Error checking rent duration:', error);
-
+        return false;
     }
 };
+
 
 const getUserAccount = async (userId) => {
     try {
