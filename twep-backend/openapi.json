@@ -909,7 +909,7 @@
     },
     "/users/{userId}/ratings": {
       "post": {
-        "summary": "Create a new rating",
+        "summary": "Create a new rating for a bike station and bike model",
         "tags": [
           "user"
         ],
