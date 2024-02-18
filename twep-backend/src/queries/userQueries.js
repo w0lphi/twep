@@ -310,7 +310,8 @@ const getRatingsByStationId = `
     FROM ratings r
     JOIN bike_models bm ON bm.id = r.bike_model_id
     JOIN stations s ON s.id = r.station_id
-    WHERE station_id = $1;
+    WHERE station_id = $1
+    ORDER BY r.created_at DESC;
 `
 
 

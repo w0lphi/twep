@@ -9,6 +9,7 @@ import { Ticket } from '../model/ticket';
 import { QrCodeDialogComponent } from '../qr-code-dialog/qr-code-dialog.component';
 import { CreateCategoryDialogComponent } from '../create-category-dialog/create-category-dialog.component';
 import { OverdueWarningDialogComponent } from '../overdue-warning-dialog/overdue-warning-dialog.component';
+import { CreateRatingDialogComponent, CreateRatingDialogData } from '../create-rating-dialog/create-rating-dialog.component';
 
 @Injectable({ providedIn: 'root' })
 export class DialogService {
@@ -83,5 +84,16 @@ export class DialogService {
       disableClose: true,
       hasBackdrop: true
     })
+  }
+
+  openCreateRatingDialog(data: CreateRatingDialogData): Observable<boolean | undefined>{
+    const dialogRef: MatDialogRef<CreateRatingDialogComponent, boolean> = this.dialog.open(CreateRatingDialogComponent, {
+      data,
+      width: "600px",
+      disableClose: true,
+      hasBackdrop: true
+    });
+
+    return dialogRef.afterClosed();
   }
 }

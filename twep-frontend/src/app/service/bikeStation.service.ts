@@ -47,6 +47,10 @@ export class BikeStationService{
     public getBikeStationRatings(id: string): Observable<BikeStationRating[]>{
         return this.http.get<BikeStationRating[]>(`${this.apiUrl}/users/stations/${id}/ratings`)
     }
+
+    public createRating(userId: string, rating: CreateRating): Observable<BikeStationRating>{
+        return this.http.post<BikeStationRating>(`${this.apiUrl}/users/${userId}/ratings`, rating)
+    }
 }
 
 export type BikeStationResponse = {
@@ -63,4 +67,11 @@ export type BikeStationRating = {
     comment: string,
     bikeModelName: string,
     stationName: string,
+}
+
+export type CreateRating = {
+    ticketId: string,
+    bikeModelRating: number,
+    stationRating: number,
+    comment: string
 }

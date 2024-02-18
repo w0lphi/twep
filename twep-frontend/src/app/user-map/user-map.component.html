@@ -36,7 +36,10 @@
             </button>
         </mat-card-header>
         <mat-card-content>
-            <app-station-card [stationId]="displayedBikeStation.id" />
+            <app-station-card 
+                [stationId]="displayedBikeStation.id" 
+                [stationName]="displayedBikeStation.name" 
+            />
         </mat-card-content>
     </mat-card>
 }

@@ -28,6 +28,15 @@
                     </mat-panel-description>
                 </mat-expansion-panel-header>
                 <div class="twep-rating-list">
+                    <button
+                        *ngIf="rentedUserTickets.length > 0"
+                        mat-flat-button
+                        class="twep-create-rating-btn"
+                        color="primary"
+                        (click)="createRating()"
+                    >
+                        RATE THIS STATION
+                    </button>
                     @if(ratings.length > 0){
                         <app-rating-card 
                             *ngFor=" let rating of ratings;"

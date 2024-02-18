@@ -1,0 +1,95 @@
+<div class="twep-create-rating-dialog">
+    <form
+        [formGroup]="ratingForm"
+        class="twep-rating-form"
+    >
+        <h1 mat-dialog-title>Create new rating</h1>
+        <div mat-dialog-content class="twep-rating-dialog-content">
+            <div class="twep-rating-title">
+                <mat-icon class="material-icons-outlined">location_on</mat-icon>
+                Station Rating
+            </div>
+            <div class="twep-create-rating-information">
+                <div>{{data.stationName}}</div>
+                <mat-form-field class="twep-rating-select">
+                    <mat-select
+                        [required]="true"
+                        name="stationRating"
+                        formControlName="stationRating"
+                    >
+                        @for (rating of ratings; track rating) {
+                            <mat-option [value]="rating">{{rating}}</mat-option>
+                        }
+                    </mat-select>
+                    <mat-icon class="twep-rating-star" matSuffix>star_rate</mat-icon>
+                </mat-form-field>
+            </div>
+            <div class="twep-rating-title">
+                <mat-icon class="material-icons-outlined">bike_scooter</mat-icon>
+                Model Rating
+            </div>
+            <div class="twep-create-rating-information">
+                <mat-form-field>
+                    <mat-label>Select Model</mat-label>
+                    <mat-select
+                        [required]="true"
+                        name="ticketId"
+                        formControlName="ticketId"
+                    >
+                        @for (ticket of ratingTickets; track ticket.ticketId ) {
+                            <mat-option [value]="ticket.ticketId">{{ticket.modelName}}</mat-option>
+                        }
+                    </mat-select>
+                    <mat-error *ngIf="ticketId?.errors?.['required']">
+                        Please select the model to rate
+                    </mat-error>
+                </mat-form-field>
+                <mat-form-field class="twep-rating-select">
+                    <mat-select
+                        [required]="true"
+                        name="bikeModelRating"
+                        formControlName="bikeModelRating"
+                    >
+                        @for (rating of ratings; track rating) {
+                            <mat-option [value]="rating">{{rating}}</mat-option>
+                        }
+                    </mat-select>
+                    <mat-icon class="twep-rating-star" matSuffix>star_rate</mat-icon>
+                </mat-form-field>
+            </div>
+            <div class="twep-rating-title">
+                <mat-icon class="material-icons-outlined">comment</mat-icon>
+                Comment
+            </div>
+            <mat-form-field>
+                <textarea 
+                    matInput
+                    placeholder="Add some comment..."
+                    rows="5"
+                    name="comment"
+                    formControlName="comment"
+                    [required]="true"
+                ></textarea>
+                <mat-error *ngIf="comment?.errors?.['required']">
+                    Please enter comment
+                </mat-error>
+            </mat-form-field>
+        </div>
+        <div mat-dialog-actions>
+            <div class="twep-spacer"></div>
+            <button
+                mat-button
+                (click)="closeDialog()"
+            >
+                CLOSE
+            </button>
+            <button
+                mat-button
+                color="primary"
+                (click)="createRating()"
+            >
+                CREATE RATING
+            </button>
+        </div>
+    </form>
+</div>

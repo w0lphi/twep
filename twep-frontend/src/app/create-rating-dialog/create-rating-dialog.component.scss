@@ -1,0 +1,48 @@
+.twep-create-rating-dialog{
+    .twep-rating-form{
+
+        .twep-rating-dialog-content{
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .twep-rating-title{
+            display: flex;
+            flex-direction: row;
+            gap: 8px;
+            color: black;
+        }
+
+        .twep-create-rating-information{
+            padding: 8px;
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+            gap: 4px;
+            align-items: baseline;
+            justify-content: space-between;
+
+            .mat-mdc-form-field{
+                flex-grow: 1;
+            }
+
+            .twep-rating-select{
+                max-width: 112px;
+            }
+        }
+    }
+}
+
+@media (max-width: 599px) {
+    .twep-create-rating-dialog{
+        .twep-rating-form{
+            .twep-create-rating-information{
+                .twep-rating-select{
+                    width: 100%;
+                    max-width: unset;
+                }
+            }
+        }
+    }
+}

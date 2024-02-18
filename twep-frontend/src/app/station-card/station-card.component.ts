@@ -16,6 +16,10 @@ import { BikeModel } from '../model/bikeModel';
 
 import { BikeCardComponent } from '../bike-card/bike-card.component';
 import { RatingCardComponent } from '../rating-card/rating-card.component';
+import { Ticket, TicketStatus } from '../model/ticket';
+import { AuthService } from '../service/auth.service';
+import { TicketService } from '../service/tickets.service';
+import { DialogService } from '../service/dialog.service';
 
 @Component({
   selector: 'app-station-card',
@@ -35,25 +39,33 @@ import { RatingCardComponent } from '../rating-card/rating-card.component';
   styleUrl: './station-card.component.scss'
 })
 export class StationCardComponent {
+  @Input() stationName!: string;
   runningAction: boolean = false;
   bikeStation?: BikeStation;
   bikes: Bike[] = [];
   bikeModels: BikeModel[] = [];
   ratings: BikeStationRating[] = [];
+  rentedUserTickets: Ticket[] = [];
   bikePanelExpanded: boolean = true;
   ratingsPanelExpanded: boolean = false;
+  _stationId!: string;
 
   @Input("stationId")
   set stationId(stationId: string) {
     this.getBikeStation(stationId);
     this.loadBikes(stationId);
     this.getRatings(stationId);
+    this.getUserTickets(stationId);
+    this._stationId = stationId;
   }
 
   constructor(
     private bikeStationService: BikeStationService,
     private bikeService: BikeService,
-    private changeDetector: ChangeDetectorRef
+    private changeDetector: ChangeDetectorRef,
+    private authService: AuthService,
+    private ticketService: TicketService,
+    private dialogService: DialogService,
   ) { 
   }
   
@@ -67,7 +79,7 @@ export class StationCardComponent {
       },
       error: (): void => {
         this.runningAction = false;
-         this.changeDetector.detectChanges();
+        this.changeDetector.detectChanges();
       }
     })
   }
@@ -98,6 +110,31 @@ export class StationCardComponent {
         this.runningAction = false;
       }
     })
+  }
+
+  getUserTickets(stationId: string): void{
+    const userId: string | null = this.authService.getLoggedInUserId();
+    if(userId !== null){
+      this.ticketService.getUserTickets(userId).subscribe({
+        next: (tickets: Ticket[]) => {
+          this.rentedUserTickets = tickets.filter(ticket => {
+            const bike: Bike = ticket.bike;
+            return bike.station?.id === stationId && ticket.status === TicketStatus.RETURNED;
+          });
+        }
+      });
+    }
+  }
+
+  createRating(){
+    this.dialogService.openCreateRatingDialog({
+      tickets: this.rentedUserTickets,
+      stationName: this.stationName,
+    }).subscribe({
+      next: (reload: boolean | undefined) => {
+        if(reload) this.getRatings(this._stationId);
+      }
+    });
   }
 
   handleExpansionPanel() {

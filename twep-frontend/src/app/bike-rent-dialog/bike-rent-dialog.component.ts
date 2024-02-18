@@ -26,7 +26,6 @@ import { CreateUserTicketResponse, TicketPriceRequest, TicketPriceResponse, Tick
 import { AuthService } from '../service/auth.service';
 import { formatISO } from 'date-fns';
 import { formatCurrency } from '../util/currency-util';
-import { Ticket } from '../model/ticket';
 
 export type BikeRentDialogData = {
   bike: Bike;
