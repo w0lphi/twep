@@ -242,10 +242,10 @@ const eligibleForCancellation = async (immediateRenting, fromDate) => {
 
         const fromDateMs = new Date(fromDate).getTime();
         const currentDateMs = Date.now();
-        const twoHoursMs = 2 * 60 * 60 * 1000; // 2 hours in milliseconds
+        const oneHoursMs = 1 * 60 * 60 * 1000; // 1 hour in milliseconds
 
-        // If the difference is less than 2 hours, the ticket is not eligible for cancellation
-        if ((fromDateMs - currentDateMs) < twoHoursMs) {
+        // If the difference is less than 1 hour, the ticket is not eligible for cancellation
+        if ((fromDateMs - currentDateMs) < oneHoursMs) {
             return false;
         }
 

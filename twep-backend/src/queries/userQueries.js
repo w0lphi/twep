@@ -71,12 +71,9 @@ ORDER BY
     (CASE t.status 
         WHEN 'rented' then 1
         WHEN 'unused' then 2
-        WHEN 'returned' then 3
-	 	WHEN 'cancelled' then 4
-	 	WHEN 'expired' then 5
-        ELSE 6
+        ELSE 3
     END) ASC,   
-    t.from_date ASC;
+    t.from_date DESC;
 `;
 
 const deductMoneyFromWallet = 'UPDATE users SET wallet = wallet - $1 WHERE id = $2 RETURNING *'

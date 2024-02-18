@@ -36,6 +36,7 @@ export class TicketCardComponent {
   @Output("cancelTicket") cancelEvent: EventEmitter<void> = new EventEmitter<void>();
   @Output("reload") reloadEvent: EventEmitter<void> = new EventEmitter<void>();
   displayCancelBtn: boolean = true;
+  runningAction: boolean = false;
 
   constructor(
     private dialogService: DialogService,
@@ -53,9 +54,14 @@ export class TicketCardComponent {
       `Do you really want to cancel ticket ${this.ticket.ticketId}?`
     )
     if (!confirmed) return;
-    this.ticketService.cancelUserTicket(this.ticket.ticketId).subscribe({
+    this.runningAction = true;
+    this.ticketService.cancelUserTicket(this.ticket.userId, this.ticket.ticketId).subscribe({
       next: (): void => {
         this.cancelEvent.emit();
+        this.runningAction = false;
+      },
+      error: (): void => {
+        this.runningAction = false;
       }
     })
   }

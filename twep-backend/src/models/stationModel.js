@@ -465,8 +465,8 @@ class StationModel {
 
     static async updateCancellableTickets(){
         try{
-            const twoHoursFromNow = addHours(new Date(Date.now()), 2);
-            const result = await pool.query(stationQueries.updateCancellableTickets, [twoHoursFromNow]);
+            const oneHourFromNow = addHours(new Date(Date.now()), 1);
+            const result = await pool.query(stationQueries.updateCancellableTickets, [oneHourFromNow]);
             return result.rows
         }catch (error) {
             throw error

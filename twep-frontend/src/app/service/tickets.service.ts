@@ -24,8 +24,8 @@ export class TicketService {
     return this.http.post<TicketPriceResponse>(`${this.apiUrl}/users/tickets/price`, request);
   }
 
-  public cancelUserTicket(ticketId: string){
-    return this.http.delete<TicketPriceResponse>(`${this.apiUrl}/users/account/tickets/${ticketId}`);
+  public cancelUserTicket(userId: string, ticketId: string){
+    return this.http.post<TicketPriceResponse>(`${this.apiUrl}/users/${userId}/tickets/${ticketId}/cancel`, null);
   }
 
   public simulateRideBike(ticketId: string, userId: string): Observable<any>{
