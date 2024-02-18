@@ -270,6 +270,14 @@ const updateTicketStatus = 'UPDATE tickets SET status = $1 WHERE id = $2';
 
 const insertPriceIntoTicket = 'UPDATE tickets SET price = $2 WHERE id = $1';
 
+const createRating = `
+    INSERT INTO 
+        ratings (id, user_id, bike_model_id, station_id, bike_model_rating, station_rating, created_at)
+    VALUES
+        ($1, $2, $3, $4, $5, $6, $7)
+    RETURNING *;
+`
+
 
 module.exports = {
     registerUser,
@@ -291,5 +299,6 @@ module.exports = {
     insertPriceIntoTicket,
     getBasicUserInfo,
     getStationOfBikeById,
-    updateStationOfUserTicket
+    updateStationOfUserTicket,
+    createRating
 };

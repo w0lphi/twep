@@ -1,6 +1,6 @@
 // Utility function to convert keys to CamelCase
 function convertKeysToCamelCase(obj) {
-    if (typeof obj !== 'object' || obj === null) {
+    if (typeof obj !== 'object' || obj === null || obj instanceof Date) {
         return obj;
     }
 

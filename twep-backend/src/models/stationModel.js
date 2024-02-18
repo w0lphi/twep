@@ -1,4 +1,4 @@
-const { formatISO, addHours } = require('date-fns');
+const { addHours } = require('date-fns');
 const pool = require('../db');
 const stationQueries = require('../queries/stationQueries');
 const { v4: uuidv4 } = require('uuid');
@@ -477,6 +477,15 @@ class StationModel {
         try{
             const result = await pool.query(stationQueries.getExpiredUserTickets);
             return result.rows;
+        }catch(error){
+            throw error;
+        }
+    }
+
+    static async getModelIdByBikeId(bikeId){
+        try{
+            const result = await pool.query(stationQueries.getModelIdByBikeId, [bikeId]);
+            return result.rows[0];
         }catch(error){
             throw error;
         }

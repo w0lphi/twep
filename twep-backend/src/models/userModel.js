@@ -24,13 +24,7 @@ class UserModel {
     static async getUserTickets(userId) {
         try {
             const { rows } = await pool.query(userQueries.getUserTickets, [userId]);
-            return rows.map(ticket => {
-                return {
-                    ...ticket,
-                    from_date: fns.formatISO(ticket.from_date),
-                    until_date: fns.formatISO(ticket.until_date),
-                };
-            });
+            return rows
         } catch (error) {
             throw error;
         }
@@ -104,11 +98,7 @@ class UserModel {
                 stationId
             ]);
             const purchasedTicket = rows[0];
-            return {
-                ...purchasedTicket,
-                from_date: fns.formatISO(purchasedTicket.from_date),
-                until_date: fns.formatISO(purchasedTicket.until_date)
-            };
+            return purchasedTicket;
         } catch (error) {
             throw error;
         }
@@ -222,6 +212,34 @@ class UserModel {
         try {
             const query = userQueries.updateStationOfUserTicket;
             const result = await pool.query(query, [stationId, bikeId]);
+            return result.rows[0];
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    static async createRating(ratingData){
+        try {
+            const query = userQueries.createRating;
+            const {
+                id,
+                userId,
+                bikeModelId,
+                stationId,
+                bikeModelRating,
+                stationRating,
+                createdAt
+            } = ratingData;
+
+            const result = await pool.query(query, [
+                id,
+                userId,
+                bikeModelId,
+                stationId,
+                bikeModelRating,
+                stationRating,
+                createdAt
+            ]);
             return result.rows[0];
         } catch (error) {
             throw error;

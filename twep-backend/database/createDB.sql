@@ -76,6 +76,16 @@ CREATE TABLE tickets (
     eligible_for_cancellation BOOLEAN
 );
 
+CREATE TABLE ratings (
+    id UUID PRIMARY KEY,
+    user_id UUID REFERENCES users(id) ON DELETE CASCADE,
+    bike_model_id UUID REFERENCES bike_models(id) ON DELETE CASCADE,
+    station_id UUID REFERENCES stations(id) ON DELETE CASCADE,
+    bike_model_rating SMALLINT NOT NULL CHECK (bike_model_rating BETWEEN 1 AND 5),
+    station_rating SMALLINT NOT NULL CHECK (bike_model_rating BETWEEN 1 AND 5),
+    created_at TIMESTAMPTZ NOT NULL
+);
+
 -- insert default admin account into db. Password is "password"
 insert into users (id, email, password, wallet, role)
 values ('3d577f6d-f4a3-4c25-a43c-05e7e06298a4','admin@twep.com', '$2b$10$X23DxyLKrGz/.NOUVVmsZ.d1z3diI2OrHvuEvnvl/wM2ly6Jr28KO', 0, 'admin' );

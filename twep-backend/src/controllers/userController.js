@@ -2,16 +2,13 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const pool = require('../../src/db');
 const { v4: uuidv4 } = require('uuid');
-const userQueries = require('../queries/userQueries');
-const { convertKeysToCamelCase, snakeCaseToCamelCase, convertSnakeToCamel } = require('../utility/utility');
+const { convertKeysToCamelCase, convertSnakeToCamel } = require('../utility/utility');
 const UserModel = require('../models/userModel');
 const path = require('path');
 const dateFns = require('date-fns');
 const qr = require('qrcode');
 const fs = require('fs');
 const StationModel = require('../models/stationModel');
-const { differenceInHours } = require('date-fns');
-const { use } = require('../routes/usersRouter');
 
 const registerUser = async (req, res) => {
     try {
@@ -510,9 +507,56 @@ const simulateReturningBike = async (req, res) => {
     }
 };
 
+const createRating = async(req, res) => {
+    try{
+        const { userId } = req.params;
+        const {
+            ticketId,
+            stationRating,
+            bikeModelRating,
+        } = req.body;
 
+        if(stationRating < 1 || stationRating > 5){
+            return res.status(400).json({ message: 'Station rating must be between 1 and 5' });
+        }
 
+        if(bikeModelRating < 1 || bikeModelRating > 5){
+            return res.status(400).json({ message: 'Bike model rating must be between 1 and 5' });
+        }
 
+        // Check if the ticket exists and belongs to the user
+        const ticket = await UserModel.getTicketById(ticketId);
+
+        if (!ticket || ticket.user_id !== userId) {
+            return res.status(404).json({ message: 'Ticket not found or does not belong to the user.' });
+        }
+
+        // Check if the ticket status is 'rented'
+        if (ticket.status === 'unused' || ticket.status === 'expired' || ticket.status === 'cancelled') {
+            return res.status(400).json({ message: 'Bike must be rented before rating' });
+        }
+        // Retrieve the bike using its ID
+        const bikeModel = await StationModel.getModelIdByBikeId(ticket.bike_id);
+        const bikeModelId = bikeModel?.id;
+        if (!bikeModelId) {
+            return res.status(404).json({ message: 'Model not found.' });
+        }
+        const createdRating = await UserModel.createRating({
+            id: uuidv4(),
+            userId,
+            bikeModelId,
+            stationId: ticket.station_id,
+            bikeModelRating,
+            stationRating,
+            createdAt: new Date(Date.now())
+        })
+
+        return res.json(convertKeysToCamelCase(createdRating));
+    } catch (error) {
+        console.error('Error creating rating:', error);
+        return res.status(500).json({ message: 'Internal server error.' });
+    }
+}
 
 
 // Function to generate QR code for ticket data
@@ -566,4 +610,5 @@ module.exports = {
     calculatePrice,
     calculatePriceAndRespond,
     eligibleForCancellation,
+    createRating
 };

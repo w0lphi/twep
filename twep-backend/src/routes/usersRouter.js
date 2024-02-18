@@ -18,6 +18,7 @@ router.get("/bikes", userController.getAllBikes);
 router.get("/bike-categories", userController.getAllBikeCategories);
 router.get("/bike-models", userController.getAllBikeModels);
 router.get('/:userId/account/tickets', userController.getAllTicketsForUser);
+router.post('/:userId/ratings', userController.createRating);
 
 router.post('/:userId/tickets/:ticketId/ride', userController.simulateTakingBike);
 router.post('/:userId/tickets/:ticketId/return', userController.simulateReturningBike);
