@@ -31,8 +31,6 @@ export class RatingCardComponent {
   ngAfterViewInit() {
     const nativeElement: HTMLDivElement = this.commentContainer.nativeElement;
     if (nativeElement !== undefined) {
-      console.log(nativeElement);
-
       const checkCommentContainer = () => {
         const clientHeight: number = nativeElement.clientHeight;
         const scrollHeight: number = nativeElement.scrollHeight;
