@@ -16,7 +16,7 @@
                     <mat-panel-title>
                         Rating
                     </mat-panel-title>
-                    <mat-panel-description>
+                    <mat-panel-description *ngIf="ratings.length > 0">
                         <div class="twep-spacer"></div>
                         <mat-icon 
                             *ngFor="let star of ratingStars"
