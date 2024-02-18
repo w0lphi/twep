@@ -58,9 +58,6 @@ export class QrCodeDialogComponent {
   ){
     this.userId = this.authService.getLoggedInUserId();
     this.ticket = data.ticket;
-    if(this.ticket.status === TicketStatus.RENTED){
-      this.progressToReturn();
-    }
   }
 
   simulateRent(): void{
@@ -68,7 +65,7 @@ export class QrCodeDialogComponent {
     this.runningAction = true;
     this.ticketService.simulateRideBike(this.ticket.ticketId, this.userId).subscribe({
       next: (): void => {
-        this.progressToReturn()
+        this.closeDialog(true);
       },
       error: (): void => {
         this.runningAction = false;
@@ -109,5 +106,9 @@ export class QrCodeDialogComponent {
 
   get qrCodeBase64(): string {
     return `data:image/png;base64, ${this.ticket.qrCodeBase64}`;
+  }
+
+  get isRented(): boolean{
+    return this.ticket.status === TicketStatus.RENTED;
   }
 }

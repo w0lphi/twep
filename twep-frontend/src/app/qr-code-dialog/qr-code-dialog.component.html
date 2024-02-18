@@ -7,13 +7,24 @@
             <div class="twep-qr-code-container">
                 <img [src]="qrCodeBase64" alt="QR code of ticket"/>
                 <div class="twep-qr-code-overlay">
-                    <button 
-                        mat-flat-button
-                        color="primary"
-                        (click)="simulateRent()"
-                    >
-                        SIMULATE RENT
-                    </button>
+                    @if(isRented){
+                        <button 
+                            mat-flat-button
+                            color="primary"
+                            (click)="progressToReturn()"
+                        >
+                            RETURN BIKE
+                        </button>
+                    }
+                    @else {
+                        <button 
+                            mat-flat-button
+                            color="primary"
+                            (click)="simulateRent()"
+                        >
+                            SIMULATE RENT
+                        </button>
+                    }
                 </div>
             </div>
         </div>
@@ -49,7 +60,7 @@
             <div class="twep-spacer"></div>
             <button
                 mat-button
-                [mat-dialog-close]="step === 2"
+                [mat-dialog-close]="false"
             >
                 CLOSE
             </button>
@@ -63,5 +74,4 @@
             </button>
         </div>
     }
-    
 </div>
