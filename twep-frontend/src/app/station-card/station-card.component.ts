@@ -9,12 +9,13 @@ import { MatExpansionModule } from '@angular/material/expansion';
 
 import { BikeStation } from '../model/bikeStation';
 import { LoadingOverlayComponent } from '../common/loading-overlay/loading-overlay.component';
-import { BikeStationService } from '../service/bikeStation.service';
+import { BikeStationRating, BikeStationService } from '../service/bikeStation.service';
 import { Bike } from '../model/bike';
 import { BikeService } from '../service/bike.service';
 import { BikeModel } from '../model/bikeModel';
 
 import { BikeCardComponent } from '../bike-card/bike-card.component';
+import { RatingCardComponent } from '../rating-card/rating-card.component';
 
 @Component({
   selector: 'app-station-card',
@@ -28,6 +29,7 @@ import { BikeCardComponent } from '../bike-card/bike-card.component';
     MatExpansionModule,
     LoadingOverlayComponent,
     BikeCardComponent,
+    RatingCardComponent
   ],
   templateUrl: './station-card.component.html',
   styleUrl: './station-card.component.scss'
@@ -35,16 +37,17 @@ import { BikeCardComponent } from '../bike-card/bike-card.component';
 export class StationCardComponent {
   runningAction: boolean = false;
   bikeStation?: BikeStation;
-  bikes?: Bike[];
-  bikeModels?: BikeModel[];
+  bikes: Bike[] = [];
+  bikeModels: BikeModel[] = [];
+  ratings: BikeStationRating[] = [];
   bikePanelExpanded: boolean = true;
   ratingsPanelExpanded: boolean = false;
-  ratingStars: string[];
 
   @Input("stationId")
   set stationId(stationId: string) {
     this.getBikeStation(stationId);
     this.loadBikes(stationId);
+    this.getRatings(stationId);
   }
 
   constructor(
@@ -52,8 +55,6 @@ export class StationCardComponent {
     private bikeService: BikeService,
     private changeDetector: ChangeDetectorRef
   ) { 
-    const starsAmount: number = Math.floor(Math.random() * (5 - 1 + 1) + 1);
-    this.ratingStars = Array.from('*'.repeat(starsAmount))
   }
   
   getBikeStation(stationId: string): void {
@@ -86,6 +87,19 @@ export class StationCardComponent {
     })
   }
 
+  getRatings(stationId: string): void {
+    this.runningAction = true;
+    this.bikeStationService.getBikeStationRatings(stationId).subscribe({
+      next: (ratings: BikeStationRating[]) => {
+        this.ratings = ratings;
+        this.runningAction = false;
+      },
+      error: () => {
+        this.runningAction = false;
+      }
+    })
+  }
+
   handleExpansionPanel() {
     this.changeDetector.detectChanges();
   }
@@ -95,5 +109,21 @@ export class StationCardComponent {
       return [];
     }
     return this.bikes;
+  }
+
+  get ratingStars(): string[] {
+    return  Array.from('*'.repeat(Math.round(this.averageRating)))
+  }
+
+  get averageRating(): number {
+    const sum: number = this.ratings.reduce((sum, {stationRating}) => sum + stationRating, 0);
+    const avg = sum / this.ratings.length;
+    return avg;
+  }
+
+  get avgRatingFormatted(): string {
+    return new Intl.NumberFormat("en-GB", {
+      maximumSignificantDigits: 2
+    }).format(this.averageRating)
   }
 }

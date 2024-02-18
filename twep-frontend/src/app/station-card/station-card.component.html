@@ -20,16 +20,25 @@
                         <div class="twep-spacer"></div>
                         <mat-icon 
                             *ngFor="let star of ratingStars"
-                            class="twep-station-rating-star"
+                            class="twep-rating-star"
                         >
                             star_rate
                         </mat-icon>
+                        <div>({{ratings.length}})</div>
                     </mat-panel-description>
                 </mat-expansion-panel-header>
                 <div class="twep-rating-list">
-                    <div class="twep-no-items-message">
-                        Station not rated yet
-                    </div>
+                    @if(ratings.length > 0){
+                        <app-rating-card 
+                            *ngFor=" let rating of ratings;"
+                            [rating]="rating" 
+                        />
+                    }
+                    @else {
+                        <div class="twep-no-items-message">
+                            Station not rated yet
+                        </div>
+                    }
                 </div>
             </mat-expansion-panel>
             <mat-expansion-panel
@@ -41,8 +50,8 @@
                     <mat-panel-title>Available Bikes</mat-panel-title>
                     <mat-panel-description>
                         <div class="twep-spacer"></div>
-                        <div class="twep-bike-amount">({{ bikes?.length ?? 0}})</div>
                         <mat-icon>pedal_bike</mat-icon>
+                        <div class="twep-bike-amount">({{ bikes.length }})</div>
                     </mat-panel-description>
                 </mat-expansion-panel-header>
                 <div class="twep-bikes-list">

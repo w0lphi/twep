@@ -1,0 +1,45 @@
+<mat-card class="twep-rating-card">
+    <mat-card-header>
+        <div mat-card-avatar>
+            <mat-icon class="twep-rating-avatar">account_circle</mat-icon>
+        </div>
+        <mat-card-subtitle>
+            {{createdAt}}
+        </mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content>
+        <mat-card-subtitle>Rating</mat-card-subtitle>
+        <div class="twep-rating-information">
+            <mat-icon class="material-icons-outlined">location_on</mat-icon>
+            <div>{{rating.stationName}}</div>
+            <div class="twep-rating-column">
+                {{rating.stationRating}}
+                <mat-icon class="twep-rating-star">star_rate</mat-icon>
+            </div>
+            <mat-icon class="material-icons-outlined">bike_scooter</mat-icon>
+            <div>{{rating.bikeModelName}}</div>
+            <div class="twep-rating-column">
+                {{rating.bikeModelRating}}
+                <mat-icon class="twep-rating-star">star_rate</mat-icon>
+            </div>
+        </div>
+        <mat-card-subtitle>Comment</mat-card-subtitle>
+        <div 
+            #commentContainer 
+            [ngClass]="{
+                'twep-rating-comment': true,
+                'show-more': showMore
+            }"
+        >
+            {{sanitizedComment}}
+        </div>
+        <a
+            *ngIf="hasMoreComment || showMore"
+            class="twep-rating-comment-toggle"
+            href="javascript:void(0)"
+            (click)="toggleComment()"
+        >
+            {{ hasMoreBtnText }}
+        </a>
+      </mat-card-content>
+</mat-card>

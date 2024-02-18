@@ -8,15 +8,12 @@
         margin: 0;
     }
 
-    .twep-bike-amount{
-        margin-right: 4px;
+    .mat-expansion-panel-header-description{
+        gap: 4px;
     }
 
-    .twep-station-rating-star{
-        color: var(--rating-yellow);
-    }
-
-    .twep-bikes-list{
+    .twep-bikes-list,
+    .twep-rating-list{
         display: flex;
         flex-direction: column;
         gap: 16px;

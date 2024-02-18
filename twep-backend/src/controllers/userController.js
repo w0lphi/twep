@@ -471,7 +471,6 @@ const simulateReturningBike = async (req, res) => {
         if (!station) {
             return res.status(404).json({ message: 'Station not found.' });
         }
-        console.log("Return station", station);
         // Check if the station has a parking place available for the bike category
         const bikeCategoryString = await StationModel.getBikeCategoryString(bike.category_id);
         const availableParkingPlace = await StationModel.findAvailableParkingPlace(stationId, { name: bikeCategoryString });
@@ -479,7 +478,6 @@ const simulateReturningBike = async (req, res) => {
             return res.status(400).json({ message: 'No available parking place for this bike category at the station.' });
         }
 
-        console.log("Returned bike", ticket.bike_id, availableParkingPlace.id);
         // Mark bike as available
         await StationModel.markBikeAsAvailable(ticket.bike_id);
 

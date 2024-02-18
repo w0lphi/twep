@@ -43,8 +43,24 @@ export class BikeStationService{
     public getBikeStationForUser(id: string): Observable<BikeStation>{
         return this.http.get<BikeStation>(`${this.apiUrl}/users/stations/${id}`)
     }
+
+    public getBikeStationRatings(id: string): Observable<BikeStationRating[]>{
+        return this.http.get<BikeStationRating[]>(`${this.apiUrl}/users/stations/${id}/ratings`)
+    }
 }
 
 export type BikeStationResponse = {
     stations: BikeStation[]
+}
+
+export type BikeStationRating = {
+    id: string,
+    stationId: string,
+    stationRating: number,
+    bikeModelRating: number,
+    createdAt: string,
+    bikeModelId: string,
+    comment: string,
+    bikeModelName: string,
+    stationName: string,
 }
