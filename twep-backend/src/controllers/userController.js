@@ -1,6 +1,7 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const pool = require('../../src/db');
+const domPurify = require('isomorphic-dompurify');
 const { v4: uuidv4 } = require('uuid');
 const { convertKeysToCamelCase, convertSnakeToCamel } = require('../utility/utility');
 const UserModel = require('../models/userModel');
@@ -514,6 +515,7 @@ const createRating = async(req, res) => {
             ticketId,
             stationRating,
             bikeModelRating,
+            comment,
         } = req.body;
 
         if(stationRating < 1 || stationRating > 5){
@@ -522,6 +524,10 @@ const createRating = async(req, res) => {
 
         if(bikeModelRating < 1 || bikeModelRating > 5){
             return res.status(400).json({ message: 'Bike model rating must be between 1 and 5' });
+        }
+
+        if(comment === undefined || comment === null || comment === ""){
+            return res.status(400).json({ message: 'Comment must not be empty' });
         }
 
         // Check if the ticket exists and belongs to the user
@@ -548,7 +554,8 @@ const createRating = async(req, res) => {
             stationId: ticket.station_id,
             bikeModelRating,
             stationRating,
-            createdAt: new Date(Date.now())
+            createdAt: new Date(Date.now()),
+            comment: domPurify.sanitize(comment, { ALLOWED_TAGS: ['#text'] }),
         })
 
         return res.json(convertKeysToCamelCase(createdRating));

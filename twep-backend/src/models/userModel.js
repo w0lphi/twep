@@ -228,7 +228,8 @@ class UserModel {
                 stationId,
                 bikeModelRating,
                 stationRating,
-                createdAt
+                createdAt,
+                comment
             } = ratingData;
 
             const result = await pool.query(query, [
@@ -238,7 +239,8 @@ class UserModel {
                 stationId,
                 bikeModelRating,
                 stationRating,
-                createdAt
+                createdAt,
+                comment
             ]);
             return result.rows[0];
         } catch (error) {

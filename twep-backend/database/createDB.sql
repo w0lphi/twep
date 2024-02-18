@@ -83,7 +83,8 @@ CREATE TABLE ratings (
     station_id UUID REFERENCES stations(id) ON DELETE CASCADE,
     bike_model_rating SMALLINT NOT NULL CHECK (bike_model_rating BETWEEN 1 AND 5),
     station_rating SMALLINT NOT NULL CHECK (bike_model_rating BETWEEN 1 AND 5),
-    created_at TIMESTAMPTZ NOT NULL
+    created_at TIMESTAMPTZ NOT NULL,
+    comment TEXT NOT NULL
 );
 
 -- insert default admin account into db. Password is "password"

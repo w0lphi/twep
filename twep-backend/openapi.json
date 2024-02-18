@@ -488,6 +488,9 @@
             "type": "number",
             "minimum": 1,
             "maximum": 5
+          },
+          "comment": {
+            "type": "string"
           }
         }
       },
@@ -523,6 +526,9 @@
           "createdAt": {
             "type": "string",
             "format": "date-time"
+          },
+          "comment": {
+            "type": "string"
           }
         },
         "example": {
@@ -532,7 +538,8 @@
           "station_id": "4f5d7722-c70b-44c8-ac4f-5cabd81d80ae",
           "bike_model_rating": 4,
           "station_rating": 3,
-          "created_at": "2024-02-18T00:22:53.000Z"
+          "created_at": "2024-02-18T00:22:53.000Z",
+          "comment": "test comment"
         }
       }
     }
