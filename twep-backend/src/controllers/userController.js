@@ -308,7 +308,7 @@ const purchaseTicket = async (req, res) => {
         const result = await UserModel.getStationOfBike(bikeId);
         const stationId = result.station_id;
 
-        if(!stationId){
+        if (!stationId) {
             return res.status(404).json({ error: "Station not found" });
         }
 
@@ -342,6 +342,32 @@ const purchaseTicket = async (req, res) => {
         res.status(500).json({ error: "Internal Server Error" });
     }
 };
+
+const cancelTicket = async (req, res) => {
+    try {
+        const userId = req.params.userId;
+        const ticketId = req.params.ticketId;
+        const tokenUserId = req.user.userId;
+
+        // Check if the user ID from the token matches the user ID from the request parameters
+        if (userId !== tokenUserId) {
+            return res.status(403).json({ error: "Forbidden - You can only cancel tickets for yourself" });
+        }
+
+        const ticket = await UserModel.getTicketById(ticketId);
+
+        if (ticket && ticket.eligible_for_cancellation) {
+            await UserModel.updateTicketStatus(ticketId, 'cancelled');
+
+            return res.status(200).json({ message: 'Ticket cancelled successfully.' });
+        } else {
+            return res.status(400).json({ error: 'Ticket is not eligible for cancellation.' });
+        }
+    } catch (error) {
+        console.error('Error cancelling ticket:', error);
+        return res.status(500).json({ error: 'Internal Server Error' });
+    }
+}
 
 
 const calculatePriceAndRespond = async (req, res) => {
@@ -506,8 +532,8 @@ const simulateReturningBike = async (req, res) => {
     }
 };
 
-const createRating = async(req, res) => {
-    try{
+const createRating = async (req, res) => {
+    try {
         const { userId } = req.params;
         const {
             ticketId,
@@ -516,15 +542,15 @@ const createRating = async(req, res) => {
             comment,
         } = req.body;
 
-        if(stationRating < 1 || stationRating > 5){
+        if (stationRating < 1 || stationRating > 5) {
             return res.status(400).json({ message: 'Station rating must be between 1 and 5' });
         }
 
-        if(bikeModelRating < 1 || bikeModelRating > 5){
+        if (bikeModelRating < 1 || bikeModelRating > 5) {
             return res.status(400).json({ message: 'Bike model rating must be between 1 and 5' });
         }
 
-        if(comment === undefined || comment === null || comment === ""){
+        if (comment === undefined || comment === null || comment === "") {
             return res.status(400).json({ message: 'Comment must not be empty' });
         }
 
@@ -564,17 +590,17 @@ const createRating = async(req, res) => {
 }
 
 const getRatingsByStationId = async (req, res) => {
-    try{
+    try {
         const { id } = req.params;
 
         const station = await UserModel.getStationById(id);
-        if(!station){
+        if (!station) {
             return res.status(404).json({ message: 'Station not found.' });
         }
 
         const ratings = await UserModel.getRatingsByStationId(id);
         return res.json(convertKeysToCamelCase(ratings));
-    }catch(error){
+    } catch (error) {
         console.error('Error when fetching ratings for station:', error);
         return res.status(500).json({ message: 'Internal server error.' });
     }
@@ -633,5 +659,6 @@ module.exports = {
     calculatePriceAndRespond,
     eligibleForCancellation,
     createRating,
-    getRatingsByStationId
+    getRatingsByStationId,
+    cancelTicket,
 };

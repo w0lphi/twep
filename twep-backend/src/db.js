@@ -4,8 +4,8 @@ const connection = {
   user: "postgres",
   host: "localhost",
   database: "twep",
-  password: "",
-  port: 5432,
+  password: "postgres",
+  port: 5433,
 };
 
 const pool = new Pool(connection);

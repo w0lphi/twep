@@ -23,6 +23,7 @@ router.post('/:userId/ratings', userController.createRating);
 
 router.post('/:userId/tickets/:ticketId/ride', userController.simulateTakingBike);
 router.post('/:userId/tickets/:ticketId/return', userController.simulateReturningBike);
+router.post('/:userId/tickets/:ticketId/cancel', userController.cancelTicket);
 router.post('/tickets/price', userController.calculatePriceAndRespond);
 
 router.post("/:userId/account/add-money", async (req, res) => {
