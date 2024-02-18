@@ -207,12 +207,12 @@ const getAllOverdueTickets = `
 const updateCancellableTickets = `
     UPDATE tickets
     SET
-        eligible_for_cancellation = true
+        eligible_for_cancellation = false
     WHERE
         id IN (
             SELECT t.id 
             FROM tickets t 
-            WHERE eligible_for_cancellation IS false 
+            WHERE eligible_for_cancellation IS true 
             AND from_date > now()
             AND from_date < $1)
     RETURNING
