@@ -24,7 +24,7 @@
                         >
                             star_rate
                         </mat-icon>
-                        <div>({{ratings.length}})</div>
+                        <div>({{avgRatingFormatted}})</div>
                     </mat-panel-description>
                 </mat-expansion-panel-header>
                 <div class="twep-rating-list">
@@ -38,6 +38,7 @@
                         RATE THIS STATION
                     </button>
                     @if(ratings.length > 0){
+                        <div>{{ratings.length}} ratings</div>
                         <app-rating-card 
                             *ngFor=" let rating of ratings;"
                             [rating]="rating" 

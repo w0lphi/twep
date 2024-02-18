@@ -155,12 +155,13 @@ export class StationCardComponent {
   get averageRating(): number {
     const sum: number = this.ratings.reduce((sum, {stationRating}) => sum + stationRating, 0);
     const avg = sum / this.ratings.length;
-    return avg;
+    return Math.round(avg * 100) / 100;
   }
 
   get avgRatingFormatted(): string {
     return new Intl.NumberFormat("en-GB", {
-      maximumSignificantDigits: 2
+      minimumFractionDigits: 1,
+      maximumFractionDigits: 1,
     }).format(this.averageRating)
   }
 }

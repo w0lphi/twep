@@ -17,6 +17,22 @@
             align-items: center;
             gap: 8px;
         }
+
+        .mat-mdc-card-subtitle{
+            display: flex;
+            align-items: center;
+            gap: 4px;
+
+            .twep-rating-star{
+                height: 16px;
+                width: 16px;
+                font-size: 16px;
+            }
+
+            +.mat-mdc-card-subtitle{
+                margin-top: 4px;
+            }
+        }
     }
 
     .twep-bike-card-content{

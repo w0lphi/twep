@@ -12,6 +12,16 @@
         <mat-card-subtitle>
             {{subtitle}}
         </mat-card-subtitle>
+        <mat-card-subtitle>
+            <mat-icon 
+                *ngFor="let star of ratingStars"
+                class="twep-rating-star"
+            >
+                star_rate
+            </mat-icon>
+            <span>({{ratingFormatted}}),</span>
+            <span>{{ratingCount}} ratings</span>
+        </mat-card-subtitle>
     </mat-card-header>
     <mat-card-content 
         [ngClass]="{

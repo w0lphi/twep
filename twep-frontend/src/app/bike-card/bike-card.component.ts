@@ -91,4 +91,23 @@ export class BikeCardComponent {
   get features(): string[] {
     return this.bike?.extraFeatures ?? [];
   }
+
+  get rating(): number {
+    return Number(this.bike.modelRating ?? 0);
+  }
+
+  get ratingStars(): string[] {
+    return  Array.from('*'.repeat(Math.round(this.rating)))
+  }
+
+  get ratingCount(): number {
+    return Number(this.bike.modelRatingsCount ?? 0);
+  }
+
+  get ratingFormatted(): string {
+    return new Intl.NumberFormat("en-GB", {
+      minimumFractionDigits: 1,
+      maximumFractionDigits: 1,
+    }).format(this.rating)
+  }
 }

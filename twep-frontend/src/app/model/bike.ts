@@ -18,6 +18,8 @@ export class Bike{
     categoryId?: string;
     station?: BikeStation;
     hourPrice?: number;
+    modelRating?: string;
+    modelRatingsCount?: string
 
     constructor(id: string, bikeModelId: string, status?: BikeStatus) {
         this.id = id;

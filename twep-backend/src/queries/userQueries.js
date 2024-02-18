@@ -37,7 +37,7 @@ SELECT
         'modelId', bm.id,
         'model', bm.name,
         'modelRating', AVG(r.bike_model_rating)::numeric(10,2),
-        'modelRatingCount', COUNT(r.bike_model_rating),
+        'modelRatingsCount', COUNT(r.bike_model_rating),
         'description', bm.description,
         'wheelSize', bm.wheel_size,
         'extraFeatures', bm.extra_features,
