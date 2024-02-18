@@ -973,7 +973,7 @@
             }
           }
         }
-      }  
+      }
     },
     "/users/stations": {
       "get": {
@@ -2526,9 +2526,9 @@
         }
       }
     },
-    "/users/{userId}/tickets/{ticketId}/ride": {
+    "/users/{userId}/tickets/{ticketId}/cancel": {
       "post": {
-        "summary": "Simulate taking a bike",
+        "summary": "cancel ticket",
         "tags": [
           "user"
         ],
@@ -2560,136 +2560,181 @@
         },
         "responses": {
           "200": {
-            "description": "Bike taken successfully"
+            "description": "Ticket cancelled successfully"
           },
           "400": {
-            "description": "Bad request"
+            "description": "Ticket is not eligible for cancellation."
           },
-          "404": {
-            "description": "Not found"
+          "403": {
+            "description": "Forbidden - You can only cancel tickets for yourself"
           }
         }
-      }
-    },
-    "/users/tickets/price": {
-      "post": {
-        "summary": "Calculate ticket price",
-        "tags": [
-          "user"
-        ],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
+      },
+      "/users/{userId}/tickets/{ticketId}/ride": {
+        "post": {
+          "summary": "Simulate taking a bike",
+          "tags": [
+            "user"
+          ],
+          "parameters": [
+            {
+              "name": "userId",
+              "in": "path",
+              "required": true,
               "schema": {
-                "type": "object",
-                "properties": {
-                  "bikeId": {
-                    "type": "string",
-                    "format": "uuid"
-                  },
-                  "fromDate": {
-                    "type": "string",
-                    "format": "date-time"
-                  },
-                  "untilDate": {
-                    "type": "string",
-                    "format": "date-time"
-                  }
-                },
-                "required": [
-                  "bikeId",
-                  "fromDate",
-                  "untilDate"
-                ]
-              }
+                "type": "string",
+                "format": "uuid"
+              },
+              "description": "The ID of the user"
+            },
+            {
+              "name": "ticketId",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string",
+                "format": "uuid"
+              },
+              "description": "The ID of the ticket"
+            }
+          ],
+          "requestBody": {
+            "required": false,
+            "content": {}
+          },
+          "responses": {
+            "200": {
+              "description": "Bike taken successfully"
+            },
+            "400": {
+              "description": "Bad request"
+            },
+            "404": {
+              "description": "Not found"
             }
           }
-        },
-        "responses": {
-          "201": {
-            "description": "Successful response",
+        }
+      },
+      "/users/tickets/price": {
+        "post": {
+          "summary": "Calculate ticket price",
+          "tags": [
+            "user"
+          ],
+          "requestBody": {
+            "required": true,
             "content": {
               "application/json": {
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "price": {
-                      "type": "number",
-                      "format": "double"
+                    "bikeId": {
+                      "type": "string",
+                      "format": "uuid"
+                    },
+                    "fromDate": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "untilDate": {
+                      "type": "string",
+                      "format": "date-time"
                     }
-                  }
+                  },
+                  "required": [
+                    "bikeId",
+                    "fromDate",
+                    "untilDate"
+                  ]
                 }
               }
             }
           },
-          "404": {
-            "description": "Not found",
-            "content": {
-              "application/json": {
-                "example": {
-                  "error": "Bike not found"
+          "responses": {
+            "201": {
+              "description": "Successful response",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "price": {
+                        "type": "number",
+                        "format": "double"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "404": {
+              "description": "Not found",
+              "content": {
+                "application/json": {
+                  "example": {
+                    "error": "Bike not found"
+                  }
                 }
               }
             }
           }
         }
-      }
-    },
-    "/users/{userId}/tickets/{ticketId}/return": {
-      "post": {
-        "summary": "Simulate returning a bike",
-        "tags": [
-          "user"
-        ],
-        "parameters": [
-          {
-            "name": "userId",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "format": "uuid"
-            },
-            "description": "The ID of the user"
-          },
-          {
-            "name": "ticketId",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "format": "uuid"
-            },
-            "description": "The ID of the ticket"
-          }
-        ],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
+      },
+      "/users/{userId}/tickets/{ticketId}/return": {
+        "post": {
+          "summary": "Simulate returning a bike",
+          "tags": [
+            "user"
+          ],
+          "parameters": [
+            {
+              "name": "userId",
+              "in": "path",
+              "required": true,
               "schema": {
-                "type": "object",
-                "properties": {
-                  "stationId": {
-                    "type": "string",
-                    "format": "uuid"
+                "type": "string",
+                "format": "uuid"
+              },
+              "description": "The ID of the user"
+            },
+            {
+              "name": "ticketId",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string",
+                "format": "uuid"
+              },
+              "description": "The ID of the ticket"
+            }
+          ],
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "stationId": {
+                      "type": "string",
+                      "format": "uuid"
+                    }
                   }
                 }
               }
+            },
+            "description": "The ID of the station where the bike is being returned\n"
+          },
+          "responses": {
+            "200": {
+              "description": "Bike returned successfully"
+            },
+            "400": {
+              "description": "Bad request"
+            },
+            "404": {
+              "description": "Not found"
             }
-          },
-          "description": "The ID of the station where the bike is being returned\n"
-        },
-        "responses": {
-          "200": {
-            "description": "Bike returned successfully"
-          },
-          "400": {
-            "description": "Bad request"
-          },
-          "404": {
-            "description": "Not found"
           }
         }
       }
