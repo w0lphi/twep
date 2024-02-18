@@ -1,52 +1,56 @@
 <div class="container">
-    <mat-card class="left-panel mobile-stack">
-        <mat-card-header>
-            <div mat-card-avatar class="profile-picture">
-                <mat-icon>account_circle</mat-icon>
-            </div>
-            <div class="profile-info">
-                <mat-card-title>Hello, {{ name }}!</mat-card-title>
-                <mat-card-subtitle>User ID: {{ userAccount.id }}</mat-card-subtitle>
-                <mat-card-subtitle>Email Address: {{ userAccount.email }}</mat-card-subtitle>
-                <mat-card-subtitle>Role: {{ userAccount.role }}</mat-card-subtitle>
-            </div>
-        </mat-card-header>
-    </mat-card>
-
-    <mat-card class="wallet-panel mobile-stack">
-        <mat-card-header>
-            <mat-card-title>Wallet</mat-card-title>
-        </mat-card-header>
-        <mat-card-content>
-            <mat-card-subtitle>Wallet Amount: {{ walletAmount }}</mat-card-subtitle>
-
-            <div id="addmoney">
-                <mat-form-field class="input-field">
-                    <mat-label>Add Money</mat-label>
-                    <input
-                        matInput
-                        [formControl]="addMoneyFormControl"
-                        type="text"
-                        name="addmoney"
-                    >
-                    <mat-error *ngIf="addMoneyFormControl.hasError('required')">
-                        Please enter amount to add to your wallet
-                    </mat-error>
-                </mat-form-field>
-            
-                <button mat-raised-button class="twep-save-btn" (click)="saveAdding()">SAVE</button>
-                <div *ngIf="saveSuccessMessage" class="success-message">{{ saveSuccessMessage }}</div>
-            </div>
-        </mat-card-content>
-    </mat-card>
-
-    <mat-card class="right-panel mobile-stack">
-        <mat-card-header>
-            <mat-card-title>Statistics</mat-card-title>
-        </mat-card-header>
-        <mat-card-content>
-            <mat-card-subtitle>Number of Tickets purchased: {{ userAccount.tickets.length }}</mat-card-subtitle>
-            <mat-card-subtitle>Number of Tickets overdue: {{ overdueTicketsCount }}</mat-card-subtitle>
-        </mat-card-content>
-    </mat-card>
+    @if(runningAction){
+        <app-loading-overlay />
+    }@else {
+        <mat-card class="left-panel mobile-stack">
+            <mat-card-header>
+                <div mat-card-avatar class="profile-picture">
+                    <mat-icon>account_circle</mat-icon>
+                </div>
+                <div class="profile-info">
+                    <mat-card-title>Hello, {{ name }}!</mat-card-title>
+                    <mat-card-subtitle>User ID: {{ userAccount.id }}</mat-card-subtitle>
+                    <mat-card-subtitle>Email Address: {{ userAccount.email }}</mat-card-subtitle>
+                    <mat-card-subtitle>Role: {{ userAccount.role }}</mat-card-subtitle>
+                </div>
+            </mat-card-header>
+        </mat-card>
+    
+        <mat-card class="wallet-panel mobile-stack">
+            <mat-card-header>
+                <mat-card-title>Wallet</mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+                <mat-card-subtitle>Wallet Amount: {{ walletAmount }}</mat-card-subtitle>
+    
+                <div id="addmoney">
+                    <mat-form-field class="input-field">
+                        <mat-label>Add Money</mat-label>
+                        <input
+                            matInput
+                            [formControl]="addMoneyFormControl"
+                            type="text"
+                            name="addmoney"
+                        >
+                        <mat-error *ngIf="addMoneyFormControl.hasError('required')">
+                            Please enter amount to add to your wallet
+                        </mat-error>
+                    </mat-form-field>
+                
+                    <button mat-raised-button class="twep-save-btn" (click)="saveAdding()">ADD MONEY</button>
+                    <div *ngIf="saveSuccessMessage" class="success-message">{{ saveSuccessMessage }}</div>
+                </div>
+            </mat-card-content>
+        </mat-card>
+    
+        <mat-card class="right-panel mobile-stack">
+            <mat-card-header>
+                <mat-card-title>Statistics</mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+                <mat-card-subtitle>Number of Tickets purchased: {{ userAccount.tickets.length }}</mat-card-subtitle>
+                <mat-card-subtitle>Number of Tickets overdue: {{ overdueTicketsCount }}</mat-card-subtitle>
+            </mat-card-content>
+        </mat-card>
+    }
 </div>

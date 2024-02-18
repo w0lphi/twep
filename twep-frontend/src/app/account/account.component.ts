@@ -23,10 +23,10 @@ import {AuthService} from '../service/auth.service';
 import { AccountService } from '../service/account.service';
 import { UserAccount } from '../model/user-account';
 
-import { ViewChild, ElementRef } from '@angular/core';
 import { TicketStatus } from '../model/ticket';
 import { isBefore } from 'date-fns';
 import { formatCurrency } from '../util/currency-util';
+import { LoadingOverlayComponent } from '../common/loading-overlay/loading-overlay.component';
 
 @Component({
   selector: 'app-account',
@@ -50,21 +50,19 @@ import { formatCurrency } from '../util/currency-util';
     MatCheckboxModule,
     MatDividerModule,
     MatSelectModule,
+    LoadingOverlayComponent
   
   ],
   templateUrl: './account.component.html',
   styleUrls: ['./account.component.scss'],
   providers: [AccountService]
 })
-export class AccountComponent implements OnInit {
+export class AccountComponent {
   addMoneyFormControl = new FormControl('', [Validators.required]);
-
   userAccount!: UserAccount;
-  loggedInUserId: string | null = null;
   userId: string | null = null;
   saveSuccessMessage: string | null = null;
-
-
+  runningAction: boolean = false;
 
   constructor(
     private accountService: AccountService,
@@ -72,24 +70,21 @@ export class AccountComponent implements OnInit {
     private walletService: WalletService,
     
     ) { 
-      this.getUserId()
+      this.loadUserAccount() 
     }
 
-    getUserId(): void {
-      this.userId = this.authService.getLoggedInUserId(); 
-    }
-
-  ngOnInit(): void {
-    this.loggedInUserId = this.authService.getLoggedInUserId();
-    this.userId = this.loggedInUserId || '';
-    this.loadUserAccount();
-  }
 
   loadUserAccount() {
-    if (this.loggedInUserId) {
-        this.accountService.getUserAccount(this.loggedInUserId).subscribe({
+    this.userId = this.authService.getLoggedInUserId(); 
+    if (this.userId !== null) {
+      this.runningAction = true;
+        this.accountService.getUserAccount(this.userId).subscribe({
           next: (data: UserAccount) => {
             this.userAccount = data;
+            this.runningAction = false;
+          },
+          error: () => {
+            this.runningAction = false;
           }
         }
       );
