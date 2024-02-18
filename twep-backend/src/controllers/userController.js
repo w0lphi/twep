@@ -451,15 +451,27 @@ const simulateTakingBike = async (req, res) => {
 
 const isBikeReturnedLate = async (ticketId) => {
     const ticket = await UserModel.getTicketById(ticketId);
-    const currentDate = new Date();
+    const currentDate = new Date(Date.now());
     const untilDate = new Date(ticket.until_date);
 
     if (dateFns.isAfter(currentDate, untilDate)) {
         // Calculate the difference in hours between the current date and the untilDate
         const hoursLate = dateFns.differenceInHours(currentDate, untilDate);
 
-        // Calculate the late fee (5€ for every hour late)
-        const lateFee = hoursLate * 5;
+        const bike = await StationModel.findById(ticket.bike_id);
+        if (!bike) {
+            throw new Error("Bike not found");
+        }
+
+        // Retrieve bike category information to get the price per hour
+        const bikeCategory = await StationModel.getBikeCategoryById(bike.category_id);
+        if (!bikeCategory) {
+            throw new Error("Bike category not found");
+        }
+        // Calculate the total price based on the price per hour and duration
+        const pricePerHour = Number(bikeCategory.hour_price) * 2;
+        // Calculate the late fee (twice the hour price for every hour late)
+        const lateFee = hoursLate * pricePerHour;
 
         return { late: true, lateFee };
     } else {

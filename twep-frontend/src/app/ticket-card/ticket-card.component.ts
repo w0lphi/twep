@@ -13,7 +13,6 @@ import { differenceInHours, format, isBefore } from "date-fns";
 import { Bike } from '../model/bike';
 import { DialogService } from '../service/dialog.service';
 import { TicketService } from '../service/tickets.service';
-import { Observable } from 'rxjs';
 import { formatCurrency } from '../util/currency-util';
 
 @Component({
@@ -148,9 +147,12 @@ export class TicketCardComponent {
       case TicketStatus.CANCELLED:
         return 'Ticket was cancelled'
       case TicketStatus.OVERDUE:
-        return 'This ticket is overdue! Please return the bike to the next station. A late fee of 5,00€ per overdue hour will be deducted from your account!'
+        const lateFee: number = Number(this.bike.hourPrice) * 2;
+        return `This ticket is overdue! Please return the bike to the next station. 
+        A late fee of ${formatCurrency(lateFee)} per overdue hour will be deducted from your account!`
         case TicketStatus.EXPIRED:
-          return 'This ticket expired without taking the bike. A fee of 10% was deducted from your wallet';
+          const ticketPrice: number = Number(this.ticket.price ?? 0) * 0.1
+          return `This ticket expired without taking the bike. A fee of ${formatCurrency(ticketPrice)} was deducted from your wallet`;
     }
   }
 
