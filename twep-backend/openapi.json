@@ -1042,6 +1042,69 @@
         }
       }
     },
+    "/users/stations/{stationId}/ratings": {
+      "get": {
+        "summary": "Get list of all ratings for a specific station",
+        "tags": [
+          "station"
+        ],
+        "parameters": [
+          {
+            "name": "stationId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "The ID of the station"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "example": [
+                  {
+                    "id": "f1417955-3467-4b2b-9a73-4da6bfba9cdc",
+                    "stationId": "4f5d7722-c70b-44c8-ac4f-5cabd81d80ae",
+                    "stationRating": 3,
+                    "bikeModelRating": 4,
+                    "createdAt": "2024-02-18T00:52:04.942Z",
+                    "bikeModelId": "186760ff-6379-4703-89c2-0844b85b3433",
+                    "comment": "test comment",
+                    "bikeModelName": "KTM Summit Trailblazer",
+                    "stationName": "Bike Station City Arkaden 2"
+                  },
+                  {
+                    "id": "0fea5a65-89dd-41fe-8c71-5e9d7b39333e",
+                    "stationId": "4f5d7722-c70b-44c8-ac4f-5cabd81d80ae",
+                    "stationRating": 3,
+                    "bikeModelRating": 4,
+                    "createdAt": "2024-02-18T00:44:16.393Z",
+                    "bikeModelId": "186760ff-6379-4703-89c2-0844b85b3433",
+                    "comment": "test comment",
+                    "bikeModelName": "KTM Summit Trailblazer",
+                    "stationName": "Bike Station City Arkaden 2"
+                  }
+                ]
+              }
+            }
+          },
+          "404": {
+            "description": "Station not found",
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "Station not found"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/users/stations/{stationId}/bikes": {
       "get": {
         "summary": "Get list of bikes available at a specific station",

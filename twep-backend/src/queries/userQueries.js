@@ -36,6 +36,8 @@ SELECT
         'hourPrice', bc.hour_price,
         'modelId', bm.id,
         'model', bm.name,
+        'modelRating', AVG(r.bike_model_rating)::numeric(10,2),
+        'modelRatingCount', COUNT(r.bike_model_rating),
         'description', bm.description,
         'wheelSize', bm.wheel_size,
         'extraFeatures', bm.extra_features,
@@ -59,14 +61,20 @@ JOIN
     parking_places pp ON ib.parking_place_id = pp.id
 JOIN
     stations s ON t.station_id = s.id
+LEFT JOIN 
+	ratings r ON r.bike_model_id = bm.id
 WHERE
     t.user_id = $1
+GROUP BY
+	t.id, ib.id, bc.id, bm.id, pp.id, s.id
 ORDER BY
     (CASE t.status 
         WHEN 'rented' then 1
         WHEN 'unused' then 2
         WHEN 'returned' then 3
-        ELSE 0
+	 	WHEN 'cancelled' then 4
+	 	WHEN 'expired' then 5
+        ELSE 6
     END) ASC,   
     t.from_date ASC;
 `;
@@ -190,6 +198,8 @@ const getBikesAtStation = `
     bm.description AS description,
     bm.wheel_size AS wheel_size,
     bm.extra_features AS extra_features,
+    AVG(r.bike_model_rating)::numeric(10,2) AS model_rating,
+	COUNT(r.bike_model_rating) AS model_ratings_count,
     pp.id AS parking_place_id
     FROM
     individual_bikes ib
@@ -201,8 +211,12 @@ const getBikesAtStation = `
     parking_places pp ON ib.parking_place_id = pp.id
     JOIN
     stations s ON pp.station_id = s.id
+    LEFT JOIN 
+	ratings r ON r.bike_model_id = bm.id
     WHERE
-    pp.station_id = $1;
+    pp.station_id = $1
+    GROUP BY
+    ib.id, bc.name, bc.hour_price, bm.name, bm.description, bm.wheel_size, bm.extra_features, pp.id;
 `;
 
 const getAllBikes = `
@@ -217,6 +231,8 @@ const getAllBikes = `
     bm.description AS description,
     bm.wheel_size AS wheel_size,
     bm.extra_features AS extra_features,
+    AVG(r.bike_model_rating)::numeric(10,2) AS model_rating,
+	COUNT(r.bike_model_rating) AS model_ratings_count,
     pp.id AS parking_place_id,
     jsonb_build_object(
         'id', s.id,
@@ -234,6 +250,8 @@ const getAllBikes = `
     parking_places pp ON ib.parking_place_id = pp.id
     JOIN
     stations s ON pp.station_id = s.id
+    LEFT JOIN 
+	ratings r ON r.bike_model_id = bm.id
     GROUP BY
     ib.id, ib.status, bc.name, bc.id, bm.id, bm.name, bm.description, bm.wheel_size, bm.extra_features, pp.id, s.id
 `;
@@ -278,6 +296,23 @@ const createRating = `
     RETURNING *;
 `
 
+const getRatingsByStationId = `
+    SELECT
+        r.id,
+        r.station_id,
+        r.station_rating,
+        r.bike_model_rating,
+        r.created_at,
+        r.bike_model_id,
+        r.comment,
+        bm.name AS bike_model_name,
+        s.name AS station_name
+    FROM ratings r
+    JOIN bike_models bm ON bm.id = r.bike_model_id
+    JOIN stations s ON s.id = r.station_id
+    WHERE station_id = $1;
+`
+
 
 module.exports = {
     registerUser,
@@ -300,5 +335,6 @@ module.exports = {
     getBasicUserInfo,
     getStationOfBikeById,
     updateStationOfUserTicket,
-    createRating
+    createRating,
+    getRatingsByStationId
 };

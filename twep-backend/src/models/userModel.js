@@ -247,6 +247,16 @@ class UserModel {
             throw error;
         }
     }
+
+    static async getRatingsByStationId(stationId){
+        try{
+            const result = await pool.query(userQueries.getRatingsByStationId, [stationId]);
+            console.log(stationId, result)
+            return result.rows;
+        }catch(error){
+            throw error;
+        }
+    }
 }
 
 module.exports = UserModel;

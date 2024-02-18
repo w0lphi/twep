@@ -13,6 +13,7 @@ router.use(verifyToken); // Apply the middleware to all routes below this line
 
 router.get("/stations", userController.getStations);
 router.get("/stations/:id", userController.getStationById);
+router.get("/stations/:id/ratings", userController.getRatingsByStationId)
 router.get("/stations/:stationId/bikes", userController.getBikesAtStation);
 router.get("/bikes", userController.getAllBikes);
 router.get("/bike-categories", userController.getAllBikeCategories);

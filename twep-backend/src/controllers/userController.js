@@ -565,6 +565,23 @@ const createRating = async(req, res) => {
     }
 }
 
+const getRatingsByStationId = async (req, res) => {
+    try{
+        const { id } = req.params;
+
+        const station = await UserModel.getStationById(id);
+        if(!station){
+            return res.status(404).json({ message: 'Station not found.' });
+        }
+
+        const ratings = await UserModel.getRatingsByStationId(id);
+        return res.json(convertKeysToCamelCase(ratings));
+    }catch(error){
+        console.error('Error when fetching ratings for station:', error);
+        return res.status(500).json({ message: 'Internal server error.' });
+    }
+}
+
 
 // Function to generate QR code for ticket data
 async function generateQRCode(ticketData) {
@@ -617,5 +634,6 @@ module.exports = {
     calculatePrice,
     calculatePriceAndRespond,
     eligibleForCancellation,
-    createRating
+    createRating,
+    getRatingsByStationId
 };
