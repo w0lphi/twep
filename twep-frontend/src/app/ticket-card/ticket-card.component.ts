@@ -148,7 +148,7 @@ export class TicketCardComponent {
       case TicketStatus.CANCELLED:
         return 'Ticket was cancelled'
       case TicketStatus.OVERDUE:
-        return 'This ticket is overdue! Please return the bike to the next station'
+        return 'This ticket is overdue! Please return the bike to the next station. A late fee of 5,00€ per overdue hour will be deducted from your account!'
         case TicketStatus.EXPIRED:
           return 'This ticket expired without taking the bike. A fee of 10% was deducted from your wallet';
     }
